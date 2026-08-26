@@ -1,0 +1,856 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
+<head>
+	<title>Sistem Informasi Perbenihan</title>
+	<!-- Link CSS -->
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/shortcut.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/flexigrid.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/jquery.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/main.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/button.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/form/formm.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/tab_view/tab-view.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/datepicker.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/ext-alll.css" />
+	<link rel="shorcut icon" href="http://localhost:8080/images/favicon.png"/>
+<style>
+	div#headerKanan {
+    position: absolute;
+    top: 50px;
+    left: 700px;
+    font-size: larger;
+	color:#fff;
+}
+.grey{
+	background: #D9D9DB;
+    color: #000000 !important;
+    padding: 5px !important;
+    height: 15px;
+}
+</style>
+	<!-- JAVASCRIPT -->
+	<script type="text/javascript" src="http://localhost:8080/js/wufoo.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>
+	<script type="text/javascript">
+		<!--//---------------------------------+
+		//  Developed by Roshan Bhattarai 
+		//  Visit http://roshanbh.com.np for this script and more.
+		//  This notice MUST stay intact for legal use
+		// --------------------------------->
+		$(document).ready(function()
+		{
+			//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+			$("#firstpane p.menu_head").click(function()
+			{
+				$(this).css({backgroundImage:"url(http://localhost:8080/images/main/bl_head1.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+				$(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/bl_head0.png)"});
+			});
+			//slides the element with class "menu_body" when mouse is over the paragraph
+			$("#secondpane p.menu_head").mouseover(function()
+			{
+				 $(this).css({backgroundImage:"url(http://localhost:8080/images/main/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+				 $(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/left.png)"});
+			});
+		});
+	</script>
+	<script type="text/javascript"> 
+		var outerLayout, middleLayout, innerLayout; 
+		$(document).ready(function () { 
+			outerLayout = $('body').layout({ 
+				center__paneSelector:	".outer-center" 
+			,	west__paneSelector:		".outer-west" 
+			,	east__paneSelector:		".outer-east" 
+			,	west__size:				165
+			,	east__size:				173 
+			,	spacing_open:			8 // ALL panes
+			,	spacing_closed:			8 // ALL panes
+			,	north__spacing_open:	0
+			,	south__spacing_open:	0
+			,	center__onresize:		"middleLayout.resizeAll" 
+			}); 
+		}); 
+	</script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.MultiFile.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.ui.all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.layout.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/flexigrid.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/datepicker.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/shortcut.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/ajax.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/tab-view.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-base.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-combo.js"></script>
+	</head>
+
+<body>
+		<div class="ui-layout-north" style="background-color:#333333">
+		<div id="toppanel">
+			<div style="padding-left:4px;float:left">
+				<img src="http://localhost:8080/images/main/header.png" width="504" height="90" />
+			</div>
+			<div style="float:right;padding-right:4px;" >
+				<img src="http://localhost:8080/images/main/header-kanan.png" width="129" height="90" />
+				<div id="headerKanan"></div>
+			</div>
+		</div>
+	</div> 
+	<div class="outer-center" id="center" style="background-color:#595959"><div id="main"><script>
+        function enable_ptgsKA() {
+                if (document.form_kaji_ulang.kadar_air.checked == true) {
+                        document.form_kaji_ulang.metode_KA.disabled = false;
+                }
+                if (document.form_kaji_ulang.kadar_air.checked == false) {
+                        document.form_kaji_ulang.metode_KA.selectedIndex = 0;
+                        document.form_kaji_ulang.metode_KA.disabled = true;
+                }
+        }
+        function enable_ptgsDT() {
+                if (document.form_kaji_ulang.daya_tumbuh.checked == true) {
+                        document.form_kaji_ulang.metode_DT.disabled = false;
+                        document.form_kaji_ulang.perlakuan_dt.disabled = false;
+                }
+                if (document.form_kaji_ulang.daya_tumbuh.checked == false) {
+                        document.form_kaji_ulang.metode_DT.selectedIndex = 0;
+                        document.form_kaji_ulang.metode_DT.disabled = true;
+                        document.form_kaji_ulang.perlakuan_dt.selectedIndex = 0;
+                        document.form_kaji_ulang.perlakuan_dt.disabled = true;
+                }
+        }
+
+        function hapus_panen_awal() {
+                document.form_kaji_ulang.tgl_panen_awal.value = '';
+                document.form_kaji_ulang.bln_panen_awal.value = '';
+                document.form_kaji_ulang.thn_panen_awal.value = '';
+        }
+
+        function hapus_panen_akhir() {
+                document.form_kaji_ulang.tgl_panen_akhir.value = '';
+                document.form_kaji_ulang.bln_panen_akhir.value = '';
+                document.form_kaji_ulang.thn_panen_akhir.value = '';
+        }
+
+        function hapus_tgl_terima() {
+                document.form_kaji_ulang.tgl_terima.value = '';
+                document.form_kaji_ulang.bln_terima.value = '';
+                document.form_kaji_ulang.thn_terima.value = '';
+        }
+
+        function copy_tgl_kirim() {
+                document.form_kaji_ulang.tgl_terima.value = document.form_kaji_ulang.tgl_kirim.value;
+                document.form_kaji_ulang.bln_terima.value = document.form_kaji_ulang.bln_kirim.value;
+                document.form_kaji_ulang.thn_terima.value = document.form_kaji_ulang.thn_kirim.value;
+        }
+</script>
+<form action="http://localhost:8080/uji_lab/kaji_ulang/update_kaji_ulang/25/1" method="post" class="wufoo" name="form_kaji_ulang">
+				<script>
+					$(document).ready(function() {
+						$.blockUI({
+							message:'Form Surat Perintah Uji Tidak Bisa Diisi\r\n \r\n Karena Form Sebelumnya Tidak Lengkap.\r\n Mohon Lengkapi Dulu Data pada Form Sebelumnya !!!'
+						});
+						$('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+					});
+				</script><fieldset>
+        <legend class="legend"> | Form Kaji Ulang Permintaan | </legend>
+
+        <div class="info">
+                <div>User Melakukan Pengisian Form untuk menambah data Kaji Ulang.
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="http://localhost:8080/uji_lab/pengujian"><img src="http://localhost:8080/images/main/39.png"  border="0"  alt="" /> Kembali ke Halaman Daftar Kaji Ulang</a>                </div>
+        </div>
+
+        <table id="menu_atas" cellspacing="1">
+  <tr> 
+    <td width="16%"><a href="http://localhost:8080//uji_lab/kaji_ulang/ubah/25/1">Kaji Ulang</a></td><td width="16%"><a href="http://localhost:8080//uji_lab/surat_perintah/ubah/25/1">Surat Perintah Uji</a></td><td width="16%"><a href="http://localhost:8080//uji_lab/uji_kadar_air/ubah/25/1">Uji Kadar Air</a></td><td width="16%"><a href="http://localhost:8080//uji_lab/uji_kemurnian_fisik/ubah/25/1">Uji Kemurnian Fisik</a></td><td width="16%"><a href="http://localhost:8080//uji_lab/uji_daya_tumbuh/ubah/25/1">Uji Daya Berkecambah</a></td>  </tr>
+</table>
+
+        <div id="tab">
+                <div class="dhtmlgoodies_aTab">
+                        <fieldset class="fieldset_default">
+                                <legend>| Kaji Ulang / Tanda Terima |</legend>
+                                <table>
+                                        <tr>
+                                                <td valign="top" width="33%">
+                                                        <ul>
+                                                                <li>
+                                                                        <label class="desc">No. Asal</label>
+                                                                        <div>
+                                                                                <input name="no_asal"
+                                                                                        class="field text medium"
+                                                                                        type="text" size="40"
+                                                                                        value="SP.0105.13.324"
+                                                                                        maxlength="20" disabled />
+                                                                                <input name="id_permohonan_uji"
+                                                                                        type="hidden"
+                                                                                        value="197" />
+                                                                                <input name="id_permohonan"
+                                                                                        type="hidden"
+                                                                                        value="72417" />
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Jenis Tanaman -
+                                                                                Varietas</label>
+                                                                        <div>
+                                                                                <input type="text" name="pengirim"
+                                                                                        value="Jagung Hibrida"
+                                                                                        class="field text medium"
+                                                                                        disabled />-
+                                                                                <input type="text" name="pengirim"
+                                                                                        value="CMP 01"
+                                                                                        class="field text small"
+                                                                                        size="20" disabled />
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Petugas Pengirim
+                                                                                Contoh</label>
+                                                                        <div>
+                                                                                <input type="text" name="pengirim"
+                                                                                        value="Edi Susanto, S.P."
+                                                                                        class="field text medium"
+                                                                                        disabled />
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Tanggal Kirim Contoh</label>
+                                                                        <span>
+                                                                                <div id="newline-wrapper">
+                                                                                        <table class="split-date-wrap"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                border="0">
+                                                                                                <tbody>
+                                                                                                        <tr>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                                id="date-1-dd"
+                                                                                                                                readonly="readonly"
+                                                                                                                                disabled
+                                                                                                                                name="tgl_kirim"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="26" />
+                                                                                                                        -<label
+                                                                                                                                for="date-1-dd">DD</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                                id="date-1-mm"
+                                                                                                                                readonly="readonly"
+                                                                                                                                disabled
+                                                                                                                                name="bln_kirim"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="02" />
+                                                                                                                        -
+                                                                                                                        <label
+                                                                                                                                for="date-1-mm">MM</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w4em highlight-days-67 split-date"
+                                                                                                                                readonly="readonly"
+                                                                                                                                id="date-1"
+                                                                                                                                name="thn_kirim"
+                                                                                                                                maxlength="4"
+                                                                                                                                disabled
+                                                                                                                                value="2024" />
+                                                                                                                        &nbsp;<img
+                                                                                                                                src="http://localhost:8080/images/main/reports--pencil.png"
+                                                                                                                                onclick="copy_tgl_kirim();" />
+                                                                                                                        <label
+                                                                                                                                for="date-1">YYYY</label>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                </td>
+                                                                                                        </tr>
+                                                                                                </tbody>
+                                                                                        </table>
+                                                                                </div>
+                                                                        </span>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                                <td valign="top" width="33%">
+                                                        <ul>
+                                                                <li>
+                                                                        <label class="desc">Berat Contoh Benih * (Angka,
+                                                                                contoh: 10)</label>
+                                                                        <div>
+                                                                                <input name="berat_kirim"
+                                                                                        autocomplete="off"
+                                                                                        class="field text medium"
+                                                                                        type="text" size="40"
+                                                                                        maxlength="10"
+                                                                                        value="1349" />
+                                                                                Gram
+                                                                        </div>
+                                                                </li>
+                                                                                                                                <li>
+                                                                        <label class="desc">Bahan Kemasan Benih</label>
+                                                                        <div>
+                                                                                <input name="bahan_kemasan"
+                                                                                        autocomplete="off"
+                                                                                        class="field text large"
+                                                                                        type="text" size="40"
+                                                                                        maxlength="50"
+                                                                                        value="" />
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Kondisi Kemasan *</label>
+                                                                        <div>
+                                                                                                                                                                <select name="segel" id="segel" class="field text select">
+<option value="0">-- Pilih Segel --</option>
+<option value="1" selected="selected">Tersegel</option>
+<option value="2">Tidak tersegel</option>
+</select>                                                                        </div>
+                                                                </li>
+                                                                                                                        </ul>
+                                                </td>
+                                                <td valign="top">
+                                                        <ul>
+                                                                <li>
+                                                                        <label class="desc">Petugas Penerima Contoh
+                                                                                *</label>
+                                                                        <div>
+                                                                                                                                                                <select name="penerima" id="penerima" class="field text select">
+<option value="0">-- Pilih Pegawai --</option>
+<option value="518">..........</option>
+<option value="519">..........</option>
+<option value="434">Achmad Cholil, S.P.</option>
+<option value="494">Ade Irma Safitri, S.P.</option>
+<option value="524">Admin Simbenih 1</option>
+<option value="525">Admin Simbenih 2</option>
+<option value="526">Admin Simbenih 3</option>
+<option value="527">Admin Simbenih 4</option>
+<option value="528">Admin Simbenih 5</option>
+<option value="529">Admin Simbenih 6</option>
+<option value="522">ADMINISTRATOR</option>
+<option value="418">Agus Pujiono Priyoatmojo, S.P</option>
+<option value="437">Aldino Hadianto, A.Md.</option>
+<option value="481">Amaniz Diharwati, S.P.</option>
+<option value="472">Amri Farhan S, A.Md</option>
+<option value="499">Ana Yunita Sari, S.P.</option>
+<option value="485">Anastry Galuh K, S.P.</option>
+<option value="445">Angela Firdausa Alif I, STP</option>
+<option value="523">Annisatul Jamilah, S.P.</option>
+<option value="480">Apriliana, S.P.</option>
+<option value="331">Ari Sujanto, S.P.</option>
+<option value="466">Arif Fathoni, SP</option>
+<option value="517">Ary Danar Kisworo, SP</option>
+<option value="500">Asep Abdul Haris, S.ST</option>
+<option value="459">Asyhar Danny Farid</option>
+<option value="502">Aulia Hasanah, S.P.</option>
+<option value="270">Avianita Agustianti, S.TP.</option>
+<option value="534">Briliyan Natalina Sudarjayanti, S.Si.</option>
+<option value="537">Bugiyarto, S.P.</option>
+<option value="489">Buyung Safitra, S.P.</option>
+<option value="473">Deanika Yanuar P, A.Md.</option>
+<option value="440">Dedy Kristiyawan, S.P.</option>
+<option value="444">Dewi Ayundadari, S.T.</option>
+<option value="505">Dian Intan Karuniasari, S.P.</option>
+<option value="483">Dinar Budi Kerina, S.P.</option>
+<option value="506">Diny Evitasari, S.P.</option>
+<option value="360">Edi Hariyanto, S.P.</option>
+<option value="491">Elank Dhayu Finayungan, S.P.</option>
+<option value="533">Elisa Dewanti, S.P.</option>
+<option value="280">Erithrina Rosmarini, S.P.</option>
+<option value="510">Farida Muthia, S.P.</option>
+<option value="503">Fifi Oktaviyanti, S.P.</option>
+<option value="531">Firmansyah, S.Si.</option>
+<option value="501">Fisabella Ayuning P.U, S.P.</option>
+<option value="514">Harumi Farah Setyaningastuti, S.P.</option>
+<option value="530">Hikma Salsabila Yusuf, S.SI</option>
+<option value="479">Indah Putri Utami, S.P.</option>
+<option value="477">Intan Hapsari, S.P.</option>
+<option value="380">Ir. Dzanuri</option>
+<option value="356">Ir. Hari Mularsono</option>
+<option value="428">Ir. Rahmad</option>
+<option value="353">Ir. Suryo</option>
+<option value="394">Ir. Syahdan</option>
+<option value="521">Ir. Yuli Maftuchah Budiarti</option>
+<option value="450">Irma Awali Nur C, S.P.</option>
+<option value="520">Joni Prasetyo, S.P</option>
+<option value="536">Kasi Yantek</option>
+<option value="478">Lambang Budiantoro, S.P.</option>
+<option value="416">Lina Asri W, S.P., M.P.</option>
+<option value="475">M. Bahrul Ulum, A.Md.</option>
+<option value="347">M. Suaidin, S.P.</option>
+<option value="429">Masedi Sugiantono</option>
+<option value="465">Masumah, S.P.</option>
+<option value="486">Miki Afriliya Sari, S.P.</option>
+<option value="511">Moh. Taufik Sujatmiko, S.ST.</option>
+<option value="373">Muhammad Suhelmi Faruq, S.P.</option>
+<option value="424">Muhammad Syaifudin Malik</option>
+<option value="509">Muthmainnah Ridahayanti, S.P.</option>
+<option value="464">Nasarudin Latif, S.P.</option>
+<option value="490">Nedya Putri Bachtiar, S.P.</option>
+<option value="417">Neetha Elinda, S.P.</option>
+<option value="535">Nina Indriya Siswandini</option>
+<option value="435">Niyah Nala Kumala Sari, S.P.</option>
+<option value="488">Nur Annisa Iftitah, S.P.</option>
+<option value="482">Nuri Dwi Wulandari, S.P.</option>
+<option value="474">Nuur Annisa, A.Md.</option>
+<option value="436">Ois Jati Setiyawan, S.P.</option>
+<option value="476">Okky Tiara Sari D, S.P.</option>
+<option value="407">Pariono, S.P.</option>
+<option value="423">Prima S Welli Candra, A.Md.</option>
+<option value="484">Prisya Niken M.P, S.P.</option>
+<option value="487">Puspita Dewi H, S.P.</option>
+<option value="449">Putri Sakinah, S.I.Kom</option>
+<option value="469">Rahmi Mahanani, A.Md</option>
+<option value="425">Rakhmad Priyadi</option>
+<option value="498">Rendri Puspita Dewi, S.P.</option>
+<option value="504">Resqi Eko Wahyu , S.St</option>
+<option value="532">Sanggita Rani Dhea, S.Si.</option>
+<option value="515">Sekar Dewi Indah Sari, S.P.</option>
+<option value="393">Setiyani</option>
+<option value="496">Shanty Anitasari, S.P.</option>
+<option value="471">Shifatur Rahmah, S.P.</option>
+<option value="432">Shofiana Widiningtyas</option>
+<option value="308">Slamet Pudjiono</option>
+<option value="507" selected="selected">Sri Rejeki Ambarwati, S.P</option>
+<option value="495">Sugeng Supriyanto, S.P.</option>
+<option value="427">Sukmandari, S.TP</option>
+<option value="516">Sulistyowati, S.TP.</option>
+<option value="359">Sumarno</option>
+<option value="330">Sumidi, S.P.</option>
+<option value="309">Suprapti, S.P.</option>
+<option value="343">Sutrisno</option>
+<option value="283">Tedy Irawan, S.TP.</option>
+<option value="497">tes</option>
+<option value="439">Titik Widayati, S.P.</option>
+<option value="410">Tjahjani Dwi Sulistijowati, S.P.</option>
+<option value="508">Tri Hadi Supratman, S.P.</option>
+<option value="415">Triyono Iswanto, S.P.</option>
+<option value="412">Wahyuni Dyah Anggraini</option>
+<option value="446">Yani Rahmawati, S.TP</option>
+<option value="470">Yorainiprina Amadea DL, A.Md.</option>
+<option value="332">Yudhi Asmoro, S.P.</option>
+</select>                                                                        </div>
+                                                                </li>
+                                                                                                                                <li>
+                                                                        <label class="desc">Tanggal Terima
+                                                                                Contoh</label>
+                                                                        <span>
+                                                                                <div id="newline-wrapper">
+                                                                                        <table class="split-date-wrap"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                border="0">
+                                                                                                <tbody>
+                                                                                                        <tr>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                                id="date-2-dd"
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="tgl_terima"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="26" />
+                                                                                                                        -<label
+                                                                                                                                for="date-2-dd">DD</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                                id="date-2-mm"
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="bln_terima"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="02" />
+                                                                                                                        -
+                                                                                                                        <label
+                                                                                                                                for="date-2-mm">MM</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w4em highlight-days-67 split-date"
+                                                                                                                                readonly="readonly"
+                                                                                                                                id="date-2"
+                                                                                                                                name="thn_terima"
+                                                                                                                                maxlength="4"
+                                                                                                                                value="2024" />
+                                                                                                                        <img src="http://localhost:8080/images/hapus.png"
+                                                                                                                                onclick="hapus_tgl_terima();" />
+                                                                                                                        <label
+                                                                                                                                for="date-2">YYYY</label>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                </td>
+                                                                                                        </tr>
+                                                                                                </tbody>
+                                                                                        </table>
+                                                                                </div>
+                                                                        </span>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Catatan</label>
+                                                                        <div>
+                                                                                <textarea name="catatan_terima"
+                                                                                        cols="30" rows="3"
+                                                                                        autocomplete="off"
+                                                                                        class="field text small"></textarea>
+                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                </table>
+                        </fieldset>
+
+                        <fieldset class="fieldset_default">
+                                <legend>| Pengujian yang diperlukan |</legend>
+                                <table>
+                                        <tr>
+                                                <td width="50%">
+                                                        <ul>
+                                                                <li>
+                                                                        <div>
+                                                                                <input name="kadar_air" type="checkbox"
+                                                                                        value="1" id="kadar_air"
+                                                                                        onchange="enable_ptgsKA()" checked='checked' />
+                                                                                Kadar Air
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                <input name="uji_gen" type="checkbox"
+                                                                                        id="uji_gen" value="1"  />
+                                                                                Kemurnian Genetik
+                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                                <td>
+                                                        <ul>
+                                                                <li>
+                                                                        <div>
+                                                                                <input name="uji_fisik" type="checkbox"
+                                                                                        id="uji_fisik" value="1"  checked='checked' />
+                                                                                Kemurnian Fisik
+                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                <input name="daya_tumbuh"
+                                                                                        type="checkbox" id="daya_tumbuh"
+                                                                                        value="1"
+                                                                                        onchange="enable_ptgsDT()" checked='checked' />
+                                                                                Daya Berkecambah
+                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                </table>
+                        </fieldset>
+
+                        <fieldset class="fieldset_default">
+                                <legend>| Macam / Metode Uji |</legend>
+                                <table>
+                                        <tr>
+                                                <td valign="top" width="50%">
+                                                        <ul>
+                                                                <li>
+                                                                        <label class="desc">Kadar Air </label>
+                                                                        <div>
+                                                                                                                                                                <select name="metode_KA" id="metode_KA" class="field text select" >
+<option value="0">-- Pilih Metode --</option>
+<option value="1">Oven</option>
+<option value="2" selected="selected">Metode Cepat</option>
+</select>                                                                        </div>
+                                                                </li>
+                                                                                                                                <li>
+                                                                        <label class="desc">Daya
+                                                                                Berkecambah/Viabilitas</label>
+                                                                        <div>
+                                                                                                                                                                <select name="metode_DT" id="metode_DT" class="field text select" >
+<option value="0">-- Pilih Metode --</option>
+<option value="1">TP</option>
+<option value="2">BP</option>
+<option value="3">PP</option>
+<option value="4" selected="selected">S</option>
+</select>                                                                        </div>
+                                                                </li>
+                                                                                                                                <li>
+                                                                        <label class="desc">Perlakuan Uji Daya Berkecambah </label>
+                                                                        <div>
+                                                                                                                                                                <select name="perlakuan_dt" id="perlakuan_dt" class="field text select" >
+<option value="0">-- Pilih Metode --</option>
+<option value="1" selected="selected">Tabur Langsung (TL)</option>
+<option value="2">Perendaman dengan KNO3 3% selama 24 jam (1R)</option>
+<option value="3">Perendaman dengan KNO3 3% selama 24 jam & dioven suhu 40&deg;Cselama 3 jam (1ROv)</option>
+<option value="4">Perendaman dengan KNO3 3% selama 48 jam (2R)</option>
+<option value="5">Perendaman dengan KNO3 3% selama 48 jam & dioven suhu 40&deg;C selama 3 jam (2ROv)</option>
+<option value="6">Perendaman dengan H2O & dioven suhu 40&deg;C selama 24 jam (1ROv H2O)</option>
+<option value="7">Perendaman dengan H2O & dioven suhu 40&deg;C selama 48 jam (2ROv H2O)</option>
+<option value="8">Benih kering dioven suhu 50&deg;C selama 5 hari (5H 50)</option>
+<option value="9">Benih kering dioven suhu 50&deg;C selama 7 hari (7H 50)</option>
+<option value="10">Benih kering dioven suhu 40&deg;C selama 5 hari (5H 40)</option>
+<option value="11">Benih kering dioven suhu 40&deg;C selama 7 hari (7H 40)</option>
+<option value="12">..........................</option>
+<option value="13">Perendaman dengan H2O & dioven suhu 40&deg;C selama 72 jam (3ROv H2O)</option>
+</select>                                                                        </div>
+                                                                </li>
+                                                                                                                        </ul>
+                                                </td>
+                                                <td valign="top">
+                                                        <ul>
+                                                                <li>
+                                                                        <label class="desc">Tanggal Panen Awal</label>
+                                                                        <span>
+                                                                                <div id="newline-wrapper">
+                                                                                        <table 
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                border="0">
+                                                                                                <tbody>
+                                                                                                        <tr>
+                                                                                                                <td><input type="text"
+                                                                                                                               
+                                                                                                                class="w2em"
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="tgl_panen_awal"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="25" />-<label
+                                                                                                                                for="date-3-dd">DD</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                
+                                                                                                                class="w2em"
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="bln_panen_awal"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="11" />-<label
+                                                                                                                                for="date-3-mm">MM</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                class="w4em highlight-days-67 "
+                                                                                                                                readonly="readonly"
+                                                                                                                                class="w2em"
+                                                                                                                                name="thn_panen_awal"
+                                                                                                                                maxlength="4"
+                                                                                                                                value="2023" />
+                                                                                                                     <!--   <img src="http://localhost:8080/images/hapus.png"
+                                                                                                                                onclick="hapus_panen_awal();" /> -->
+                                                                                                                        <label   for="date-3">YYYY</label>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                </td>
+                                                                                                        </tr>
+                                                                                                </tbody>
+                                                                                        </table>
+                                                                                </div>
+                                                                        </span>
+                                                                </li>
+                                                                <li>
+                                                                        <label class="desc">Tanggal Panen Akhir</label>
+                                                                        <span>
+                                                                                <div id="newline-wrapper">
+                                                                                        <table 
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                border="0">
+                                                                                                <tbody>
+                                                                                                        <tr>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                               
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="tgl_panen_akhir"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="25" />-<label
+                                                                                                                                for="date-4-dd">DD</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w2em"
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="bln_panen_akhir"
+                                                                                                                                maxlength="2"
+                                                                                                                                value="11" />-<label
+                                                                                                                                for="date-4-mm">MM</label>
+                                                                                                                </td>
+                                                                                                                <td><input type="text"
+                                                                                                                                class="w4em highlight-days-67 "
+                                                                                                                                readonly="readonly"
+                                                                                                                                name="thn_panen_akhir"
+                                                                                                                                maxlength="4"
+                                                                                                                                value="2023" />
+                                                                                                                <!--        <img src="http://localhost:8080/images/hapus.png"
+                                                                                                                                onclick="hapus_panen_akhir();" /> -->
+                                                                                                                        <label for="date-4">YYYY</label>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                </td>
+                                                                                                        </tr>
+                                                                                                </tbody>
+                                                                                        </table>
+                                                                                </div>
+                                                                        </span>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                </table>
+                        </fieldset>
+
+                        <fieldset class="fieldset_default">
+                                <legend>| Pengujian Penyakit |</legend>
+                                <table>
+                                        <tr>
+                                                <td width="33%">
+                                                        <ul>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                                        <input name="uji_penyakit1"
+                                                                                                type="checkbox" value="1"
+                                                                                                disabled readonly  />
+                                                                                        Bulai (Peronosclerospora maydis)                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                                        <input name="uji_penyakit2"
+                                                                                                type="checkbox"
+                                                                                                id="uji_penyakit2" value="1"
+                                                                                                disabled readonly  />
+                                                                                        Karat daun                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                                        <input name="uji_penyakit3"
+                                                                                                type="checkbox"
+                                                                                                id="uji_penyakit3" value="1"
+                                                                                                disabled readonly  />
+                                                                                        Hawar Daun Bakteri                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                                <td width="33%">
+                                                        <ul>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                        </div>
+                                                                </li>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                                <td>
+                                                        <ul>
+                                                                <li>
+                                                                        <div>
+                                                                                                                                                        </div>
+                                                                </li>
+                                                        </ul>
+                                                </td>
+                                        </tr>
+                                </table>
+                        </fieldset>
+                        <div class="buttons">
+                                <input name="" type="submit" value="Simpan Data">
+                                <input name="" type="reset">
+                        </div>
+                </div>
+        </div>
+</fieldset>
+</form></div></div> 
+	<div class="outer-west" style="background-color:#333333">
+<div> <!--This is the first division of left-->
+	<div id="firstpane" class="menu_list"> <!--Code for menu starts here-->
+		<p class="menu_head">
+			<a href="http://localhost:8080/beranda" Menampilkan halaman utama>Halaman Utama</a>		</p>
+
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<p class="menu_head">Sertifikasi</p>
+			<div class="menu_body" align="left">
+				<a href="http://localhost:8080/data_permohonan"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Pengajuan & Fase Lap</a>				<a href="http://localhost:8080/pasca_lapangan/pasca_pengajuan"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Pasca Lapangan</a><a href="http://localhost:8080/pasca_lapangan/konsep_label"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label</a><a href="http://localhost:8080/pasca_lapangan/konsep_label_standart"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label Standart</a>			</div>
+		
+		<!-----------------------------------------------MENU LAB--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Laboratorium</p>
+			<div class="menu_body" align="left">
+			<a href="http://localhost:8080/uji_lab/pengujian" Menampilkan halaman uji lab><img src="http://localhost:8080/images/main/lab.png"  border="0"  alt="" />Uji Laboratorium</a>			<a href="http://localhost:8080/uji_lab/kaji_ulang/getBukuInduk"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Buku Induk</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>		
+		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Data Master</p>
+		<div class="menu_body" align="left" style="overflow:auto; height:150px; margin-right:5px;">
+			<a href="http://localhost:8080/atur_komoditas" Menampilkan halaman data Golongan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Golongan</a>			<a href="http://localhost:8080/atur_golongan" Menampilkan halaman Kumpulan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kumpulan</a>			<a href="http://localhost:8080/atur_jenis_tanaman" Menampilkan halaman jenis tanaman><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Jenis Tanaman</a>			<a href="http://localhost:8080/atur_varietas" Menampilkan halaman varietas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Varietas</a>			<a href="http://localhost:8080/atur_grup_kelas_benih" Menampilkan halaman grup kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master G.Kelas Benih</a>			<a href="http://localhost:8080/atur_kelas_benih" Menampilkan halaman kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kelas Benih</a>			<a href="http://localhost:8080/atur_penyakit" Menampilkan halaman penyakit><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Penyakit</a>			<a href="http://localhost:8080/atur_kabupaten" Menampilkan halaman kabupaten><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kabupaten</a>			<a href="http://localhost:8080/atur_kecamatan" Menampilkan halaman kecamatan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kecamatan</a>			<a href="http://localhost:8080/atur_satuan" Menampilkan halaman satuan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Satuan</a>			<a href="http://localhost:8080/atur_satgas" Menampilkan halaman satgas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Wilayah Kerja</a>			<a href="http://localhost:8080/atur_status" Menampilkan halaman status><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Status</a>			<a href="http://localhost:8080/atur_produsen" Menampilkan halaman produsen><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Produsen</a>			<a href="http://localhost:8080/atur_pegawai" Menampilkan halaman pegawai><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Pegawai</a>			<a href="http://localhost:8080/atur_mata_anggaran" Menampilkan halaman mata anggaran><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master M. Anggaran</a>			<a href="http://localhost:8080/atur_konfigurasi"><img src="http://localhost:8080/images/main/71.png"  border="0"  alt="" /> Konfigurasi Aplikasi</a>			<a href="http://localhost:8080/atur_user"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Daftar User</a>		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!--
+		<p class="menu_head">Laporan</p>
+		<div class="menu_body" align="left">
+			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_varietas"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Varietas</a>			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_groupKB"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Grup KB</a>		</div>
+		-->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">&nbsp;&nbsp;&nbsp;&nbsp;Manajemen Aplikasi</p>
+		<div class="menu_body" align="left">
+			
+			<a href="http://localhost:8080/atur_log"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Serti Log</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>			
+							<a href="http://localhost:8080/restore"><img src="http://localhost:8080/images/main/restore.png"  border="0"  alt="" /> Restore Database</a>					<a href="http://localhost:8080/fullbackups"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Backup Data</a>					<a href="http://localhost:8080/sinkronisasi"><img src="http://localhost:8080/images/main/approve.png"  border="0"  alt="" /> Sinkronisasi Data Opr</a>					</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Info</p>
+		<div class="menu_body" align="left">
+			<div class="user_info">
+				<table width="0" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th>Username</th>
+						<td>:</td>
+						<td>coba10</td>
+					</tr>
+					<tr>
+						<th>Role</th>
+						<td>:</td>
+						<td>Super Admin</td>
+					</tr>
+					<tr>
+						<th>Wewenang</th>
+						<td>:</td>
+						<td>Semua Golongan</td>
+					</tr>
+					<tr>
+						<th>Pegawai</th>
+						<td>:</td>
+						<td>Prima S Welli Candra, A.Md.</td>
+					</tr>
+					<tr>
+						<th>Wilayah Kerja</th>
+						<td>:</td>
+						<td>Malang</td>
+					</tr>
+					<tr>
+						<th>Tahun</th>
+						<td>:</td>
+						<td>2024						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Menu</p>
+		<div class="menu_body" align="left">
+			<!--
+			<a href="http://localhost:8080/doc/User_Manual_Sistem_Informasi_Sistem_Perbenihan.docx"><img src="http://localhost:8080/images/main/book.png"  border="0"  alt="" /> Bantuan Penggunaan</a>		
+						-->
+			<a href="http://localhost:8080/ganti_password"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Ubah Password</a>			<a href='javascript:void(0);' onclick="window.open('https://docs.google.com/spreadsheet/viewform?formkey=dHBCNGtNUFltY29hcURrM1NsTDJ0bXc6MQ', '_blank', 'width=800,height=600,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0');"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Feedback</a>			<a href="http://localhost:8080/logout"><img src="http://localhost:8080/images/main/key--plus.png"  border="0"  alt="" /> Logout</a>		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+	</div> <!--Code for menu ends here-->
+</div></div> 
+	<div class="ui-layout-south" style="background-color:#333333">
+		<div id="footerpanel">
+			<div style="float:right;"><img src="http://localhost:8080/images/main/footer-right.png" width="314" height="30" /></div>
+		</div>
+	</div> 
+</body>
+
+</html>

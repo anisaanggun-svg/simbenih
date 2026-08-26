@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
+<head>
+	<title>Sistem Informasi Perbenihan</title>
+	<!-- Link CSS -->
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/shortcut.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/flexigrid.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/jquery.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/main.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/button.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/form/formm.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/tab_view/tab-view.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/datepicker.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/ext-alll.css" />
+	<link rel="shorcut icon" href="http://localhost:8080/images/favicon.png"/>
+<style>
+	div#headerKanan {
+    position: absolute;
+    top: 50px;
+    left: 700px;
+    font-size: larger;
+	color:#fff;
+}
+.grey{
+	background: #D9D9DB;
+    color: #000000 !important;
+    padding: 5px !important;
+    height: 15px;
+}
+</style>
+	<!-- JAVASCRIPT -->
+	<script type="text/javascript" src="http://localhost:8080/js/wufoo.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>
+	<script type="text/javascript">
+		<!--//---------------------------------+
+		//  Developed by Roshan Bhattarai 
+		//  Visit http://roshanbh.com.np for this script and more.
+		//  This notice MUST stay intact for legal use
+		// --------------------------------->
+		$(document).ready(function()
+		{
+			//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+			$("#firstpane p.menu_head").click(function()
+			{
+				$(this).css({backgroundImage:"url(http://localhost:8080/images/main/bl_head1.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+				$(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/bl_head0.png)"});
+			});
+			//slides the element with class "menu_body" when mouse is over the paragraph
+			$("#secondpane p.menu_head").mouseover(function()
+			{
+				 $(this).css({backgroundImage:"url(http://localhost:8080/images/main/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+				 $(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/left.png)"});
+			});
+		});
+	</script>
+	<script type="text/javascript"> 
+		var outerLayout, middleLayout, innerLayout; 
+		$(document).ready(function () { 
+			outerLayout = $('body').layout({ 
+				center__paneSelector:	".outer-center" 
+			,	west__paneSelector:		".outer-west" 
+			,	east__paneSelector:		".outer-east" 
+			,	west__size:				165
+			,	east__size:				173 
+			,	spacing_open:			8 // ALL panes
+			,	spacing_closed:			8 // ALL panes
+			,	north__spacing_open:	0
+			,	south__spacing_open:	0
+			,	center__onresize:		"middleLayout.resizeAll" 
+			}); 
+		}); 
+	</script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.MultiFile.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.ui.all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.layout.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/flexigrid.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/datepicker.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/shortcut.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/ajax.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/tab-view.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-base.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-combo.js"></script>
+	</head>
+
+<body>
+		<div class="ui-layout-north" style="background-color:#333333">
+		<div id="toppanel">
+			<div style="padding-left:4px;float:left">
+				<img src="http://localhost:8080/images/main/header.png" width="504" height="90" />
+			</div>
+			<div style="float:right;padding-right:4px;" >
+				<img src="http://localhost:8080/images/main/header-kanan.png" width="129" height="90" />
+				<div id="headerKanan"></div>
+			</div>
+		</div>
+	</div> 
+	<div class="outer-center" id="center" style="background-color:#595959"><div id="main">
+
+
+<div id="container">
+	<form action="http://localhost:8080/atur_varietas/input_varietas" method="post" class="wufoo">	<fieldset class="fieldset">
+	<legend class="legend">
+		| Form input data master varietas |
+	</legend>
+	
+	<div class="info">
+		<div>User melakukan pengisian form untuk menambah varietas</div>
+	</div>
+	
+	<div>
+		<a href="http://localhost:8080/atur_varietas" Menampilkan halaman varietas><img src="http://localhost:8080/images/main/39.png"  border="0"  alt="" /> Kembali ke Master Data Varietas</a>	</div>
+	<br>	
+ <!-- Konten -------------------------------------------------------------------------->
+ <div id="contentform">
+ <ul>
+ 		<!--------------------------------------------------------------------------------->
+ 		<li>
+			<label class="desc">Kode Varietas *</label>
+			<div>
+				<input autocomplete="off" class="field text small" maxlength="5" type="text" name="kode_varietas" id="kode_varietas" value="" /> 
+			</div>
+			
+		</li>		
+				
+		
+		<!--------------------------------------------------------------------------------->
+		<li>
+			<label class="desc">Nama varietas *</label>
+			<div>
+				<input autocomplete="off" class="field text medium" type="text" name="nama_varietas" id="nama_varietas" value="" /> 
+			</div>
+			
+		</li>		
+				
+		<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+		<li>
+			<label class="desc">Nama Tanaman *</label>
+			<div>
+				<select name="tanaman" class="field select">
+<option value="0" selected="selected">-- Pilih Tanaman --</option>
+<option value="1">Pdn-Padi Inbrida-open polinatet-Non Hibrida</option>
+<option value="2">Pdn-Padi Inbrida-Restorer-Non Hibrida</option>
+<option value="3">Pdh-Padi Hibrida-Tiga galur-Non Hibrida</option>
+<option value="4">Pdh-Padi Hibrida-CMS-Non Hibrida</option>
+<option value="5">Jgb-Jagung Komposit-Komposit-Non Hibrida</option>
+<option value="6">Jg-Jagung-Galur murni-Non Hibrida</option>
+<option value="7">Jgh-Jagung Hibrida-.-Non Hibrida</option>
+<option value="12">Sgm-Shorgum-open polinatet-Non Hibrida</option>
+<option value="13">Gdm-GANDUM-open polinatet-Non Hibrida</option>
+<option value="14">Kdl-Kedelai-Clestogami-Non Hibrida</option>
+<option value="15">Kct-Kacang Tanah-Clestogami-Non Hibrida</option>
+<option value="16">Kch-Kacang Hijau-Clestogami-Non Hibrida</option>
+<option value="17">Krp-KORO PEDANG-Clestogami-Non Hibrida</option>
+<option value="18">Kcm-KACANG MERAH-Clestogami-Non Hibrida</option>
+<option value="19">Ubj-Ubi Jalar-Stek batang-Non Hibrida</option>
+<option value="20">Ubj-Ubi Jalar-Umbi-Non Hibrida</option>
+<option value="21">Ubk-Ubi Kayu-Stek batang-Non Hibrida</option>
+<option value="22">Tls-TALAS-Umbi-Non Hibrida</option>
+<option value="23">Ap-ALPUKAT-Seedling-Non Hibrida</option>
+<option value="24">Ap-ALPUKAT-Okulasi-Non Hibrida</option>
+<option value="25">Ap-ALPUKAT-Grafting-Non Hibrida</option>
+<option value="26">Ap-ALPUKAT-Mata tempel-Non Hibrida</option>
+<option value="27">Ap-ALPUKAT-Tunas pucuk-Non Hibrida</option>
+<option value="28">Ag-ANGGUR-Stek berakar-Non Hibrida</option>
+<option value="29">Ag-ANGGUR-Grafting-Non Hibrida</option>
+<option value="30">Ag-ANGGUR-Stek batang-Non Hibrida</option>
+<option value="31">Al-APEL-Tunas akar-Non Hibrida</option>
+<option value="32">Al-APEL-Okulasi-Non Hibrida</option>
+<option value="33">Al-APEL-Stek batang-Non Hibrida</option>
+<option value="34">Al-APEL-Stek berakar-Non Hibrida</option>
+<option value="35">Al-APEL-Stek akar-Non Hibrida</option>
+<option value="36">Al-APEL-Mata tempel-Non Hibrida</option>
+<option value="37">Bmb-BELIMBING-Seedling-Non Hibrida</option>
+<option value="38">Bmb-BELIMBING-Okulasi-Non Hibrida</option>
+<option value="39">Bmb-BELIMBING-Grafting-Non Hibrida</option>
+<option value="40">Bmb-BELIMBING-Mata tempel-Non Hibrida</option>
+<option value="41">Bmb-BELIMBING-Tunas pucuk-Non Hibrida</option>
+<option value="42">Bme-BUAH MERAH-Seedling-Non Hibrida</option>
+<option value="43">Bme-BUAH MERAH-Anakan-Non Hibrida</option>
+<option value="44">Bme-BUAH MERAH-Grafting-Non Hibrida</option>
+<option value="45">Bme-BUAH MERAH-Mata tempel-Non Hibrida</option>
+<option value="46">Bme-BUAH MERAH-Tunas pucuk-Non Hibrida</option>
+<option value="47">Bw-BIWA-Seedling-Non Hibrida</option>
+<option value="48">Bw-BIWA-Okulasi-Non Hibrida</option>
+<option value="49">Bw-BIWA-Mata tempel-Non Hibrida</option>
+<option value="50">Bw-BIWA-Tunas pucuk-Non Hibrida</option>
+<option value="51">Cp-CEMPEDAK-Okulasi-Non Hibrida</option>
+<option value="52">Cp-CEMPEDAK-Grafting-Non Hibrida</option>
+<option value="53">Cp-CEMPEDAK-Mata tempel-Non Hibrida</option>
+<option value="54">Cp-CEMPEDAK-Tunas pucuk-Non Hibrida</option>
+<option value="55">Dk-DUKU-Seedling-Non Hibrida</option>
+<option value="56">Dk-DUKU-Okulasi-Non Hibrida</option>
+<option value="57">Dk-DUKU-Grafting-Non Hibrida</option>
+<option value="58">Dk-DUKU-Mata tempel-Non Hibrida</option>
+<option value="59">Dk-DUKU-Tunas pucuk-Non Hibrida</option>
+<option value="60">Dk-DUKU-Cangkok-Non Hibrida</option>
+<option value="61">Dr-DURIAN-Seedling-Non Hibrida</option>
+<option value="62">Dr-DURIAN-Okulasi-Non Hibrida</option>
+<option value="63">Dr-DURIAN-Grafting-Non Hibrida</option>
+<option value="64">Dr-DURIAN-Mata tempel-Non Hibrida</option>
+<option value="65">Dr-DURIAN-Tunas pucuk-Non Hibrida</option>
+<option value="66">Ja-JAMBU AIR-Seedling-Non Hibrida</option>
+<option value="67">Ja-JAMBU AIR-Okulasi-Non Hibrida</option>
+<option value="68">Ja-JAMBU AIR-Grafting-Non Hibrida</option>
+<option value="69">Ja-JAMBU AIR-Mata tempel-Non Hibrida</option>
+<option value="70">Ja-JAMBU AIR-Tunas pucuk-Non Hibrida</option>
+<option value="71">Ja-JAMBU AIR-Cangkok-Non Hibrida</option>
+<option value="72">Jbj-JAMBU BIJI-Seedling-Non Hibrida</option>
+<option value="73">Jbj-JAMBU BIJI-Okulasi-Non Hibrida</option>
+<option value="74">Jbj-JAMBU BIJI-Grafting-Non Hibrida</option>
+<option value="75">Jbj-JAMBU BIJI-Mata tempel-Non Hibrida</option>
+<option value="76">Jbj-JAMBU BIJI-Tunas pucuk-Non Hibrida</option>
+<option value="77">Jbj-JAMBU BIJI-Cangkok-Non Hibrida</option>
+<option value="78">Jbl-JAMBU BOL-Seedling-Non Hibrida</option>
+<option value="79">Jbl-JAMBU BOL-Okulasi-Non Hibrida</option>
+<option value="80">Jbl-JAMBU BOL-Grafting-Non Hibrida</option>
+<option value="81">Jbl-JAMBU BOL-Mata tempel-Non Hibrida</option>
+<option value="82">Jbl-JAMBU BOL-Tunas pucuk-Non Hibrida</option>
+<option value="83">Jbl-JAMBU BOL-Cangkok-Non Hibrida</option>
+<option value="84">Jr-JERUK-Kultur jaringan In Vitro-Non Hibrida</option>
+<option value="85">Jr-JERUK-Kultur jaringan Pasca In Vitro-Non Hibrida</option>
+<option value="86">Jr-JERUK-Seedling-Non Hibrida</option>
+<option value="87">Jr-JERUK-Okulasi-Non Hibrida</option>
+<option value="88">Jr-JERUK-Mata tempel-Non Hibrida</option>
+<option value="89">Jr-JERUK-Cangkok-Non Hibrida</option>
+<option value="90">Kc-KECAPI-Seedling-Non Hibrida</option>
+<option value="91">Kc-KECAPI-Okulasi-Non Hibrida</option>
+<option value="92">Kc-KECAPI-Grafting-Non Hibrida</option>
+<option value="93">Kc-KECAPI-Mata tempel-Non Hibrida</option>
+<option value="94">Kc-KECAPI-Tunas pucuk-Non Hibrida</option>
+<option value="95">Ko-KEDONODNG-Seedling-Non Hibrida</option>
+<option value="96">Ko-KEDONODNG-Okulasi-Non Hibrida</option>
+<option value="97">Ko-KEDONODNG-Grafting-Non Hibrida</option>
+<option value="98">Ko-KEDONODNG-Mata tempel-Non Hibrida</option>
+<option value="99">Ko-KEDONODNG-Tunas pucuk-Non Hibrida</option>
+<option value="100">Kke-KELENGKENG-Seedling-Non Hibrida</option>
+<option value="101">Kke-KELENGKENG-Okulasi-Non Hibrida</option>
+<option value="102">Kke-KELENGKENG-Grafting-Non Hibrida</option>
+<option value="103">Kke-KELENGKENG-Mata tempel-Non Hibrida</option>
+<option value="104">Kke-KELENGKENG-Tunas pucuk-Non Hibrida</option>
+<option value="105">Kke-KELENGKENG-Cangkok-Non Hibrida</option>
+<option value="106">Ksm-KESEMEK-Seedling-Non Hibrida</option>
+<option value="107">Ksm-KESEMEK-Okulasi-Non Hibrida</option>
+<option value="108">Ksm-KESEMEK-Grafting-Non Hibrida</option>
+<option value="109">Ksm-KESEMEK-Mata tempel-Non Hibrida</option>
+<option value="110">Ksm-KESEMEK-Tunas pucuk-Non Hibrida</option>
+<option value="111">Ksm-KESEMEK-Tunas akar-Non Hibrida</option>
+<option value="112">Ksm-KESEMEK-Stek akar-Non Hibrida</option>
+<option value="113">Ku-KUINI-Seedling-Non Hibrida</option>
+<option value="114">Ku-KUINI-Okulasi-Non Hibrida</option>
+<option value="115">Ku-KUINI-Grafting-Non Hibrida</option>
+<option value="116">Ku-KUINI-Mata tempel-Non Hibrida</option>
+<option value="117">Ku-KUINI-Tunas pucuk-Non Hibrida</option>
+<option value="118">Ls-LANGSAT-Seedling-Non Hibrida</option>
+<option value="119">Ls-LANGSAT-Okulasi-Non Hibrida</option>
+<option value="120">Ls-LANGSAT-Grafting-Non Hibrida</option>
+<option value="121">Ls-LANGSAT-Mata tempel-Non Hibrida</option>
+<option value="122">Ls-LANGSAT-Tunas pucuk-Non Hibrida</option>
+<option value="123">Ls-LANGSAT-Cangkok-Non Hibrida</option>
+<option value="124">Lc-LECI-Seedling-Non Hibrida</option>
+<option value="125">Lc-LECI-Okulasi-Non Hibrida</option>
+<option value="126">Lc-LECI-Grafting-Non Hibrida</option>
+<option value="127">Lc-LECI-Mata tempel-Non Hibrida</option>
+<option value="128">Lc-LECI-Tunas pucuk-Non Hibrida</option>
+<option value="129">Mg-MANGGA-Seedling-Non Hibrida</option>
+<option value="130">Mg-MANGGA-Okulasi-Non Hibrida</option>
+<option value="131">Mg-MANGGA-Grafting-Non Hibrida</option>
+<option value="132">Mg-MANGGA-Mata tempel-Non Hibrida</option>
+<option value="133">Mg-MANGGA-Tunas pucuk-Non Hibrida</option>
+<option value="134">Mg-MANGGA-Cangkok-Non Hibrida</option>
+<option value="135">Mi-MANGGIS-Seedling-Non Hibrida</option>
+<option value="136">Mi-MANGGIS-Okulasi-Non Hibrida</option>
+<option value="137">Mi-MANGGIS-Grafting-Non Hibrida</option>
+<option value="138">Mi-MANGGIS-Mata tempel-Non Hibrida</option>
+<option value="139">Mi-MANGGIS-Tunas pucuk-Non Hibrida</option>
+<option value="140">Mk-MARKISAH-Stek akar-Non Hibrida</option>
+<option value="141">Mk-MARKISAH-Stek berakar-Non Hibrida</option>
+<option value="142">Mta-MATOA-Seedling-Non Hibrida</option>
+<option value="143">Mta-MATOA-Okulasi-Non Hibrida</option>
+<option value="144">Mta-MATOA-Grafting-Non Hibrida</option>
+<option value="145">Mta-MATOA-Mata tempel-Non Hibrida</option>
+<option value="146">Mta-MATOA-Tunas pucuk-Non Hibrida</option>
+<option value="147">Nk-NANGKA-Seedling-Non Hibrida</option>
+<option value="148">Nk-NANGKA-Okulasi-Non Hibrida</option>
+<option value="149">Nk-NANGKA-Grafting-Non Hibrida</option>
+<option value="150">Nk-NANGKA-Mata tempel-Non Hibrida</option>
+<option value="151">Nk-NANGKA-Tunas pucuk-Non Hibrida</option>
+<option value="152">Nn-NENAS-Eksplant-Non Hibrida</option>
+<option value="153">Nn-NENAS-Anakan-Non Hibrida</option>
+<option value="154">Nnw-NENAS-Crown-Non Hibrida</option>
+<option value="155">Pp-PEPAYA-open polinatet-Non Hibrida</option>
+<option value="156">Pp-PEPAYA-.-Non Hibrida</option>
+<option value="157">Pi-PISANG-Kultur jaringan In Vitro-Non Hibrida</option>
+<option value="158">Pi-PISANG-Kultur jaringan Pasca In Vitro-Non Hibrida</option>
+<option value="159">Pi-PISANG-Eksplant-Non Hibrida</option>
+<option value="160">Pi-PISANG-Tunas bonggol-Non Hibrida</option>
+<option value="161">Pi-PISANG-Anakan-Non Hibrida</option>
+<option value="162">Rm-RAMBUTAN-Seedling-Non Hibrida</option>
+<option value="163">Rm-RAMBUTAN-Okulasi-Non Hibrida</option>
+<option value="164">Rm-RAMBUTAN-Grafting-Non Hibrida</option>
+<option value="165">Rm-RAMBUTAN-Mata tempel-Non Hibrida</option>
+<option value="166">Slk-SALAK-Seedling-Non Hibrida</option>
+<option value="167">Slk-SALAK-Anakan-Non Hibrida</option>
+<option value="168">So-SAWO-Seedling-Non Hibrida</option>
+<option value="169">So-SAWO-Okulasi-Non Hibrida</option>
+<option value="170">So-SAWO-Grafting-Non Hibrida</option>
+<option value="171">So-SAWO-Mata tempel-Non Hibrida</option>
+<option value="172">So-SAWO-Tunas pucuk-Non Hibrida</option>
+<option value="173">So-SAWO-Cangkok-Non Hibrida</option>
+<option value="174">Si-SIRSAK-Seedling-Non Hibrida</option>
+<option value="175">Si-SIRSAK-Okulasi-Non Hibrida</option>
+<option value="176">Si-SIRSAK-Grafting-Non Hibrida</option>
+<option value="177">Si-SIRSAK-Mata tempel-Non Hibrida</option>
+<option value="178">Si-SIRSAK-Tunas pucuk-Non Hibrida</option>
+<option value="179">Srk-SRIKAYA-Seedling-Non Hibrida</option>
+<option value="180">Srk-SRIKAYA-Okulasi-Non Hibrida</option>
+<option value="181">Srk-SRIKAYA-Grafting-Non Hibrida</option>
+<option value="182">Srk-SRIKAYA-Mata tempel-Non Hibrida</option>
+<option value="183">Srk-SRIKAYA-Tunas pucuk-Non Hibrida</option>
+<option value="184">Sk-SUKUN-Stek akar-Non Hibrida</option>
+<option value="185">Sk-SUKUN-Tunas akar-Non Hibrida</option>
+<option value="186">Wn-WANI-Seedling-Non Hibrida</option>
+<option value="187">Wn-WANI-Okulasi-Non Hibrida</option>
+<option value="188">Wn-WANI-Grafting-Non Hibrida</option>
+<option value="189">Wn-WANI-Mata tempel-Non Hibrida</option>
+<option value="190">Bk-BENGKUANG-open polinatet-Non Hibrida</option>
+<option value="191">Sm-SEMANGKA-open polinatet-Non Hibrida</option>
+<option value="192">Sm-SEMANGKA-.-Non Hibrida</option>
+<option value="193">Ml-MELON-open polinatet-Non Hibrida</option>
+<option value="194">Ml-MELON-.-Non Hibrida</option>
+<option value="195">Trp-TERONG PIRUS-open polinatet-Non Hibrida</option>
+<option value="196">Trp-TERONG PIRUS-.-Non Hibrida</option>
+<option value="197">Wn-WANI-Tunas pucuk-Non Hibrida</option>
+<option value="198">Mj-MELINJO-Seedling-Non Hibrida</option>
+<option value="199">Mj-MELINJO-Okulasi-Non Hibrida</option>
+<option value="200">Mj-MELINJO-Grafting-Non Hibrida</option>
+<option value="201">Mj-MELINJO-Mata tempel-Non Hibrida</option>
+<option value="202">Bd-BAWANG  DAUN-open polinatet-Non Hibrida</option>
+<option value="203">Mj-MELINJO-Tunas pucuk-Non Hibrida</option>
+<option value="204">Bd-BAWANG  DAUN-Umbi-Non Hibrida</option>
+<option value="205">Bm-BAWANG MERAH-open polinatet-Non Hibrida</option>
+<option value="206">Bm-BAWANG MERAH-Umbi-Non Hibrida</option>
+<option value="207">Bp-BAWANG PUTIH-Umbi-Non Hibrida</option>
+<option value="208">By-BAYAM-open polinatet-Non Hibrida</option>
+<option value="209">Br-BROCOLI-open polinatet-Non Hibrida</option>
+<option value="210">Br-BROCOLI-.-Non Hibrida</option>
+<option value="211">Bc-BUNCIS-open polinatet-Non Hibrida</option>
+<option value="212">Cbb-CABAI BESAR-open polinatet-Non Hibrida</option>
+<option value="213">Cbb-CABAI BESAR-.-Non Hibrida</option>
+<option value="214">Cbk-CABAI KERITING-open polinatet-Non Hibrida</option>
+<option value="215">Cbk-CABAI KERITING-.-Non Hibrida</option>
+<option value="216">Cbr-CABAI RAWIT-open polinatet-Non Hibrida</option>
+<option value="217">Cbr-CABAI RAWIT-.-Non Hibrida</option>
+<option value="218">Cbp-CABAI PAPRIKA-open polinatet-Non Hibrida</option>
+<option value="219">Cbp-CABAI PAPRIKA-.-Non Hibrida</option>
+<option value="220">Jm-JAGUNG MANIS-Komposit-Non Hibrida</option>
+<option value="221">Jg-JAGUNG MANIS-Galur murni-Non Hibrida</option>
+<option value="222">Jm-JAGUNG MANIS-.-Non Hibrida</option>
+<option value="223">Jm-JAGUNG MANIS-Doble cross-Non Hibrida</option>
+<option value="224">Jm-JAGUNG MANIS-Try Way Cross-Non Hibrida</option>
+<option value="225">Jm-JAGUNG MANIS-Top Cross-Non Hibrida</option>
+<option value="226">Jm-JAGUNG MANIS-Parental Cross-Non Hibrida</option>
+<option value="227">Kcp-KACANG PANJANG-Clestogami-Non Hibrida</option>
+<option value="228">Ku-KACANG TUNGGAK-Clestogami-Non Hibrida</option>
+<option value="229">Ki-KAILAN-open polinatet-Non Hibrida</option>
+<option value="230">Ki-KAILAN-.-Non Hibrida</option>
+<option value="231">Kk-KANGKUNG-open polinatet-Non Hibrida</option>
+<option value="232">Kds-KEDELAI SAYUR-Clestogami-Non Hibrida</option>
+<option value="233">Kn-KENTANG-Kultur jaringan In Vitro-Non Hibrida</option>
+<option value="234">Kn-KENTANG-Kultur jaringan Pasca In Vitro-Non Hibrida</option>
+<option value="235">Kn-KENTANG-Umbi-Non Hibrida</option>
+<option value="236">Kb-KUBIS-open polinatet-Non Hibrida</option>
+<option value="237">Kb-KUBIS-.-Non Hibrida</option>
+<option value="238">Cf-KUBIS BUNGA-open polinatet-Non Hibrida</option>
+<option value="239">Cf-KUBIS BUNGA-.-Non Hibrida</option>
+<option value="240">Lb-LABU / WALUH-open polinatet-Non Hibrida</option>
+<option value="241">Lb-LABU / WALUH-.-Non Hibrida</option>
+<option value="242">Lk-LOBAK-open polinatet-Non Hibrida</option>
+<option value="243">Lk-LOBAK-.-Non Hibrida</option>
+<option value="244">Mt-MENTIMUN-open polinatet-Non Hibrida</option>
+<option value="245">Mt-MENTIMUN-.-Non Hibrida</option>
+<option value="246">Ok-OKRA-open polinatet-Non Hibrida</option>
+<option value="247">Ok-OKRA-.-Non Hibrida</option>
+<option value="248">Oy-OYONG / GAMBAS-open polinatet-Non Hibrida</option>
+<option value="249">Oy-OYONG / GAMBAS-.-Non Hibrida</option>
+<option value="250">Pr-PARIA-open polinatet-Non Hibrida</option>
+<option value="251">Pr-PARIA-.-Non Hibrida</option>
+<option value="252">Ci-SAWI HIJAU-open polinatet-Non Hibrida</option>
+<option value="253">Ci-SAWI HIJAU-.-Non Hibrida</option>
+<option value="254">Sw-SAWI PAHIT-open polinatet-Non Hibrida</option>
+<option value="255">Sw-SAWI PAHIT-.-Non Hibrida</option>
+<option value="256">Ps-SAWI PUTIH / PETSAI-open polinatet-Non Hibrida</option>
+<option value="257">Ps-SAWI PUTIH / PETSAI-.-Non Hibrida</option>
+<option value="258">Sl-SELADA-open polinatet-Non Hibrida</option>
+<option value="259">Sl-SELADA-.-Non Hibrida</option>
+<option value="260">Sd-SELEDRI-open polinatet-Non Hibrida</option>
+<option value="261">Sp-SPINACH-open polinatet-Non Hibrida</option>
+<option value="262">To-TANG OH-open polinatet-Non Hibrida</option>
+<option value="263">To-TANG OH-.-Non Hibrida</option>
+<option value="264">Tr-TERONG-open polinatet-Non Hibrida</option>
+<option value="265">Tr-TERONG-.-Non Hibrida</option>
+<option value="266">Tm-TOMAT -open polinatet-Non Hibrida</option>
+<option value="267">Tm-TOMAT-.-Non Hibrida</option>
+<option value="268">Wt-WORTEL -open polinatet-Non Hibrida</option>
+<option value="269">Ang-ANGGREK-Eksplant-Non Hibrida</option>
+<option value="270">Ang-ANGGREK-Kultur jaringan In Vitro-Non Hibrida</option>
+<option value="271">Ang-ANGGREK-Kultur jaringan Pasca In Vitro-Non Hibrida</option>
+<option value="272">Any-ANYELIR-Tunas pucuk-Non Hibrida</option>
+<option value="273">Gla-GLADIOL-Umbi-Non Hibrida</option>
+<option value="274">Kri-KRISAN-Tunas pucuk-Non Hibrida</option>
+<option value="275">Kri-KRISAN-Stek berakar-Non Hibrida</option>
+<option value="276">Sdp-SEDAP MALAM-Umbi-Non Hibrida</option>
+<option value="277">Mwr-MAWAR-Stek berakar-Non Hibrida</option>
+<option value="278">Mwr-MAWAR-Stek batang-Non Hibrida</option>
+<option value="279">Mwr-MAWAR-Mata tempel-Non Hibrida</option>
+<option value="280">Mwr-MAWAR-Okulasi-Non Hibrida</option>
+<option value="281">Mel-MELATI-Stek berakar-Non Hibrida</option>
+<option value="282">Mel-MELATI-Stek batang-Non Hibrida</option>
+<option value="283">Jhe-JAHE-Rimpang-Non Hibrida</option>
+<option value="284">Ken-KENCUR-Rimpang-Non Hibrida</option>
+<option value="285">Kny-KUNYIT-Rimpang-Non Hibrida</option>
+<option value="286">Tml-TEMULAWAK-Rimpang-Non Hibrida</option>
+<option value="287">Ldh-LIDAH BUAYA-Eksplant-Non Hibrida</option>
+<option value="288">Ldh-LIDAH BUAYA-Anakan-Non Hibrida</option>
+<option value="289">Prg-Porang-Umbi-Non Hibrida</option>
+</select>			</div>
+			
+		</li>
+				<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+		<li>
+			<label class="desc">Status Master*</label>
+			<div>
+								<select name="status_varietas" id="status_varietas"  class="field text select">
+					<option value="1" selected>Aktif</option>
+					<option value="0" >Tidak Aktif</option>
+				</select>
+			</div>	
+		</li>		
+				<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+				
+		
+		<li class="buttons">
+		  <input id="saveForm" type="submit" value="Simpan" />
+		  <input name="reset" type="reset" value="Reset"/>
+		</li>
+	</ul>
+	</div>
+</fieldset>
+</form></form>
+</div><!--container--></div></div> 
+	<div class="outer-west" style="background-color:#333333">
+<div> <!--This is the first division of left-->
+	<div id="firstpane" class="menu_list"> <!--Code for menu starts here-->
+		<p class="menu_head">
+			<a href="http://localhost:8080/beranda" Menampilkan halaman utama>Halaman Utama</a>		</p>
+
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<p class="menu_head">Sertifikasi</p>
+			<div class="menu_body" align="left">
+				<a href="http://localhost:8080/data_permohonan"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Pengajuan & Fase Lap</a>				<a href="http://localhost:8080/pasca_lapangan/pasca_pengajuan"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Pasca Lapangan</a><a href="http://localhost:8080/pasca_lapangan/konsep_label"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label</a><a href="http://localhost:8080/pasca_lapangan/konsep_label_standart"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label Standart</a>			</div>
+		
+		<!-----------------------------------------------MENU LAB--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Laboratorium</p>
+			<div class="menu_body" align="left">
+			<a href="http://localhost:8080/uji_lab/pengujian" Menampilkan halaman uji lab><img src="http://localhost:8080/images/main/lab.png"  border="0"  alt="" />Uji Laboratorium</a>			<a href="http://localhost:8080/uji_lab/kaji_ulang/getBukuInduk"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Buku Induk</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>		
+		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Data Master</p>
+		<div class="menu_body" align="left" style="overflow:auto; height:150px; margin-right:5px;">
+			<a href="http://localhost:8080/atur_komoditas" Menampilkan halaman data Golongan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Golongan</a>			<a href="http://localhost:8080/atur_golongan" Menampilkan halaman Kumpulan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kumpulan</a>			<a href="http://localhost:8080/atur_jenis_tanaman" Menampilkan halaman jenis tanaman><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Jenis Tanaman</a>			<a href="http://localhost:8080/atur_varietas" Menampilkan halaman varietas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Varietas</a>			<a href="http://localhost:8080/atur_grup_kelas_benih" Menampilkan halaman grup kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master G.Kelas Benih</a>			<a href="http://localhost:8080/atur_kelas_benih" Menampilkan halaman kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kelas Benih</a>			<a href="http://localhost:8080/atur_penyakit" Menampilkan halaman penyakit><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Penyakit</a>			<a href="http://localhost:8080/atur_kabupaten" Menampilkan halaman kabupaten><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kabupaten</a>			<a href="http://localhost:8080/atur_kecamatan" Menampilkan halaman kecamatan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kecamatan</a>			<a href="http://localhost:8080/atur_satuan" Menampilkan halaman satuan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Satuan</a>			<a href="http://localhost:8080/atur_satgas" Menampilkan halaman satgas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Wilayah Kerja</a>			<a href="http://localhost:8080/atur_status" Menampilkan halaman status><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Status</a>			<a href="http://localhost:8080/atur_produsen" Menampilkan halaman produsen><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Produsen</a>			<a href="http://localhost:8080/atur_pegawai" Menampilkan halaman pegawai><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Pegawai</a>			<a href="http://localhost:8080/atur_mata_anggaran" Menampilkan halaman mata anggaran><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master M. Anggaran</a>			<a href="http://localhost:8080/atur_konfigurasi"><img src="http://localhost:8080/images/main/71.png"  border="0"  alt="" /> Konfigurasi Aplikasi</a>			<a href="http://localhost:8080/atur_user"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Daftar User</a>		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!--
+		<p class="menu_head">Laporan</p>
+		<div class="menu_body" align="left">
+			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_varietas"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Varietas</a>			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_groupKB"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Grup KB</a>		</div>
+		-->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">&nbsp;&nbsp;&nbsp;&nbsp;Manajemen Aplikasi</p>
+		<div class="menu_body" align="left">
+			
+			<a href="http://localhost:8080/atur_log"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Serti Log</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>			
+							<a href="http://localhost:8080/restore"><img src="http://localhost:8080/images/main/restore.png"  border="0"  alt="" /> Restore Database</a>					<a href="http://localhost:8080/fullbackups"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Backup Data</a>					<a href="http://localhost:8080/sinkronisasi"><img src="http://localhost:8080/images/main/approve.png"  border="0"  alt="" /> Sinkronisasi Data Opr</a>					</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Info</p>
+		<div class="menu_body" align="left">
+			<div class="user_info">
+				<table width="0" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th>Username</th>
+						<td>:</td>
+						<td>coba10</td>
+					</tr>
+					<tr>
+						<th>Role</th>
+						<td>:</td>
+						<td>Super Admin</td>
+					</tr>
+					<tr>
+						<th>Wewenang</th>
+						<td>:</td>
+						<td>Semua Golongan</td>
+					</tr>
+					<tr>
+						<th>Pegawai</th>
+						<td>:</td>
+						<td>Prima S Welli Candra, A.Md.</td>
+					</tr>
+					<tr>
+						<th>Wilayah Kerja</th>
+						<td>:</td>
+						<td>Malang</td>
+					</tr>
+					<tr>
+						<th>Tahun</th>
+						<td>:</td>
+						<td>2024						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Menu</p>
+		<div class="menu_body" align="left">
+			<!--
+			<a href="http://localhost:8080/doc/User_Manual_Sistem_Informasi_Sistem_Perbenihan.docx"><img src="http://localhost:8080/images/main/book.png"  border="0"  alt="" /> Bantuan Penggunaan</a>		
+						-->
+			<a href="http://localhost:8080/ganti_password"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Ubah Password</a>			<a href='javascript:void(0);' onclick="window.open('https://docs.google.com/spreadsheet/viewform?formkey=dHBCNGtNUFltY29hcURrM1NsTDJ0bXc6MQ', '_blank', 'width=800,height=600,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0');"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Feedback</a>			<a href="http://localhost:8080/logout"><img src="http://localhost:8080/images/main/key--plus.png"  border="0"  alt="" /> Logout</a>		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+	</div> <!--Code for menu ends here-->
+</div></div> 
+	<div class="ui-layout-south" style="background-color:#333333">
+		<div id="footerpanel">
+			<div style="float:right;"><img src="http://localhost:8080/images/main/footer-right.png" width="314" height="30" /></div>
+		</div>
+	</div> 
+</body>
+
+</html>

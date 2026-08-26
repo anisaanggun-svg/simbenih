@@ -1,0 +1,73 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="SHORTCUT ICON" href="<?= base_url() ?>images/favicon.png"/>
+	
+	<!-- Drop CSS here -->
+	<link rel="stylesheet" type="text/css" href="<?= base_url();?>css/login/login.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="<?= base_url();?>css/default/button.css" media="screen, tv, projection" title="Default" />	
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Halaman Login | Sistem Informasi Perbenihan</title>
+</head>
+
+<body bgcolor="#333333">
+<div id="main_panel">
+	<div id="panel1"></div>
+	<div id="panel2"></div>
+	<div id="panel3"></div>
+	<div id="panel4"></div>
+	<div id="panel5"></div>
+	<div id="panel6"></div>
+	<div id="panel7">
+		<div align="center">
+		<?= form_open('login');?>
+	    <table width="230" border="0" cellpadding="0" cellspacing="5" style="padding-left:1px;">
+			<tr height="3px">
+			  <td colspan="3"></td>
+		  	</tr>
+			<tr>
+              <td width="24%" align="right">Username</td>
+	            <td width="3%"><div align="center">:</div></td>
+	            <td width="73%"><input type="text" name="username" class="text" autocomplete="off" /></td>
+			</tr>
+			<tr>
+				<td align="right">Password</td>
+				<td><div align="center">:</div></td>
+				<td><input type="password" name="password" class="text"/></td>
+			</tr>
+                        <tr>
+				<td align="right">Tahun</td>
+				<td><div align="center">:</div></td>
+				<td align="left">
+                                    <?php 
+                                    if(set_value('tahun')!='') $set_select = set_value('tahun');
+                                    else $set_select = '-1';
+                                    echo form_dropdown('tahun',$tahun,$set_select,'class="field text select"'); ?>
+                                </td>
+			</tr>
+			<tr>
+				<td colspan="2">&nbsp;</td>
+				<td>
+					<input type="submit" name="Submit" value="Login" id="submit-button"/>
+            		<input type="reset" name="reset" value="Reset" />				
+				</td>
+			</tr>
+      	</table>
+		<?= form_close();?>
+		</div>
+	</div>
+	<div id="panel8"></div>
+	<div style="float:left; width:218px;">
+		<div id="panel9">
+			<div style="margin:7px;color:#2f567e; font-weight:bold;">
+				<MARQUEE align="center" scrollamount="3" behavior="alternate">- Obvious Solution -</MARQUEE> 
+			</div>
+		</div>
+		<div id="panel11"></div>
+	</div>
+	<div id="panel10"></div>
+</div>
+</body>
+</html>

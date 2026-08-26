@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
+<head>
+	<title>Sistem Informasi Perbenihan</title>
+	<!-- Link CSS -->
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/shortcut.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/flexigrid.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/jquery.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/main.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/button.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/form/formm.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/tab_view/tab-view.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/datepicker.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/ext-alll.css" />
+	<link rel="shorcut icon" href="http://localhost:8080/images/favicon.png"/>
+<style>
+	div#headerKanan {
+    position: absolute;
+    top: 50px;
+    left: 700px;
+    font-size: larger;
+	color:#fff;
+}
+.grey{
+	background: #D9D9DB;
+    color: #000000 !important;
+    padding: 5px !important;
+    height: 15px;
+}
+</style>
+	<!-- JAVASCRIPT -->
+	<script type="text/javascript" src="http://localhost:8080/js/wufoo.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>
+	<script type="text/javascript">
+		<!--//---------------------------------+
+		//  Developed by Roshan Bhattarai 
+		//  Visit http://roshanbh.com.np for this script and more.
+		//  This notice MUST stay intact for legal use
+		// --------------------------------->
+		$(document).ready(function()
+		{
+			//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+			$("#firstpane p.menu_head").click(function()
+			{
+				$(this).css({backgroundImage:"url(http://localhost:8080/images/main/bl_head1.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+				$(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/bl_head0.png)"});
+			});
+			//slides the element with class "menu_body" when mouse is over the paragraph
+			$("#secondpane p.menu_head").mouseover(function()
+			{
+				 $(this).css({backgroundImage:"url(http://localhost:8080/images/main/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+				 $(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/left.png)"});
+			});
+		});
+	</script>
+	<script type="text/javascript"> 
+		var outerLayout, middleLayout, innerLayout; 
+		$(document).ready(function () { 
+			outerLayout = $('body').layout({ 
+				center__paneSelector:	".outer-center" 
+			,	west__paneSelector:		".outer-west" 
+			,	east__paneSelector:		".outer-east" 
+			,	west__size:				165
+			,	east__size:				173 
+			,	spacing_open:			8 // ALL panes
+			,	spacing_closed:			8 // ALL panes
+			,	north__spacing_open:	0
+			,	south__spacing_open:	0
+			,	center__onresize:		"middleLayout.resizeAll" 
+			}); 
+		}); 
+	</script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.MultiFile.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.ui.all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.layout.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/flexigrid.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/datepicker.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/shortcut.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/ajax.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/tab-view.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-base.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-combo.js"></script>
+	</head>
+
+<body>
+		<div class="ui-layout-north" style="background-color:#333333">
+		<div id="toppanel">
+			<div style="padding-left:4px;float:left">
+				<img src="http://localhost:8080/images/main/header.png" width="504" height="90" />
+			</div>
+			<div style="float:right;padding-right:4px;" >
+				<img src="http://localhost:8080/images/main/header-kanan.png" width="129" height="90" />
+				<div id="headerKanan"></div>
+			</div>
+		</div>
+	</div> 
+	<div class="outer-center" id="center" style="background-color:#595959"><div id="main"><form action="http://localhost:8080/ganti_password/index" method="post">	<fieldset class="fieldset">
+	<legend class="legend">| Form Update User |</legend>
+
+	<div class="info">
+		<div>Update Password User</div>
+	</div>
+	
+	<div>
+		<a href="http://localhost:8080/beranda"><img src="http://localhost:8080/images/main/39.png"  border="0"  alt="" /> Kembali ke Beranda</a>	</div>
+	
+	<div class="content_form">
+			<ul>
+				<li>
+					<label class="desc">Password Lama*</label>
+					<div>
+						<input autocomplete="off" class="field text medium" name="password_lama" type="password" size="10" value=""/>
+					</div>
+				</li>
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->			
+				
+				<li>
+					<label class="desc">Password Baru*</label>
+					<div>
+						<input autocomplete="off" class="field text small" name="password_baru" type="password" size="40" value=""/>
+					</div>
+				</li>
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				
+				<li>
+					<label class="desc">Konfirmasi Password*</label>
+					<div>
+						<input autocomplete="off" class="field text small" name="confirm_password" type="password" size="40" value=""/>
+					</div>
+				</li>
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+			<li>
+					<input type="submit" name="Submit" value="Simpan" id="submit-button"/>
+					<input type="reset" name="reset" value="Reset" />			
+				</li>
+				 
+			</ul>
+		</div>
+	</fieldset>	
+</form>
+<script language="javascript">
+function disable_wewenang(){
+		var key=$("#role").val();
+		if( key == 3 || key == 4 || key == 7 || key == 8 ){
+			document.form_input_user.wewenang.disabled=false;
+		}else{
+			document.form_input_user.wewenang.value="-1";
+			document.form_input_user.wewenang.disabled=true;
+		}
+}
+</script>
+</div></div> 
+	<div class="outer-west" style="background-color:#333333">
+<div> <!--This is the first division of left-->
+	<div id="firstpane" class="menu_list"> <!--Code for menu starts here-->
+		<p class="menu_head">
+			<a href="http://localhost:8080/beranda" Menampilkan halaman utama>Halaman Utama</a>		</p>
+
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<p class="menu_head">Sertifikasi</p>
+			<div class="menu_body" align="left">
+				<a href="http://localhost:8080/data_permohonan"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Pengajuan & Fase Lap</a>				<a href="http://localhost:8080/pasca_lapangan/pasca_pengajuan"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Pasca Lapangan</a><a href="http://localhost:8080/pasca_lapangan/konsep_label"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label</a><a href="http://localhost:8080/pasca_lapangan/konsep_label_standart"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label Standart</a>			</div>
+		
+		<!-----------------------------------------------MENU LAB--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Laboratorium</p>
+			<div class="menu_body" align="left">
+			<a href="http://localhost:8080/uji_lab/pengujian" Menampilkan halaman uji lab><img src="http://localhost:8080/images/main/lab.png"  border="0"  alt="" />Uji Laboratorium</a>			<a href="http://localhost:8080/uji_lab/kaji_ulang/getBukuInduk"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Buku Induk</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>		
+		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Data Master</p>
+		<div class="menu_body" align="left" style="overflow:auto; height:150px; margin-right:5px;">
+			<a href="http://localhost:8080/atur_komoditas" Menampilkan halaman data Golongan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Golongan</a>			<a href="http://localhost:8080/atur_golongan" Menampilkan halaman Kumpulan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kumpulan</a>			<a href="http://localhost:8080/atur_jenis_tanaman" Menampilkan halaman jenis tanaman><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Jenis Tanaman</a>			<a href="http://localhost:8080/atur_varietas" Menampilkan halaman varietas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Varietas</a>			<a href="http://localhost:8080/atur_grup_kelas_benih" Menampilkan halaman grup kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master G.Kelas Benih</a>			<a href="http://localhost:8080/atur_kelas_benih" Menampilkan halaman kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kelas Benih</a>			<a href="http://localhost:8080/atur_penyakit" Menampilkan halaman penyakit><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Penyakit</a>			<a href="http://localhost:8080/atur_kabupaten" Menampilkan halaman kabupaten><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kabupaten</a>			<a href="http://localhost:8080/atur_kecamatan" Menampilkan halaman kecamatan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kecamatan</a>			<a href="http://localhost:8080/atur_satuan" Menampilkan halaman satuan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Satuan</a>			<a href="http://localhost:8080/atur_satgas" Menampilkan halaman satgas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Wilayah Kerja</a>			<a href="http://localhost:8080/atur_status" Menampilkan halaman status><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Status</a>			<a href="http://localhost:8080/atur_produsen" Menampilkan halaman produsen><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Produsen</a>			<a href="http://localhost:8080/atur_pegawai" Menampilkan halaman pegawai><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Pegawai</a>			<a href="http://localhost:8080/atur_mata_anggaran" Menampilkan halaman mata anggaran><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master M. Anggaran</a>			<a href="http://localhost:8080/atur_konfigurasi"><img src="http://localhost:8080/images/main/71.png"  border="0"  alt="" /> Konfigurasi Aplikasi</a>			<a href="http://localhost:8080/atur_user"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Daftar User</a>		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!--
+		<p class="menu_head">Laporan</p>
+		<div class="menu_body" align="left">
+			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_varietas"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Varietas</a>			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_groupKB"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Grup KB</a>		</div>
+		-->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">&nbsp;&nbsp;&nbsp;&nbsp;Manajemen Aplikasi</p>
+		<div class="menu_body" align="left">
+			
+			<a href="http://localhost:8080/atur_log"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Serti Log</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>			
+							<a href="http://localhost:8080/restore"><img src="http://localhost:8080/images/main/restore.png"  border="0"  alt="" /> Restore Database</a>					<a href="http://localhost:8080/fullbackups"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Backup Data</a>					<a href="http://localhost:8080/sinkronisasi"><img src="http://localhost:8080/images/main/approve.png"  border="0"  alt="" /> Sinkronisasi Data Opr</a>					</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Info</p>
+		<div class="menu_body" align="left">
+			<div class="user_info">
+				<table width="0" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th>Username</th>
+						<td>:</td>
+						<td>coba10</td>
+					</tr>
+					<tr>
+						<th>Role</th>
+						<td>:</td>
+						<td>Super Admin</td>
+					</tr>
+					<tr>
+						<th>Wewenang</th>
+						<td>:</td>
+						<td>Semua Golongan</td>
+					</tr>
+					<tr>
+						<th>Pegawai</th>
+						<td>:</td>
+						<td>Prima S Welli Candra, A.Md.</td>
+					</tr>
+					<tr>
+						<th>Wilayah Kerja</th>
+						<td>:</td>
+						<td>Malang</td>
+					</tr>
+					<tr>
+						<th>Tahun</th>
+						<td>:</td>
+						<td>2024						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Menu</p>
+		<div class="menu_body" align="left">
+			<!--
+			<a href="http://localhost:8080/doc/User_Manual_Sistem_Informasi_Sistem_Perbenihan.docx"><img src="http://localhost:8080/images/main/book.png"  border="0"  alt="" /> Bantuan Penggunaan</a>		
+						-->
+			<a href="http://localhost:8080/ganti_password"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Ubah Password</a>			<a href='javascript:void(0);' onclick="window.open('https://docs.google.com/spreadsheet/viewform?formkey=dHBCNGtNUFltY29hcURrM1NsTDJ0bXc6MQ', '_blank', 'width=800,height=600,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0');"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Feedback</a>			<a href="http://localhost:8080/logout"><img src="http://localhost:8080/images/main/key--plus.png"  border="0"  alt="" /> Logout</a>		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+	</div> <!--Code for menu ends here-->
+</div></div> 
+	<div class="ui-layout-south" style="background-color:#333333">
+		<div id="footerpanel">
+			<div style="float:right;"><img src="http://localhost:8080/images/main/footer-right.png" width="314" height="30" /></div>
+		</div>
+	</div> 
+</body>
+
+</html>

@@ -1,0 +1,2597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="id">
+<head>
+	<title>Sistem Informasi Perbenihan</title>
+	<!-- Link CSS -->
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/shortcut.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/flexigrid.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/jquery.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/main.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/default/button.css" media="screen, tv, projection" title="Default" />
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/form/formm.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/tab_view/tab-view.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/datepicker.css" media="screen, tv, projection" title="Default" />	
+	<link rel="stylesheet" type="text/css" href="http://localhost:8080/css/ext-alll.css" />
+	<link rel="shorcut icon" href="http://localhost:8080/images/favicon.png"/>
+<style>
+	div#headerKanan {
+    position: absolute;
+    top: 50px;
+    left: 700px;
+    font-size: larger;
+	color:#fff;
+}
+.grey{
+	background: #D9D9DB;
+    color: #000000 !important;
+    padding: 5px !important;
+    height: 15px;
+}
+</style>
+	<!-- JAVASCRIPT -->
+	<script type="text/javascript" src="http://localhost:8080/js/wufoo.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>
+	<script type="text/javascript">
+		<!--//---------------------------------+
+		//  Developed by Roshan Bhattarai 
+		//  Visit http://roshanbh.com.np for this script and more.
+		//  This notice MUST stay intact for legal use
+		// --------------------------------->
+		$(document).ready(function()
+		{
+			//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+			$("#firstpane p.menu_head").click(function()
+			{
+				$(this).css({backgroundImage:"url(http://localhost:8080/images/main/bl_head1.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+				$(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/bl_head0.png)"});
+			});
+			//slides the element with class "menu_body" when mouse is over the paragraph
+			$("#secondpane p.menu_head").mouseover(function()
+			{
+				 $(this).css({backgroundImage:"url(http://localhost:8080/images/main/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+				 $(this).siblings().css({backgroundImage:"url(http://localhost:8080/images/main/left.png)"});
+			});
+		});
+	</script>
+	<script type="text/javascript"> 
+		var outerLayout, middleLayout, innerLayout; 
+		$(document).ready(function () { 
+			outerLayout = $('body').layout({ 
+				center__paneSelector:	".outer-center" 
+			,	west__paneSelector:		".outer-west" 
+			,	east__paneSelector:		".outer-east" 
+			,	west__size:				165
+			,	east__size:				173 
+			,	spacing_open:			8 // ALL panes
+			,	spacing_closed:			8 // ALL panes
+			,	north__spacing_open:	0
+			,	south__spacing_open:	0
+			,	center__onresize:		"middleLayout.resizeAll" 
+			}); 
+		}); 
+	</script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.MultiFile.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.ui.all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.layout.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/flexigrid.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/datepicker.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/shortcut.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/ajax.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/tab_view/tab-view.js"></script>	
+	<script type="text/javascript" src="http://localhost:8080/js/jquery.blockUI.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-base.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-all.js"></script>
+	<script type="text/javascript" src="http://localhost:8080/js/ext-combo.js"></script>
+	</head>
+
+<body>
+		<div class="ui-layout-north" style="background-color:#333333">
+		<div id="toppanel">
+			<div style="padding-left:4px;float:left">
+				<img src="http://localhost:8080/images/main/header.png" width="504" height="90" />
+			</div>
+			<div style="float:right;padding-right:4px;" >
+				<img src="http://localhost:8080/images/main/header-kanan.png" width="129" height="90" />
+				<div id="headerKanan"></div>
+			</div>
+		</div>
+	</div> 
+	<div class="outer-center" id="center" style="background-color:#595959"><div id="main">
+
+
+	<form action="http://localhost:8080/atur_jenis_tanaman/input_jenis_tanaman/1" method="post" class="wufoo" name="form_input_jenis_tanaman">	<fieldset class="fieldset">
+	<legend class="legend"> | Form Input Data Master Jenis Tanaman | </legend>
+	
+	
+	
+	<div>
+		<a href="http://localhost:8080/atur_jenis_tanaman"><img src="http://localhost:8080/images/main/39.png"  border="0"  alt="" /> Kembali ke Halaman Daftar Jenis Tanaman</a>	</div>
+	
+	 <!-- Konten -------------------------------------------------------------------------->
+	<div id="tab">
+		<!--tab Data Tanaman--------------------------------------------------------------->
+		<div class="dhtmlgoodies_aTab">		
+			<div class="content_tab2"> 
+								<fieldset class="fieldset_default">
+					<legend>| Data Tanaman |</legend>			 
+					<table>
+						<tr>
+							<td width="50%">
+								<ul>
+									<li>
+										<label class="desc">Kode Tanaman *</label>
+										<div>
+											<input autocomplete="off" class="field text small" type="text" name="kode_tanaman" id="golongan" value=""/> 
+										</div>							
+									</li>		
+													
+									<!--------------------------------------------------------------------------------->
+						
+									<li>
+										<label class="desc">Nama Tanaman *</label>
+										<div>
+											<input autocomplete="off" class="field text medium" type="text" name="nama_tanaman" id="golongan" value="" /> 
+										</div>							
+									</li>		
+											
+									<!--------------------------------------------------------------------------------->
+						
+									<li>
+										<label class="desc">Nama golongan *</label>
+										<div>
+											<select name="golongan" class="field select">
+<option value="0" selected="selected">-- Pilih golongan --</option>
+<option value="1">Serealia</option>
+<option value="2">Aneka Kacang</option>
+<option value="3">Aneka Umbi</option>
+<option value="4">Buah Tahunan</option>
+<option value="5">Buah Semusim</option>
+<option value="6">Sayuran Tahunan</option>
+<option value="7">Sayuran Semusim</option>
+<option value="8">Tanaman Hias</option>
+<option value="9">Biofarmaka</option>
+<option value="10">Kacang-kacangan</option>
+<option value="11">Umbi-umbian</option>
+</select>										</div>							
+									</li>
+																		<!--rizal------------------------------------------------------------------------------->
+						
+									<li>
+										<label class="desc">Jenis perbanyakan *</label>
+										<div>							
+											<select name="klasifikasi" id="klasifikasi" onChange="atur_nama_perbanyakan(); disable_klasifikasi();" class="field text select">
+<option value="0" selected="selected">-- Pilih Jenis Perbanyakan --</option>
+<option value="1">Non Hibrida</option>
+<option value="2">Hibrida</option>
+<option value="3">Vegetatif</option>
+</select>										</div>							
+									</li>
+																	
+									<!--------------------------------------------------------------------------------->
+									<li>
+										<label class="desc">Nama perbanyakan *</label>
+										<div>							
+											
+											<select name="perbanyakan" id="perbanyakan"  class="field text select" >
+												<option value="0">-- Pilih Nama perbanyakan --</option>
+																								
+											</select>
+										</div>							
+									</li>
+											
+									<!--------------------------------------------------------------------------------->
+									<li>
+										<label class="desc">Status Master*</label>
+										<div>
+																						<select name="status_tanaman" id="status_tanaman"  class="field text select">
+												<option value="1" selected>Aktif</option>
+												<option value="0" >Tidak Aktif</option>
+											</select>
+										</div>	
+									</li>		
+																		<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+								</ul>
+							</td>
+							<td>
+								<ul>						
+									<li>
+										<label class="desc">Nama Satuan Produk *</label>
+										<div>
+											<select name="satuan_produk" id="satuan_produk" onChange="atur_satuan();set_satuan()" class="field select">
+<option value="0" selected="selected">-- Pilih Satuan --</option>
+<option value="1">Ton</option>
+<option value="2">Kilogram</option>
+<option value="3">Gram</option>
+<option value="4">Batang</option>
+<option value="5">Knol</option>
+<option value="6">Planlet</option>
+<option value="7">Hektare</option>
+<option value="9">Ribuan Batang</option>
+<option value="10">Ribuan Planlet</option>
+<option value="11">Ribuan Knol</option>
+<option value="12">Entres</option>
+<option value="13">Ribuan Entres</option>
+<option value="14">Eksplant</option>
+<option value="15">Ribuan Eksplant</option>
+<option value="16">Ribuan Tunas Pucuk</option>
+<option value="17">Tunas Pucuk</option>
+<option value="18">Stek Akar/cm</option>
+<option value="19">Ribuan Stek Akar</option>
+<option value="20">Stek batang/cm</option>
+<option value="21">Mata Tempel</option>
+<option value="22">Ribuan Mata Tempel</option>
+</select>										</div>
+							
+									</li>
+																		<!--------------------------------------------------------------------------------->						
+									<li>
+										<label class="desc">Nama Satuan Kemasan *</label>
+																	
+										<div>															
+											<select name="satuan_kemasan" id="satuan_kemasan"  class="field text select" >
+												<option value="0">-- Pilih Satuan Kemasan --</option>
+																								
+											</select>
+										</div>
+									</li>
+																		<!--------------------------------------------------------------------------------->						
+									<li>
+										<label class="desc">Nama Satuan Penangkaran *</label>
+										<div>
+											<select name="satuan_penangkaran" class="field select">
+<option value="0" selected="selected">-- Pilih Satuan --</option>
+<option value="1">Ton</option>
+<option value="2">Kilogram</option>
+<option value="3">Gram</option>
+<option value="4">Batang</option>
+<option value="5">Knol</option>
+<option value="6">Planlet</option>
+<option value="7">Hektare</option>
+<option value="9">Ribuan Batang</option>
+<option value="10">Ribuan Planlet</option>
+<option value="11">Ribuan Knol</option>
+<option value="12">Entres</option>
+<option value="13">Ribuan Entres</option>
+<option value="14">Eksplant</option>
+<option value="15">Ribuan Eksplant</option>
+<option value="16">Ribuan Tunas Pucuk</option>
+<option value="17">Tunas Pucuk</option>
+<option value="18">Stek Akar/cm</option>
+<option value="19">Ribuan Stek Akar</option>
+<option value="20">Stek batang/cm</option>
+<option value="21">Mata Tempel</option>
+<option value="22">Ribuan Mata Tempel</option>
+</select>										</div>							
+									</li>
+																		<!--------------------------------------------------------------------------------->						
+						
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Tanggal Semai dan Tanam |</legend>			 
+					<table>
+						<tr>
+							<td width="50%">
+								<ul>				
+									<li>
+										<label class="desc">Tanggal Semai Jantan / Batang Bawah</label>
+										<div>
+											<select name="istilah_semai_jantan" class="field select">
+<option value="0" selected="selected">-- Pilih Istilah --</option>
+<option value="1">Jantan</option>
+<option value="2">Batang Bawah</option>
+<option value="3">Betina</option>
+<option value="4">Non Hibrida</option>
+<option value="5">Batang Atas</option>
+<option value="6">Tanggal semai seedling</option>
+<option value="7">Tanggal pemindahan seedling</option>
+<option value="8">Stek</option>
+<option value="9">Stek akar</option>
+<option value="10">Tanggal tanam stek akar</option>
+<option value="11">Tanggal pemisahan anakan</option>
+<option value="12">Tanggal tanam anakan</option>
+<option value="13">Tanggal pemisahan crown</option>
+<option value="14">Tanggal tanam crown</option>
+<option value="15">Tanggal eksplant</option>
+<option value="16">Eksplant</option>
+<option value="17">Entres</option>
+<option value="18">Tanggal Inisiasi Kultur Jaringan In Vitro</option>
+<option value="19">Tanggal multiplikasi Kultur Jaringan In Vitro</option>
+<option value="20">Tanggal Aklimatisasi Kultur Jaringan Pasca In Vitro</option>
+<option value="21">Tanggal pemindahan Kultur Jaringan Pasca In Vitro</option>
+<option value="22">Umbi</option>
+<option value="23">Rimpang</option>
+<option value="24">Tanggal tanam rimpang</option>
+<option value="25">Tanggal Cangkok</option>
+<option value="26">Bonggol</option>
+<option value="27">Subang</option>
+<option value="28">Tanggal Okulasi</option>
+<option value="29">Tanggal Grafting</option>
+<option value="30">Tanggal Tanam Induk Mata Tempel</option>
+<option value="31">Tanggal Tanam Induk Tunas Pucuk</option>
+<option value="32">Tanggal Tanam Stek Batang</option>
+<option value="33">Tanggal Tanam Stek Akar</option>
+</select>										</div>							
+									</li>			
+								<!--------------------------------------------------------------------------------->						
+									<li>
+										<label class="desc">Tanggal Semai Betina / Batang Atas</label>
+										<div>
+											<select name="istilah_semai_betina" class="field select">
+<option value="0" selected="selected">-- Pilih Istilah --</option>
+<option value="1">Jantan</option>
+<option value="2">Batang Bawah</option>
+<option value="3">Betina</option>
+<option value="4">Non Hibrida</option>
+<option value="5">Batang Atas</option>
+<option value="6">Tanggal semai seedling</option>
+<option value="7">Tanggal pemindahan seedling</option>
+<option value="8">Stek</option>
+<option value="9">Stek akar</option>
+<option value="10">Tanggal tanam stek akar</option>
+<option value="11">Tanggal pemisahan anakan</option>
+<option value="12">Tanggal tanam anakan</option>
+<option value="13">Tanggal pemisahan crown</option>
+<option value="14">Tanggal tanam crown</option>
+<option value="15">Tanggal eksplant</option>
+<option value="16">Eksplant</option>
+<option value="17">Entres</option>
+<option value="18">Tanggal Inisiasi Kultur Jaringan In Vitro</option>
+<option value="19">Tanggal multiplikasi Kultur Jaringan In Vitro</option>
+<option value="20">Tanggal Aklimatisasi Kultur Jaringan Pasca In Vitro</option>
+<option value="21">Tanggal pemindahan Kultur Jaringan Pasca In Vitro</option>
+<option value="22">Umbi</option>
+<option value="23">Rimpang</option>
+<option value="24">Tanggal tanam rimpang</option>
+<option value="25">Tanggal Cangkok</option>
+<option value="26">Bonggol</option>
+<option value="27">Subang</option>
+<option value="28">Tanggal Okulasi</option>
+<option value="29">Tanggal Grafting</option>
+<option value="30">Tanggal Tanam Induk Mata Tempel</option>
+<option value="31">Tanggal Tanam Induk Tunas Pucuk</option>
+<option value="32">Tanggal Tanam Stek Batang</option>
+<option value="33">Tanggal Tanam Stek Akar</option>
+</select>										</div>							
+									</li>			
+									<!--------------------------------------------------------------------------------->
+								</ul>
+							</td>
+							<td>
+								<ul>			
+									<li>
+										<label class="desc">Tanggal Tanam Jantan / Batang Bawah</label>
+										<div>
+											<select name="istilah_tanam_jantan" class="field select">
+<option value="0" selected="selected">-- Pilih Istilah --</option>
+<option value="1">Jantan</option>
+<option value="2">Batang Bawah</option>
+<option value="3">Betina</option>
+<option value="4">Non Hibrida</option>
+<option value="5">Batang Atas</option>
+<option value="6">Tanggal semai seedling</option>
+<option value="7">Tanggal pemindahan seedling</option>
+<option value="8">Stek</option>
+<option value="9">Stek akar</option>
+<option value="10">Tanggal tanam stek akar</option>
+<option value="11">Tanggal pemisahan anakan</option>
+<option value="12">Tanggal tanam anakan</option>
+<option value="13">Tanggal pemisahan crown</option>
+<option value="14">Tanggal tanam crown</option>
+<option value="15">Tanggal eksplant</option>
+<option value="16">Eksplant</option>
+<option value="17">Entres</option>
+<option value="18">Tanggal Inisiasi Kultur Jaringan In Vitro</option>
+<option value="19">Tanggal multiplikasi Kultur Jaringan In Vitro</option>
+<option value="20">Tanggal Aklimatisasi Kultur Jaringan Pasca In Vitro</option>
+<option value="21">Tanggal pemindahan Kultur Jaringan Pasca In Vitro</option>
+<option value="22">Umbi</option>
+<option value="23">Rimpang</option>
+<option value="24">Tanggal tanam rimpang</option>
+<option value="25">Tanggal Cangkok</option>
+<option value="26">Bonggol</option>
+<option value="27">Subang</option>
+<option value="28">Tanggal Okulasi</option>
+<option value="29">Tanggal Grafting</option>
+<option value="30">Tanggal Tanam Induk Mata Tempel</option>
+<option value="31">Tanggal Tanam Induk Tunas Pucuk</option>
+<option value="32">Tanggal Tanam Stek Batang</option>
+<option value="33">Tanggal Tanam Stek Akar</option>
+</select>										</div>										
+									</li>
+									<!--------------------------------------------------------------------------------->						
+									<li>
+										<label class="desc">Tanggal Tanam Betina</label>
+										<div>
+											<select name="istilah_tanam_betina" class="field select">
+<option value="0" selected="selected">-- Pilih Istilah --</option>
+<option value="1">Jantan</option>
+<option value="2">Batang Bawah</option>
+<option value="3">Betina</option>
+<option value="4">Non Hibrida</option>
+<option value="5">Batang Atas</option>
+<option value="6">Tanggal semai seedling</option>
+<option value="7">Tanggal pemindahan seedling</option>
+<option value="8">Stek</option>
+<option value="9">Stek akar</option>
+<option value="10">Tanggal tanam stek akar</option>
+<option value="11">Tanggal pemisahan anakan</option>
+<option value="12">Tanggal tanam anakan</option>
+<option value="13">Tanggal pemisahan crown</option>
+<option value="14">Tanggal tanam crown</option>
+<option value="15">Tanggal eksplant</option>
+<option value="16">Eksplant</option>
+<option value="17">Entres</option>
+<option value="18">Tanggal Inisiasi Kultur Jaringan In Vitro</option>
+<option value="19">Tanggal multiplikasi Kultur Jaringan In Vitro</option>
+<option value="20">Tanggal Aklimatisasi Kultur Jaringan Pasca In Vitro</option>
+<option value="21">Tanggal pemindahan Kultur Jaringan Pasca In Vitro</option>
+<option value="22">Umbi</option>
+<option value="23">Rimpang</option>
+<option value="24">Tanggal tanam rimpang</option>
+<option value="25">Tanggal Cangkok</option>
+<option value="26">Bonggol</option>
+<option value="27">Subang</option>
+<option value="28">Tanggal Okulasi</option>
+<option value="29">Tanggal Grafting</option>
+<option value="30">Tanggal Tanam Induk Mata Tempel</option>
+<option value="31">Tanggal Tanam Induk Tunas Pucuk</option>
+<option value="32">Tanggal Tanam Stek Batang</option>
+<option value="33">Tanggal Tanam Stek Akar</option>
+</select>										</div>							
+									</li>			
+									<!--------------------------------------------------------------------------------->
+								</ul>
+							</td>
+						</tr>
+					</table>		
+				</fieldset>
+			</div>
+		</div> 
+		<!--tab Data Pemeriksaan Lapangan--------------------------------------------------------------->
+		<div class="dhtmlgoodies_aTab">		
+			<div class="content_tab2">
+				<fieldset class="fieldset_default">
+					<legend>| Data Isolasi |</legend>			 
+					<table>
+						<tr>
+							<td width="50%">
+								<ul>				
+									<li>
+										<label class="desc">Isolasi Jarak (contoh: 100 atau 3.0 atau Lab)</label>					
+									</li>
+									<table>
+									<tr>
+									
+										<td>
+										<ul><li><label class="desc">BS</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_jarak2" value="" />										
+										</li>
+										</td>
+										<td>
+										<ul><li><label class="desc">BD</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_jarak3" value="" />										
+										</li>
+										</td>
+										<td>
+										<ul><li><label class="desc">BP</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_jarak4" value="" />										
+										</li>
+										</td>
+										<td>
+										<ul><li><label class="desc">BR</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_jarak5" value="" />										
+										</li>
+										</td>									<!--------------------------------------------------------------------------------->						
+									<tr>
+									</table>
+								</ul>
+							</td>						
+							<td>
+								<ul>			
+									<li>
+										<label class="desc">Isolasi Waktu (Contoh: 100 atau 3.0 atau Lab)</label>					
+									</li>
+									<table>
+									<tr>
+									
+										<td>
+										<label class="desc">BS</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_waktu2" value="" /> 
+										</td>
+										<td>
+										<label class="desc">BD</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_waktu3" value="" /> 
+										</td>
+										<td>
+										<label class="desc">BP</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_waktu4" value="" /> 
+										</td>
+										<td>
+										<label class="desc">BR</label>
+										<input autocomplete="off" class="field text medium" type="text" name="isolasi_waktu5" value="" /> 
+										</td>									<!--------------------------------------------------------------------------------->						
+									<tr>
+									</table>						
+								</ul>
+							</td>
+						</tr>
+					</table>		
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Populasi Tanaman Diperiksa |</legend>			 
+					<table>
+						<tr>
+							<td width="33%">
+								<ul>
+									<li>
+									<label class="desc">Hibrida Jantan (angka, contoh: 30, untuk individu tuliskan: 1)</label>
+									<input autocomplete="off" class="field text medium" type="text" name="populasi_jantan" id="populasi_jantan" value=""/>										 
+									</li>								</ul>
+							</td>
+							<td width="33%">
+								<ul>
+									<li>
+									<label class="desc">Hibrida Betina (angka, contoh: 30, untuk individu tuliskan: 1)</label>
+									<input autocomplete="off" class="field text medium" type="text" name="populasi_betina" id="populasi_betina" value=""/>										 
+									</li>
+									</li>								</ul>
+							</td>
+							<td width="33%">
+								<ul>
+									<li>
+									<label class="desc">Non Hibrida (angka, contoh: 30, untuk individu tuliskan: 1)</label>
+									<input autocomplete="off" class="field text medium" type="text" name="populasi_non" id="populasi_non" value=""/>										 
+									</li>
+									</li>								</ul>
+							</td>
+						</tr>
+					</table>		
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Jenis Pemeriksaan |</legend>			 
+					<table>
+						<tr>
+							<td width="33%">
+								<ul>				
+									<li>
+										<div>
+											<input type="checkbox" name="pendahuluan" value="1" 
+											 > Pemeriksaan Pendahuluan <br>
+											<input type="checkbox" name="saat_tanam" value="1" 
+											 > Pemeriksaan Saat Tanam <br>
+											<input type="checkbox" name="saat_okulasi" value="1" 
+											 > Pemeriksaan Saat Okulasi <br>
+											<input type="checkbox" name="saat_grafting" value="1" 
+											 > Pemeriksaan Saat Grafting <br>
+											<input type="checkbox" name="saat_cangkok" value="1" 
+											 > Pemeriksaan Saat Cangkok <br>
+											<input type="checkbox" name="vegetatif" value="1" 
+											 > Pemeriksaan Fase Vegetatif <br>
+											<input type="checkbox" name="vegetatif1" value="1" 
+											 > Pemeriksaan Fase Vegetatif 1 <br>											 									
+										</div>
+									</li>
+								</ul>
+							</td>
+							<td>
+								<ul>			
+									<li>
+										<div>
+											<input type="checkbox" name="vegetatif_ulangan" value="1" 
+											 > Pemeriksaan Fase Vegetatif Ulangan <br>
+											<input type="checkbox" name="berbunga1" value="1" 
+											 > Pemeriksaan Fase Berbunga 1 <br>
+											<input type="checkbox" name="berbunga2" value="1" 
+											 > Pemeriksaan Fase Berbunga 2 <br>
+											<input type="checkbox" name="berbunga3" value="1" 
+											 > Pemeriksaan Fase Berbunga 3 <br>
+											<input type="checkbox" name="berbunga" value="1" 
+											 > Pemeriksaan Fase Berbunga <br>
+											<input type="checkbox" name="vegetatif2" value="1" 
+											 > Pemeriksaan Fase Vegetatif 2 <br>																			
+										</div>										
+									</li>		
+								</ul>
+							</td>
+							<td>
+								<ul>
+									<li>
+										<div>
+											<input type="checkbox" name="berbunga_ulangan" value="1" 
+											 > Pemeriksaan Fase Berbunga Ulangan <br>
+											<input type="checkbox" name="masak" value="1" 
+											 > Pemeriksaan Fase Masak <br>
+											<input type="checkbox" name="vegetatif3" value="1" 
+											 > Pemeriksaan Fase Vegetatif 3 <br>
+											<input type="checkbox" name="masak_ulangan" value="1" 
+											 > Pemeriksaan Fase Masak Ulangan <br>
+										</div>
+									</li>
+								<ul>
+							</td>
+						</tr>
+					</table>		
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Standar CVL dan Tipe Simpang Non Hibrida |</legend>			 
+					<table>
+						<tr>
+							<td>
+								<ul>
+									<li>
+										<table>
+											<tr>
+												<td width="50%">
+													<ul>
+														<li>
+															<label class="desc">Standar CVL dan Tipe Simpang Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+														</li>
+														<li>
+															<table>
+																<tr>
+																<td>
+																		<label class="desc">BS</label>
+																		<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang2" value="" /></td><td>
+																		<label class="desc">BD</label>
+																		<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang3" value="" /></td><td>
+																		<label class="desc">BP</label>
+																		<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang4" value="" /></td><td>
+																		<label class="desc">BR</label>
+																		<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang5" value="" /></td>									
+																</tr>																
+															</table>
+														</li>
+																											</ul>
+												</td>
+												<td>
+													<ul>
+														<li>
+									
+														</li>
+													</ul>
+												</td>
+											</tr>
+										</table>									
+									</li>
+								</ul>
+							</td>							
+						</tr>
+					</table>		
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Pemeriksaan Hibridisasi |</legend>			 
+					<table>
+						<tr>
+							<td width = "50%">
+								<ul>
+									<li>
+									<label class="desc">Pengujian Kemurnian Induk Betina (angka, contoh: 21 atau 3.6)</label>
+										<table>
+											<tr>
+												<td width="50%">
+												<div>
+													<label class="desc">Rumpun</label>
+													<input autocomplete="off" class="field text small" type="text" name="rumpun" value=""/>										 
+												</div>
+												</td>
+												<td width="50%">
+												<div>
+													<label class="desc">Malai</label>
+													<input autocomplete="off" class="field text small" type="text" name="malai" value=""/>										 
+												</div>
+												</td>
+											</tr>
+										</table>
+									</li>
+																										</ul>
+							</td>
+							<td>
+								<ul>
+									<li>
+										<label class="desc">Persentase Pengujian Hibridisasi (angka, contoh: 21 atau 3.6)</label>
+										<table>
+											<tr>
+												<td width="50%">
+												<div>
+													<label class="desc">Kemurnian</label>
+													<input autocomplete="off" class="field text small" type="text" name="kemurnian" value=""/>%
+												</div>
+												</td>
+												<td width="50%">
+												<div>
+													<label class="desc">Tipe Simpang</label>
+													<input autocomplete="off" class="field text small" type="text" name="simpang" value=""/>%
+												</div>
+												</td>
+											</tr>
+										</table>
+									</li>
+																										</ul>
+							</td>
+						</tr>
+					</table>		
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Penyakit |</legend>			 
+					<table>
+						<tr>
+							<td width="50%">
+								<ul>	
+									<li>
+										<!---Penyakit 1------------------------------------------------------------------------------>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 1 *</label>
+												<br>
+												<div>
+													<select name="penyakit1" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 1 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit1-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit1-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit1-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit1-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td width="20%">
+												<label class="desc">Standar Penyakit 1 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny1" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny1" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																								
+									</li>
+									<!--Penyakit 2-------------------------------------------------------------------------->
+									
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 2 *</label>
+												<br>
+												<div>
+													<select name="penyakit2" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 2 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit2-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit2-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit2-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit2-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 2 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny2" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny2" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																								
+									</li>
+									<!---Penyakit 3------------------------------------------------------------------------------>
+						
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 3 *</label>
+												<br>
+												<div>
+													<select name="penyakit3" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 3 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit3-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit3-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit3-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit3-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 3 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny3" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny3" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+									<!---Penyakit 4------------------------------------------------------------------------------>
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 4 *</label>
+												<br>
+												<div>
+													<select name="penyakit4" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 4 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit4-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit4-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit4-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit4-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 4 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny4" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny4" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																									</li>
+									<!--Penyakti 5------------------------------------------------------------------------------->
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 5 *</label>
+												<br>
+												<div>
+													<select name="penyakit5" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 5 Non Hibrida</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit5-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit5-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit5-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit5-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 5 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny5" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny5" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+									<!--Penyakit 6------------------------------------------------------------------------------->
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 6 *</label>
+												<br>
+												<div>
+													<select name="penyakit6" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 6 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit6-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit6-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit6-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit6-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 6 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny6" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny6" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+									<!--Penyakit 7------------------------------------------------------------------------------->						
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit 7 *</label>
+												<br>
+												<div>
+													<select name="penyakit7" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit 7 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit7-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit7-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit7-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit7-5" value="" /></td>									
+													</tr>													
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit 7 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny7" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny7" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+									<!--------------------------------------------------------------------------------->
+								</ul>
+							</td>
+						</tr>
+					</table>	
+				</fieldset>
+			</div>
+		</div>
+		<!--tab Pasca Panen--------------------------------------------------------------->
+		<div class="dhtmlgoodies_aTab">		
+			<div class="content_tab2">
+				<fieldset class="fieldset_default">
+					<legend>| Pemeriksaan Alat dan Pengambilan Contoh |</legend>			 
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td width="33%">
+											<ul>
+											<li>
+											<label class="desc">Berat Minimum Contoh Kirim (angka, contoh: 21 atau 3.6)</label>
+											<input autocomplete="off" class="field text small" type="text" name="berat_minim" value=""/> gram
+																						</li>
+											<li>
+											<label class="desc">Berat Kelompok Benih Maksimum (angka, contoh: 21 atau 3.6)</label>
+											<input autocomplete="off" class="field text small" type="text" name="berat_maks" value=""/> Satuan:<input readonly="" class="field text small" type="text" id="satuan_prod_maks" name="satuan_prod_maks" /> 
+																						</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<ul>
+											<li>
+											<input type="checkbox" name="pengawasan_panen" value="1" 
+											 > Pemeriksaan Alat dan Pengawasan Panen <br>
+											</li>											
+											<li>
+											<input type="checkbox" name="pengawasan_pengolahan" value="1" 
+											 > Pemeriksaan Alat dan Pengawasan Pengolahan <br>
+											</li>
+											<li>
+											<input type="checkbox" name="siap_siar" value="1" 
+											 > Pemeriksaan Siap Siar <br>
+											</li>
+											</ul>
+										</td>								
+										<td>
+											<ul>
+											<li>
+											<input type="checkbox" name="ambil_contoh" value="1" 
+											 > Pengambilan Contoh Benih <br>
+											</li>
+											<li>
+											<input type="checkbox" name="ambil_contoh_ulang" value="1" 
+											 > Pengambilan Contoh Benih Ulang <br>
+											</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Standar CVL dan Tipe Simpang Umbi Non Hibrida |</legend>			 
+					<table>
+						<tr>
+							<td width="100%">
+								<table>
+									<tr>
+										<td width="50%">
+											<ul><li>
+													<label class="desc">Standar CVL dan Tipe Simpang Umbi Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang_umbi2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang_umbi3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang_umbi4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_simpang_umbi5" value="" />%</td>									
+													<tr>
+													</table>
+												</li>												
+											</ul>
+										</td>
+										<td>											
+										</td>
+									</tr>
+								</table>								
+									
+							</td>							
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Penyakit Umbi|</legend>			 
+					<table>
+						<tr>
+							<td width="50%">
+								<ul>	
+									<li>
+										<!---Penyakit 1------------------------------------------------------------------------------>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit Umbi 1 *</label>
+												<br>
+												<div>
+													<select name="penyakit_umb1" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit Umbi 1 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb1-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb1-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb1-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb1-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td width="20%">
+												<label class="desc">Standar Penyakit Umbi 1 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny_umb1" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny_umb1" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																								
+									</li>
+									<!--Penyakit 2-------------------------------------------------------------------------->
+									
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit Umbi 2 *</label>
+												<br>
+												<div>
+													<select name="penyakit_umb2" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit Umbi 2 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb2-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb2-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb2-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb2-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit Umbi 2 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny_umb2" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny_umb2" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																								
+									</li>
+									<!---Penyakit 3------------------------------------------------------------------------------>
+						
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit Umbi 3 *</label>
+												<br>
+												<div>
+													<select name="penyakit_umb3" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit Umbi 3 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb3-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb3-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb3-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb3-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit Umbi 3 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny_umb3" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny_umb3" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+									<!---Penyakit 4------------------------------------------------------------------------------>
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit Umbi 4 *</label>
+												<br>
+												<div>
+													<select name="penyakit_umb4" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit Umbi 4 Non Hibrida (angka, contoh: 21 atau 3.6)</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb4-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb4-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb4-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb4-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit Umbi 4 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny_umb4" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny_umb4" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																									</li>
+									<!--Penyakti 5------------------------------------------------------------------------------->
+									<li>
+										<table>
+											<tr>
+												<td width = "30%">
+												<ul>
+												<label class="desc">Nama Penyakit Umbi 5 *</label>
+												<br>
+												<div>
+													<select name="penyakit_umb5" class="field select">
+<option value="0" selected="selected">-- Pilih Penyakit --</option>
+<option value="1">Aphid</option>
+<option value="2">Altenaria brassiceae pv. Vesicatoria</option>
+<option value="3">Altenaria brassisicola pv. Vesicatoria</option>
+<option value="4">Altenaria porii</option>
+<option value="5">Bakteri</option>
+<option value="6">Botritis alii</option>
+<option value="7">Bunchy Top Virus</option>
+<option value="8">Banana Streak Virus</option>
+<option value="9">Busuk umbi</option>
+<option value="10">Cendawan</option>
+<option value="11">Colletotricum capsici</option>
+<option value="12">Colletotricum gloeosporoides</option>
+<option value="13">Colletotricum legenarium</option>
+<option value="14">Colletotricum lindemuthianum</option>
+<option value="15">CMAV</option>
+<option value="16">Cucumber mosaic Virus</option>
+<option value="17">Cytrus floem degeration</option>
+<option value="18">Cymbidium mozaic virus</option>
+<option value="19">Diaphorina citri</option>
+<option value="20">Erwinia carotovora</option>
+<option value="21">Exocortis</option>
+<option value="22">Fusarium sp</option>
+<option value="23">Hawar Daun Bakteri</option>
+<option value="24">Karat daun</option>
+<option value="25">Kudis</option>
+<option value="26">Layu Bakteri</option>
+<option value="27">Layu Fusarium</option>
+<option value="28">Lalat rimpang</option>
+<option value="29">Leak yellow stripe virus</option>
+<option value="30">Mealbugs</option>
+<option value="31">Mite</option>
+<option value="32">Nematoda</option>
+<option value="33">Nematoda sista kuning</option>
+<option value="34">Odontoglossium ring spot virus</option>
+<option value="35">Onion Yellow Dwarf virus</option>
+<option value="36">Phoma spp</option>
+<option value="37">Peronospora destruktor</option>
+<option value="38">Pentalonia nigrohervosa</option>
+<option value="39">Pseudomonas lachrymans</option>
+<option value="40">Phomopsis spp</option>
+<option value="41">Psorosis</option>
+<option value="42">Phyllostica sp</option>
+<option value="43">Pseudomonas syringae</option>
+<option value="44">Phomopsis vexsans</option>
+<option value="45">Ralstonia solanacearum</option>
+<option value="46">Shallot laten virus</option>
+<option value="47">Lalat / Serangga penggerek</option>
+<option value="48">Tatter leaf</option>
+<option value="49">Tristeza</option>
+<option value="50">Virus</option>
+<option value="51">Vein enation</option>
+<option value="52">Xanthomonas campestris</option>
+<option value="53">Xanthomonas campestris pv. Vesicatoria</option>
+<option value="54">Xyloporosis</option>
+<option value="55">Wereng Batang Coklat</option>
+<option value="56">Tungro</option>
+<option value="57">Kerusakan Mekanis</option>
+<option value="58">Penggerek Batang</option>
+<option value="59">Bulai (Peronosclerospora maydis)</option>
+<option value="60">Hawar daun (Helminthosporium turcikum)</option>
+<option value="61">Boleng</option>
+</select>												</div>
+												</ul>
+												</td>
+												<td width = "50%">
+												<label class="desc">Standar Penyakit Umbi 5 Non Hibrida</label>
+												<table>
+													<tr>
+													<td>
+														<label class="desc">BS</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb5-2" value="" /></td><td>
+														<label class="desc">BD</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb5-3" value="" /></td><td>
+														<label class="desc">BP</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb5-4" value="" /></td><td>
+														<label class="desc">BR</label>
+														<input autocomplete="off" class="field text medium" type="text" name="std_penyakit_umb5-5" value="" /></td>									
+													</tr>
+												</table>
+												</td>
+												<td>
+												<label class="desc">Standar Penyakit Umbi 5 Hibrida</label>
+												<table>
+													<tr>
+														<td>
+															<label class="desc">Jantan</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_jantan_peny_umb5" value=""/>
+														</td>
+														<td>
+															<label class="desc">Betina</label>
+															<input autocomplete="off" class="field text medium" type="text" name="std_betina_peny_umb5" value=""/>
+														</td>
+													</tr>
+												</table>
+												</td>
+											</tr>
+										</table>
+																																							</li>
+								</ul>
+							</td>
+						</tr>
+					</table>	
+				</fieldset>
+			</div>
+		</div>
+		<!--tab Pengujian Laboratorium------------------------------->
+		<div class="dhtmlgoodies_aTab">		
+			<div class="content_tab2">
+				<fieldset class="fieldset_default">
+					<legend>| Pengiriman Contoh dan Kaji Ulang |</legend>			 
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td width = "33%">
+											<ul>
+											<li>
+											<input type="checkbox" name="kirim_contoh" value="1" 
+											 > Pengiriman Contoh ke Laboratorium <br>
+											</li>
+											</ul>
+										</td>								
+										<td>
+											<ul>											
+											<li>
+											<input type="checkbox" name="kaji_ulang" value="1" 
+											 > Kaji Ulang Permintaan <br>
+											</li>
+											<li>
+											</ul>
+										</td>
+										<td>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset class="fieldset_default">
+					<legend>| Standar Pengujian Laboratorium |</legend>			 
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td width = "20%">
+											<ul>
+											<li>
+											<label class="desc">Pengujian Kadar Air Maksimum (angka, contoh: 21 atau 3.6)</label>
+											</li>
+											<li>
+											<input autocomplete="off" class="field text small" type="text" name="air_maks" value=""/>%
+											</li>
+											<li>
+																						</li>
+											</ul>
+										</td>
+										<td>
+										</td>
+										<td>
+										</td>
+									</tr>									
+								</table>								
+								<table>
+									<tr>
+										<td width="50%">
+											<ul>
+												<li>
+													<label class="desc">Pengujian Kemurnian Fisik Minimum (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="murni_fisik2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="murni_fisik3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="murni_fisik4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="murni_fisik5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Pengujian Kotoran Benih Maksimum (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="kotoran_maks2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="kotoran_maks3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="kotoran_maks4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="kotoran_maks5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Pengujian Benih Tanaman Lain Maksimum (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="benih_lain2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="benih_lain3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="benih_lain4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="benih_lain5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Pengujian Benih Rerumputan (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="biji_rumput2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="biji_rumput3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="biji_rumput4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="biji_rumput5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																							</ul>
+										</td>
+										<td>
+											<ul>
+												<li>
+													<label class="desc">Pengujian Campuran Varietas Lain Maksimum (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_maks2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_maks3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_maks4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="cvl_maks5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Pengujian Warna Lain Maksimum (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="warna_lain2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="warna_lain3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="warna_lain4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="warna_lain5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Pengujian Daya Tumbuh (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="daya_tumbuh2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="daya_tumbuh3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="daya_tumbuh4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="daya_tumbuh5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																								<li>
+													<label class="desc">Uji Kesehatan Benih (angka, contoh: 21 atau 3.6)</label>
+												</li>
+												<li>
+													<table>
+														<tr>
+														<td>
+																<label class="desc">BS</label>
+																<input autocomplete="off" class="field text medium" type="text" name="uji_kesehatan2" value="" />%</td><td>
+																<label class="desc">BD</label>
+																<input autocomplete="off" class="field text medium" type="text" name="uji_kesehatan3" value="" />%</td><td>
+																<label class="desc">BP</label>
+																<input autocomplete="off" class="field text medium" type="text" name="uji_kesehatan4" value="" />%</td><td>
+																<label class="desc">BR</label>
+																<input autocomplete="off" class="field text medium" type="text" name="uji_kesehatan5" value="" />%</td>									
+														<tr>
+													</table>
+												</li>
+																							</ul>
+										</td>
+									</tr>
+								</table>	
+							</td>							
+						</tr>
+					</table>		
+				</fieldset>													
+				<fieldset class="fieldset_default">
+					<legend>| Laporan |</legend>	 
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td>
+											<ul>
+											<li>
+											<input type="checkbox" name="laporan_benih_lab" value="1" 
+											 > Rekomendasi Hasil Pengujian Benih Laboratoris <br>
+											</li>											
+											<li>
+											<input type="checkbox" name="laporan_benih_sertifikat" value="1" 
+											 > Rekomendasi Hasil Pengujian Benih Bersertifikat <br>
+											</li>										
+											</ul>
+										</td>								
+										<td>
+											<ul>
+											<li>
+											<input type="checkbox" name="nomor_seri_label" value="1" 
+											 > Rekomendasi Pelaksanaan Penilaian Sumber Benih (no. seri label) <br>
+											</li>
+											<li>
+											<input type="checkbox" name="pengawasan_label" value="1" 
+											 > Pengawasan Pemasangan Label <br>
+											</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>				
+					</table>
+				</fieldset>				
+				<div class="buttons">
+					<input name="" type="submit" value="Simpan Data">
+					<input name="" type="reset">
+				</div>	
+			</div>
+		</div>
+	</div> 
+	</fieldset>
+	
+<script type="text/javascript">
+	initTabs('tab',Array('Data Tanaman','Pemeriksaan Lapangan','Pasca Panen','Pengujian Labotarium'),0,'100%',335,Array(false,false));
+</script>
+</form><script>	
+	function atur_nama_perbanyakan(){
+	    var prp = $("#klasifikasi").val();
+		if(prp != 0){
+		  	$.ajax({
+				url: "http://localhost:8080/index.php/atur_jenis_tanaman/atur_nama_perbanyakan/",
+				global: false,
+				type: "POST",
+				async: false,
+				dataType: "html",
+				data: "klasifikasi="+ prp, //the name of the $_POST variable and its value
+				success: function (response) {
+					var dynamic_options1 = $("*").index( $('.dynamic1')[0] );
+					if ( dynamic_options1 != (-1)) 
+						$(".dynamic1").remove();
+						$("#perbanyakan").append(response);
+						$(".third").attr({selected: ' selected'});
+	            }          
+			});
+		  return false;
+		}
+	}
+	function disable_klasifikasi(){
+		var key=$("#klasifikasi").val();
+		if( key == 1 || key == 3){
+		document.form_input_jenis_tanaman.populasi_jantan.disabled=true;
+		document.form_input_jenis_tanaman.populasi_betina.disabled=true;
+		document.form_input_jenis_tanaman.populasi_non.disabled=false;
+		document.form_input_jenis_tanaman.populasi_jantan.value='';
+		document.form_input_jenis_tanaman.populasi_betina.value='';
+		}
+		else if (key == 2){
+		document.form_input_jenis_tanaman.populasi_jantan.disabled=false;
+		document.form_input_jenis_tanaman.populasi_betina.disabled=false;
+		document.form_input_jenis_tanaman.populasi_non.disabled=true;
+		document.form_input_jenis_tanaman.populasi_non.value='';
+		}
+	}
+	function atur_satuan(){
+		var key=$("#satuan_produk").val();
+		if(key != 0){
+		$.ajax({
+				url: "http://localhost:8080/index.php/atur_jenis_tanaman/atur_satuan/",
+				global: false,
+				type: "POST",
+				async: false,
+				dataType: "html",
+				data: "satuan_produk="+ key, //the name of the $_POST variable and its value
+				success: function (response) {
+					var dynamic_options1 = $("*").index( $('.dynamic2')[0] );
+					if ( dynamic_options1 != (-1)) 
+						$(".dynamic2").remove();
+						$("#satuan_kemasan").append(response);
+						$(".third").attr({selected: ' selected'});
+	            }          
+			});
+		  return false;
+		}
+	}
+	function set_satuan(){
+		var key=$("#satuan_produk").val();
+		if(key != 0){
+		$.ajax({
+				url: "http://localhost:8080/index.php/atur_jenis_tanaman/set_satuan/",
+				global: false,
+				type: "POST",
+				async: false,
+				dataType: "html",
+				data: "satuan_produk="+ key, //the name of the $_POST variable and its value
+				success: function (response) {
+					document.form_input_jenis_tanaman.satuan_prod_maks.value = response;			
+	            }           
+			});
+		  return false;
+		}
+	}
+</script>	</div></div> 
+	<div class="outer-west" style="background-color:#333333">
+<div> <!--This is the first division of left-->
+	<div id="firstpane" class="menu_list"> <!--Code for menu starts here-->
+		<p class="menu_head">
+			<a href="http://localhost:8080/beranda" Menampilkan halaman utama>Halaman Utama</a>		</p>
+
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+					<p class="menu_head">Sertifikasi</p>
+			<div class="menu_body" align="left">
+				<a href="http://localhost:8080/data_permohonan"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Pengajuan & Fase Lap</a>				<a href="http://localhost:8080/pasca_lapangan/pasca_pengajuan"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Pasca Lapangan</a><a href="http://localhost:8080/pasca_lapangan/konsep_label"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label</a><a href="http://localhost:8080/pasca_lapangan/konsep_label_standart"><img src="http://localhost:8080/images/main/wooden-box--pencil.png"  border="0"  alt="" /> Konsep Label Standart</a>			</div>
+		
+		<!-----------------------------------------------MENU LAB--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Laboratorium</p>
+			<div class="menu_body" align="left">
+			<a href="http://localhost:8080/uji_lab/pengujian" Menampilkan halaman uji lab><img src="http://localhost:8080/images/main/lab.png"  border="0"  alt="" />Uji Laboratorium</a>			<a href="http://localhost:8080/uji_lab/kaji_ulang/getBukuInduk"><img src="http://localhost:8080/images/main/application--pencil.png"  border="0"  alt="" /> Buku Induk</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>		
+		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">Data Master</p>
+		<div class="menu_body" align="left" style="overflow:auto; height:150px; margin-right:5px;">
+			<a href="http://localhost:8080/atur_komoditas" Menampilkan halaman data Golongan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Golongan</a>			<a href="http://localhost:8080/atur_golongan" Menampilkan halaman Kumpulan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kumpulan</a>			<a href="http://localhost:8080/atur_jenis_tanaman" Menampilkan halaman jenis tanaman><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Jenis Tanaman</a>			<a href="http://localhost:8080/atur_varietas" Menampilkan halaman varietas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Varietas</a>			<a href="http://localhost:8080/atur_grup_kelas_benih" Menampilkan halaman grup kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master G.Kelas Benih</a>			<a href="http://localhost:8080/atur_kelas_benih" Menampilkan halaman kelas benih><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kelas Benih</a>			<a href="http://localhost:8080/atur_penyakit" Menampilkan halaman penyakit><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Penyakit</a>			<a href="http://localhost:8080/atur_kabupaten" Menampilkan halaman kabupaten><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kabupaten</a>			<a href="http://localhost:8080/atur_kecamatan" Menampilkan halaman kecamatan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Kecamatan</a>			<a href="http://localhost:8080/atur_satuan" Menampilkan halaman satuan><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Satuan</a>			<a href="http://localhost:8080/atur_satgas" Menampilkan halaman satgas><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Wilayah Kerja</a>			<a href="http://localhost:8080/atur_status" Menampilkan halaman status><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Status</a>			<a href="http://localhost:8080/atur_produsen" Menampilkan halaman produsen><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Produsen</a>			<a href="http://localhost:8080/atur_pegawai" Menampilkan halaman pegawai><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master Pegawai</a>			<a href="http://localhost:8080/atur_mata_anggaran" Menampilkan halaman mata anggaran><img src="http://localhost:8080/images/main/folder.png"  border="0"  alt="" /> Master M. Anggaran</a>			<a href="http://localhost:8080/atur_konfigurasi"><img src="http://localhost:8080/images/main/71.png"  border="0"  alt="" /> Konfigurasi Aplikasi</a>			<a href="http://localhost:8080/atur_user"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Daftar User</a>		</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!--
+		<p class="menu_head">Laporan</p>
+		<div class="menu_body" align="left">
+			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_varietas"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Varietas</a>			<a href="http://localhost:8080/laporan_penangkaran_produksi_per_groupKB"><img src="http://localhost:8080/images/main/clipboard--pencil.png"  border="0"  alt="" /> Penangkaran dan Produksi per Grup KB</a>		</div>
+		-->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+				<p class="menu_head">&nbsp;&nbsp;&nbsp;&nbsp;Manajemen Aplikasi</p>
+		<div class="menu_body" align="left">
+			
+			<a href="http://localhost:8080/atur_log"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Serti Log</a>			<a href="http://localhost:8080/atur_log_lab"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Laboratorium Log</a>			
+							<a href="http://localhost:8080/restore"><img src="http://localhost:8080/images/main/restore.png"  border="0"  alt="" /> Restore Database</a>					<a href="http://localhost:8080/fullbackups"><img src="http://localhost:8080/images/main/backup.png"  border="0"  alt="" /> Backup Data</a>					<a href="http://localhost:8080/sinkronisasi"><img src="http://localhost:8080/images/main/approve.png"  border="0"  alt="" /> Sinkronisasi Data Opr</a>					</div>
+		
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Info</p>
+		<div class="menu_body" align="left">
+			<div class="user_info">
+				<table width="0" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th>Username</th>
+						<td>:</td>
+						<td>coba10</td>
+					</tr>
+					<tr>
+						<th>Role</th>
+						<td>:</td>
+						<td>Super Admin</td>
+					</tr>
+					<tr>
+						<th>Wewenang</th>
+						<td>:</td>
+						<td>Semua Golongan</td>
+					</tr>
+					<tr>
+						<th>Pegawai</th>
+						<td>:</td>
+						<td>Prima S Welli Candra, A.Md.</td>
+					</tr>
+					<tr>
+						<th>Wilayah Kerja</th>
+						<td>:</td>
+						<td>Malang</td>
+					</tr>
+					<tr>
+						<th>Tahun</th>
+						<td>:</td>
+						<td>2024						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+		<p class="menu_head">User Menu</p>
+		<div class="menu_body" align="left">
+			<!--
+			<a href="http://localhost:8080/doc/User_Manual_Sistem_Informasi_Sistem_Perbenihan.docx"><img src="http://localhost:8080/images/main/book.png"  border="0"  alt="" /> Bantuan Penggunaan</a>		
+						-->
+			<a href="http://localhost:8080/ganti_password"><img src="http://localhost:8080/images/main/38.png"  border="0"  alt="" /> Ubah Password</a>			<a href='javascript:void(0);' onclick="window.open('https://docs.google.com/spreadsheet/viewform?formkey=dHBCNGtNUFltY29hcURrM1NsTDJ0bXc6MQ', '_blank', 'width=800,height=600,scrollbars=yes,status=yes,resizable=yes,screenx=0,screeny=0');"><img src="http://localhost:8080/images/main/28.png"  border="0"  alt="" /> Feedback</a>			<a href="http://localhost:8080/logout"><img src="http://localhost:8080/images/main/key--plus.png"  border="0"  alt="" /> Logout</a>		</div>
+		<!------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+	</div> <!--Code for menu ends here-->
+</div></div> 
+	<div class="ui-layout-south" style="background-color:#333333">
+		<div id="footerpanel">
+			<div style="float:right;"><img src="http://localhost:8080/images/main/footer-right.png" width="314" height="30" /></div>
+		</div>
+	</div> 
+</body>
+
+</html>
