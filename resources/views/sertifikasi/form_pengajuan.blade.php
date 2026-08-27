@@ -34,42 +34,6 @@
         margin-bottom: -2px;
     }
 
-    /* Enhanced Phase Navigation */
-    .phase-nav {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid #dee2e6;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .phase-nav strong {
-        color: #495057;
-        font-weight: 600;
-        margin-right: 0.75rem;
-    }
-    .phase-nav a {
-        color: #495057;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: 0.375rem;
-        display: inline-block;
-        margin-right: 0.25rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-    .phase-nav a:hover {
-        background-color: #e3f2fd;
-        color: #007bff;
-        transform: translateY(-1px);
-    }
-    .phase-nav a.active {
-        background-color: #007bff;
-        color: #fff;
-        box-shadow: 0 2px 4px rgba(0,123,255,0.3);
-    }
-
     /* Enhanced Fieldset Tab */
     .fieldset-tab {
         border: 1px solid #e3e6f0;
@@ -114,28 +78,6 @@
         background-color: #007bff;
         margin-right: 0.75rem;
         border-radius: 2px;
-    }
-
-    /* Enhanced Info Box */
-    .info-box {
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        border-left: 4px solid #2196f3;
-        padding: 1.25rem;
-        margin-bottom: 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .info-box .no-induk {
-        font-weight: 700;
-        color: #1565c0;
-        background-color: rgba(255,255,255,0.7);
-        padding: 0.15rem 0.5rem;
-        border-radius: 0.25rem;
-        font-family: 'Courier New', monospace;
-        letter-spacing: 0.5px;
-    }
-    .info-box strong {
-        color: #455a64;
     }
 
     /* Enhanced Tab Content */
@@ -235,6 +177,14 @@
         border-radius: 0.375rem;
     }
 
+    /* Full width card */
+    .full-width-card {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .nav-tabs .nav-link {
@@ -253,86 +203,14 @@
 @endpush
 
 @section("content")
-<div class="row">
-    <div class="col-12">
-        <div class="card">
+<div class="card full-width-card">
             <div class="card-header">
                 <h3 class="card-title">Pengajuan Sertifikasi (Jenis Tanaman Hibrida)</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <!-- Info Box -->
-                <div class="info-box">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <div class="d-flex flex-wrap align-items-center gap-3">
-                                <div>
-                                    <strong>No. Berkas:</strong><br>
-                                    <span class="no-induk">TP26.401.0339</span>
-                                </div>
-                                <div class="vr d-none d-md-block"></div>
-                                <div>
-                                    <strong>No Induk Lapangan:</strong><br>
-                                    <span class="no-induk">JghHI.R.3507120.0911.0339</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                            <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalInputPermohonan">
-                                <i class="fas fa-plus mr-1"></i> Input Permohonan Baru
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                @include('sertifikasi.partials.header_fase', ['active_fase' => 'pengajuan', 'id_permohonan' => $id ?? 105271])
 
-                <!-- Modal Input Permohonan Baru -->
-                <div class="modal fade" id="modalInputPermohonan" tabindex="-1" role="dialog" aria-labelledby="modalInputPermohonanLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalInputPermohonanLabel">
-                                    <i class="fas fa-file-alt mr-2"></i> Pilih Tipe Form Permohonan
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="tipeFormPermohonan">Tipe Form <span class="text-danger">*</span></label>
-                                    <select name="tipe_form" id="tipeFormPermohonan" class="form-control">
-                                        <option value="">-- Pilih Tipe Form --</option>
-                                        <option value="1">Form Tipe Hibrida</option>
-                                        <option value="2">Form Tipe Non Hibrida</option>
-                                        <option value="4">Form Tipe Umbi/Rimpang</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    <i class="fas fa-times mr-1"></i> Batal
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="pilihTipeForm()">
-                                    <i class="fas fa-check mr-1"></i> OK
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    </div>
-                </div>
-
-                <!-- Phase Navigation -->
-                <div class="phase-nav">
-                    <strong>Fase:</strong>
-                    <a href="#" class="active">Pengajuan</a>
-                    <a href="#">Pendahuluan</a>
-                    <a href="#">Vegetatif</a>
-                    <a href="#">Berbunga</a>
-                    <a href="#">Berb.Ulangan</a>
-                    <a href="#">Masak</a>
-                    <a href="#">Panen</a>
-                </div>
 
                 <form action="{{ url('') }}/admin/sertifikasi/pengajuan/update" method="POST">
                     @csrf
@@ -476,6 +354,7 @@
                                             <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_penangkaran" value="Hektare" readonly></span>
                                         </div>
                                     </div>
+                                    <small class="form-text text-muted">Angka, contoh: 4 atau 3,4 jika desimal</small>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -589,7 +468,7 @@
     <legend>Lokasi / Letak Areal</legend>
     <div class="row">
         <!-- Kolom 1: Wilayah Administratif -->
-        <div class="col-md-4">
+        <div class="col-md-6">
             <h6 class="form-section-title">Wilayah Administratif</h6>
             <div class="form-group">
                 <label>Blok <span class="text-danger">*</span></label>
@@ -605,7 +484,7 @@
         </div>
 
         <!-- Kolom 2: Detail Lokasi -->
-        <div class="col-md-4">
+        <div class="col-md-6">
             <h6 class="form-section-title">Detail Lokasi</h6>
             <div class="form-group">
                 <label>Kecamatan <span class="text-danger">*</span></label>
@@ -617,17 +496,11 @@
             </div>
         </div>
 
-        <!-- Kolom 3: Informasi Tambahan (Opsional: Ditambah field kosong/pendukung agar seimbang) -->
-        <div class="col-md-4">
-            <h6 class="form-section-title">Informasi Tambahan</h6>
+        <!-- Kolom 3: Informasi Tambahan -->
+        <div class="col-md-12">
             <div class="form-group">
                 <label>Dukuh</label>
                 <input type="text" class="form-control" name="dukuh" value="Wonokasian">
-            </div>
-            <!-- Contoh tambahan jika ingin mengisi kekosongan kolom ke-3 agar simetris -->
-            <div class="form-group">
-                <label>Kodepos / Keterangan Lain</label>
-                <input type="text" class="form-control" name="keterangan_lokasi" placeholder="Opsional">
             </div>
         </div>
     </div>
@@ -639,8 +512,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Bero</label>
-                                        <div class="col-sm-4">
+                                        <label class="col-md-3 col-form-label">Bero</label>
+                                        <div class="col-md-3">
                                             <select name="bero" id="bero" class="form-control" onchange="toggleBero()">
                                                 <option value="0">-- Pilih Bero --</option>
                                                 <option value="1" selected>Tidak Ada Bero</option>
@@ -648,14 +521,14 @@
                                             </select>
                                             <input type="text" class="form-control mt-2" name="bulan_bero" readonly style="display: none;" placeholder="Bulan (Angka, contoh: 5)">
                                         </div>
-                                        <label class="col-sm-2 col-form-label">Varietas Sebelumnya</label>
-                                        <div class="col-sm-4">
-                                            <input type="text" class="form-control" name="varietas_sebelumnya" value="">
+                                        <label class="col-md-3 col-form-label text-nowrap">Varietas Sebelumnya</label>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" name="varietas_sebelumnya" value="" style="width: 100%;">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label">Tanaman Sebelumnya</label>
-                                        <div class="col-sm-4">
+                                        <label class="col-md-3 col-form-label">Tanaman Sebelumnya</label>
+                                        <div class="col-md-9">
                                             <input type="text" class="form-control" name="tanaman_sebelumnya" value="Padi">
                                         </div>
                                     </div>
@@ -671,117 +544,152 @@
                         <div class="fieldset-tab">
                             <legend>Asal Benih Sumber</legend>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <h6 class="form-section-title">Induk Betina</h6>
-                                        <div class="form-group">
-                                            <label>Asal Induk Betina <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="asal_betina" value="Surabaya">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Asal Induk Betina <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="asal_betina" value="Surabaya">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Kode Induk Betina <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="kode_betina" value="SAP 20">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Kode Induk Betina <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="kode_betina" value="SAP 20">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Jumlah Induk Betina <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="jumlah_betina" value="3" size="10" maxlength="10">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_betina" value="Kilogram" readonly></span>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Jumlah Induk Betina <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="jumlah_betina" value="3" size="10" maxlength="10">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_betina" value="Kilogram" readonly></span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Kelas Benih Betina <span class="text-danger">*</span></label>
-                                            <select name="kelas_benih_betina" id="kelas_benih_betina" class="form-control">
-                                                <option value="">-- Pilih Kelas Benih --</option>
-                                                <option value="0">---</option>
-                                                <option value="1">NS-N</option>
-                                                <option value="2" selected>BS-S</option>
-                                                <option value="7">BD-D</option>
-                                                <option value="12">BP-P</option>
-                                                <option value="13">BP1-P1</option>
-                                                <option value="14">BP2-P2</option>
-                                                <option value="17">BR-R</option>
-                                                <option value="18">BR1-R1</option>
-                                                <option value="19">BR2-R2</option>
-                                                <option value="20">BR3-R3</option>
-                                                <option value="21">BR4-R4</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Produsen Benih <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="produsen_betina" value="PT. LIMAGRAIN AGRICON INDONESIA">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>No Kelompok Benih <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="kelompok_betina" value="003/PS-B/LG/2026">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Jumlah Label <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="label_betina" value="3" size="10" maxlength="10">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Lembar</span>
-                                                </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Kelas Benih Betina <span class="text-danger">*</span></label>
+                                                <select name="kelas_benih_betina" id="kelas_benih_betina" class="form-control">
+                                                    <option value="">-- Pilih Kelas Benih --</option>
+                                                    <option value="0">---</option>
+                                                    <option value="1">NS-N</option>
+                                                    <option value="2" selected>BS-S</option>
+                                                    <option value="7">BD-D</option>
+                                                    <option value="12">BP-P</option>
+                                                    <option value="13">BP1-P1</option>
+                                                    <option value="14">BP2-P2</option>
+                                                    <option value="17">BR-R</option>
+                                                    <option value="18">BR1-R1</option>
+                                                    <option value="19">BR2-R2</option>
+                                                    <option value="20">BR3-R3</option>
+                                                    <option value="21">BR4-R4</option>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Catatan</label>
-                                            <textarea class="form-control" name="catatan_asal_benih" rows="3"></textarea>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                        <h6 class="form-section-title">Induk Jantan</h6>
-                                        <div class="form-group">
-                                            <label>Asal Induk Jantan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="asal_jantan" value="Surabaya">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Produsen Benih <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="produsen_betina" value="PT. LIMAGRAIN AGRICON INDONESIA">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Kode Induk Jantan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="kode_jantan" value="SAP 21">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>No Kelompok Benih <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="kelompok_betina" value="003/PS-B/LG/2026">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Jumlah Induk Jantan <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="jumlah_jantan" value="1" size="10" maxlength="10">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_jantan" value="Kilogram" readonly></span>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Jumlah Label <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="label_betina" value="3" size="10" maxlength="10">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Lembar</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Kelas Benih Jantan <span class="text-danger">*</span></label>
-                                            <select name="kelas_benih_jantan" id="kelas_benih_jantan" class="form-control">
-                                                <option value="">-- Pilih Kelas Benih --</option>
-                                                <option value="0">---</option>
-                                                <option value="1">NS-N</option>
-                                                <option value="2" selected>BS-S</option>
-                                                <option value="7">BD-D</option>
-                                                <option value="12">BP-P</option>
-                                                <option value="13">BP1-P1</option>
-                                                <option value="14">BP2-P2</option>
-                                                <option value="17">BR-R</option>
-                                                <option value="18">BR1-R1</option>
-                                                <option value="19">BR2-R2</option>
-                                                <option value="20">BR3-R3</option>
-                                                <option value="21">BR4-R4</option>
-                                            </select>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Catatan</label>
+                                                <textarea class="form-control" name="catatan_asal_benih" rows="3"></textarea>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Produsen Benih <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="produsen_jantan" value="PT. LIMAGRAIN AGRICON INDONESIA">
+                                    </div>
+
+                                    <h6 class="form-section-title mt-3">Induk Jantan</h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Asal Induk Jantan <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="asal_jantan" value="Surabaya">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>No Kelompok Benih <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="kelompok_jantan" value="003/PS-J/LG/2026">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Kode Induk Jantan <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="kode_jantan" value="SAP 21">
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Jumlah Label <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" name="label_jantan" value="1" size="10" maxlength="10">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text">Lembar</span>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Jumlah Induk Jantan <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="jumlah_jantan" value="1" size="10" maxlength="10">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_jantan" value="Kilogram" readonly></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Kelas Benih Jantan <span class="text-danger">*</span></label>
+                                                <select name="kelas_benih_jantan" id="kelas_benih_jantan" class="form-control">
+                                                    <option value="">-- Pilih Kelas Benih --</option>
+                                                    <option value="0">---</option>
+                                                    <option value="1">NS-N</option>
+                                                    <option value="2" selected>BS-S</option>
+                                                    <option value="7">BD-D</option>
+                                                    <option value="12">BP-P</option>
+                                                    <option value="13">BP1-P1</option>
+                                                    <option value="14">BP2-P2</option>
+                                                    <option value="17">BR-R</option>
+                                                    <option value="18">BR1-R1</option>
+                                                    <option value="19">BR2-R2</option>
+                                                    <option value="20">BR3-R3</option>
+                                                    <option value="21">BR4-R4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Produsen Benih <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="produsen_jantan" value="PT. LIMAGRAIN AGRICON INDONESIA">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>No Kelompok Benih <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="kelompok_jantan" value="003/PS-J/LG/2026">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Jumlah Label <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="label_jantan" value="1" size="10" maxlength="10">
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Lembar</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -811,10 +719,6 @@
             <!-- /.card-body -->
         </div>
         <!-- /.card -->
-    </div>
-    <!-- /.col -->
-</div>
-<!-- /.row -->
 @endsection
 
 @push("footer")
@@ -829,15 +733,6 @@
 function uppercase() {
     var txt = document.getElementById("kode_unik_sertifikasi");
     if (txt) txt.value = txt.value.toUpperCase();
-}
-
-function pilihTipeForm() {
-    var tipeForm = document.getElementById("tipeFormPermohonan").value;
-    if (!tipeForm) {
-        alert('Pilih tipe form terlebih dahulu!');
-        return false;
-    }
-    window.location.href = "{{ url('') }}/admin/sertifikasi/pengajuan/tambah?tipe=" + tipeForm;
 }
 
 function toggleBero() {

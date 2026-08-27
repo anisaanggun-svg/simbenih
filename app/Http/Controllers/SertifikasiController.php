@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Produsen;
+use App\Models\Pegawai;
 
 class SertifikasiController extends Controller
 {
@@ -82,6 +84,26 @@ class SertifikasiController extends Controller
     }
 
     /**
+     * Show fase pendahuluan form for a record.
+     */
+    public function fasePendahuluan($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_pendahuluan', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
+     * Show fase vegetatif form for a record.
+     */
+    public function faseVegetatif($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_vegetatif', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
      * Show edit form for a record.
      */
     public function edit($id)
@@ -128,5 +150,16 @@ class SertifikasiController extends Controller
     {
         // TODO: Generate Excel
         return redirect()->back()->with('info', 'Fitur export Excel akan segera tersedia.');
+    }
+
+    /**
+     * Get produsen address via AJAX.
+     */
+    public function dapatkanAlamatProdusen(Request $request)
+    {
+        $idProdusen = $request->input('id_produsen', 0);
+        $produsen = Produsen::find($idProdusen);
+        $alamat = $produsen ? $produsen->alamat : '';
+        return $alamat;
     }
 }

@@ -185,6 +185,41 @@
     <!-- /.col -->
 </div>
 <!-- /.row -->
+
+                <!-- Modal Input Permohonan Baru -->
+                <div class="modal fade" id="modalInputPermohonan" tabindex="-1" role="dialog" aria-labelledby="modalInputPermohonanLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalInputPermohonanLabel">
+                                    <i class="fas fa-file-alt mr-2"></i> Pilih Tipe Form Permohonan
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="tipeFormPermohonan">Tipe Form <span class="text-danger">*</span></label>
+                                    <select name="tipe_form" id="tipeFormPermohonan" class="form-control">
+                                        <option value="">-- Pilih Tipe Form --</option>
+                                        <option value="1">Form Tipe Hibrida</option>
+                                        <option value="2">Form Tipe Non Hibrida</option>
+                                        <option value="4">Form Tipe Umbi/Rimpang</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <i class="fas fa-times mr-1"></i> Batal
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="pilihTipeForm()">
+                                    <i class="fas fa-check mr-1"></i> OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 @endsection
 
 @push("footer")
@@ -249,7 +284,16 @@ $(function() {
 });
 
 function tambahData() {
-    window.location.href = "{{ url('') }}/admin/sertifikasi/pengajuan/tambah";
+    $('#modalInputPermohonan').modal('show');
+}
+
+function pilihTipeForm() {
+    var tipeForm = document.getElementById("tipeFormPermohonan").value;
+    if (!tipeForm) {
+        alert('Pilih tipe form terlebih dahulu!');
+        return false;
+    }
+    window.location.href = "{{ url('') }}/admin/sertifikasi/pengajuan/tambah?tipe=" + tipeForm;
 }
 
 function hapusData() {
