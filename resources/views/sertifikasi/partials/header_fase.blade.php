@@ -140,10 +140,10 @@
     <a href="{{ url('') }}/admin/sertifikasi/pengajuan/edit/{{ $id_permohonan }}" {{ $active_fase == 'pengajuan' ? 'class="active"' : '' }}>Pengajuan</a>
     <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_pendahuluan/{{ $id_permohonan }}" {{ $active_fase == 'pendahuluan' ? 'class="active"' : '' }}>Pendahuluan</a>
     <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_vegetatif/{{ $id_permohonan }}" {{ $active_fase == 'vegetatif' ? 'class="active"' : '' }}>Vegetatif</a>
-    <a href="#" {{ $active_fase == 'berbunga' ? 'class="active"' : '' }}>Berbunga</a>
-    <a href="#" {{ $active_fase == 'berbunga_ulangan' ? 'class="active"' : '' }}>Berb.Ulangan</a>
-    <a href="#" {{ $active_fase == 'masak' ? 'class="active"' : '' }}>Masak</a>
-    <a href="#" {{ $active_fase == 'panen' ? 'class="active"' : '' }}>Panen</a>
+    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_berbunga/{{ $id_permohonan }}" {{ $active_fase == 'berbunga' ? 'class="active"' : '' }}>Berbunga</a>
+    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_berbunga_ulangan/{{ $id_permohonan }}" {{ $active_fase == 'berbunga_ulangan' ? 'class="active"' : '' }}>Berb.Ulangan</a>
+    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_masak/{{ $id_permohonan }}" {{ $active_fase == 'masak' ? 'class="active"' : '' }}>Masak</a>
+    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_panen/{{ $id_permohonan }}" {{ $active_fase == 'panen' ? 'class="active"' : '' }}>Panen</a>
 </div>
 
 <script>

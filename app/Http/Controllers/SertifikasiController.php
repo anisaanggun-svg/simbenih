@@ -104,6 +104,46 @@ class SertifikasiController extends Controller
     }
 
     /**
+     * Show fase berbunga form for a record.
+     */
+    public function faseBerbunga($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_berbunga', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
+     * Show fase berbunga ulangan form for a record.
+     */
+    public function faseBerbungaUlangan($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_berbunga_ulangan', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
+     * Show fase masak form for a record.
+     */
+    public function faseMasak($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_masak', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
+     * Show fase panen form for a record.
+     */
+    public function fasePanen($id)
+    {
+        $produsen_list = Produsen::orderBy('nama')->get();
+        $pegawai_list = Pegawai::orderBy('nama')->get();
+        return view('sertifikasi.form_panen', compact('id', 'produsen_list', 'pegawai_list'));
+    }
+
+    /**
      * Show edit form for a record.
      */
     public function edit($id)

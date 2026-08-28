@@ -19,13 +19,52 @@
     top: 50px;
     left: 700px;
     font-size: larger;
-	color:#fff;=
+	color:#fff;
 }
 .grey{
 	background: #D9D9DB;
     color: #000000 !important;
     padding: 5px !important;
     height: 15px;
+}
+
+/* Menu atas - mengikuti tata letak fase_pendahuluan */
+#menu_atas {
+    margin-bottom: 15px;
+}
+#menu_atas td {
+    padding: 8px 12px;
+}
+#menu_atas a {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #667eea;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+#menu_atas a:hover {
+    background-color: #5a67d8;
+}
+#menu_atas a.active {
+    background-color: #5a67d8;
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    #menu_atas td {
+        display: block;
+        width: 100%;
+    }
+}
+
+/* Tab styling - mengikuti tata letak fase_pendahuluan */
+.dhtmlgoodies_aTab {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 10px;
 }
 </style>
 	<!-- JAVASCRIPT -->
@@ -109,7 +148,7 @@
  border-width:thin;
 }
 </style>
-<form action="http://localhost:8080/hibrida/fase_berbunga3/update_berbunga3/105271" method="post" class="wufoo" name="form_edit_fase_berbunga3">	<fieldset>
+<form action="http://localhost:8080/hibrida/fase_berbunga/update_berbunga/105271" method="post" class="wufoo" name="form_edit_fase_berbunga">	<fieldset>
 	<legend class="legend">
 		| Fase Berbunga (Jenis Tanaman Hibrida) |
 	</legend>
@@ -124,8 +163,8 @@
 
 	
 	<table id="menu_atas" cellspacing="1">
-  <tr> 
-    <td><a href="http://localhost:8080//hibrida/pengajuan_sertifikasi/ubah_pengajuan_sertifikasi/105271/kosong">Pengajuan Sertifikasi</a></td><td><a href="http://localhost:8080/hibrida/fase_pendahuluan/ubah_pendahuluan/105271">Pendahuluan</a></td><td><a href="http://localhost:8080//hibrida/fase_vegetatif/ubah_vegetatif/105271/6/">Vegetatif</a></td><td><a href="http://localhost:8080//hibrida/fase_berbunga3/ubah_berbunga3/105271/12/">Berbunga</a></td><td><a href="http://localhost:8080//hibrida/fase_berbunga_ulangan/ubah_berbunga_ulangan/105271/14/">Berb.Ulangan</a></td><td><a href="http://localhost:8080//hibrida/fase_masak/ubah_masak/105271/15/">Masak</a></td><td><a href="http://localhost:8080//hibrida/fase_panen/ubah_panen/105271/">Panen</a></td>  </tr>
+	 <tr>
+	   <td><a href="http://localhost:8080//hibrida/pengajuan_sertifikasi/ubah_pengajuan_sertifikasi/105271/kosong">Pengajuan Sertifikasi</a></td><td><a href="http://localhost:8080/hibrida/fase_pendahuluan/ubah_pendahuluan/105271">Pendahuluan</a></td><td><a href="http://localhost:8080//hibrida/fase_vegetatif/ubah_vegetatif/105271/6/">Vegetatif</a></td><td><a class="active" href="http://localhost:8080//hibrida/fase_berbunga/ubah_berbunga/105271/12/">Berbunga</a></td><td><a href="http://localhost:8080//hibrida/fase_berbunga_ulangan/ubah_berbunga_ulangan/105271/14/">Berb.Ulangan</a></td><td><a href="http://localhost:8080//hibrida/fase_masak/ubah_masak/105271/15/">Masak</a></td><td><a href="http://localhost:8080//hibrida/fase_panen/ubah_panen/105271/">Panen</a></td>  </tr>
 </table>
 	
 	<div id="tab4">
@@ -2053,6 +2092,331 @@
 			</fieldset>			
 		</div>
 		
+				<div class="dhtmlgoodies_aTab">
+			<fieldset class="fieldset_tab2">
+				<legend>Pemeriksaan Berbunga Ulangan</legend>
+				<div>
+				<table>
+					<tbody>
+						<tr>
+							<td valign="top" width="50%">
+							<ul>	
+								<li>
+								<label class="desc">Tanggal Berbunga Ulangan*</label>
+								<span>
+								<div id="newline-wrapper">
+								<table class="split-date-wrap" cellpadding="0" cellspacing="0" border="0">
+									<tbody>
+										<tr>
+											<td>
+											<input type="text" class="w2em" id="date-31-u-dd"  readonly name="tgl_vegetatif_ulangan" maxlength="2" value=""/>-<label for="date-31-u-dd">DD</label></td>
+											<td>
+											<input type="text" class="w2em" id="date-31-u-mm"  readonly name="bln_vegetatif_ulangan" maxlength="2" value=""/>-<label for="date-31-u-mm">MM</label></td>
+											<td>
+											<input type="text" class="w4em highlight-days-67 split-date"  readonly id="date-31-u" name="thn_vegetatif_ulangan" maxlength="4" value=""/>
+													
+											&nbsp;<img src="http://localhost:8080/images/hapus.png" onclick="hapus_tanggal_tumbuh();"/>
+																						<label for="date-31-u">YYYY</label></td>
+											<td> </td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								</span>
+								</li>
+																																<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->		
+								
+								<li>
+									<label class="desc">Luas Lulus Berbunga Ulangan* (Angka, contoh: 4 atau 3.4 jika desimal)</label>
+									<div>
+										<input autocomplete="off" class="field text small"  name="luas_lulus_v_ulangan" type="text" size="25" maxlength="25" value="1"/> Hektare									</div>
+								</li>
+														
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+
+								<li>
+									<label class="desc">Kelas Benih*</label>
+									<div>
+									<select name="kelas_benih_ulangan" id="kelas_benih"  class="field text select">
+<option value="0">---</option>
+<option value="1">NS-N</option>
+<option value="2">BS-S</option>
+<option value="7">BD-D</option>
+<option value="12">BP-P</option>
+<option value="13">BP1-P1</option>
+<option value="14">BP2-P2</option>
+<option value="17" selected="selected">BR-R</option>
+<option value="18">BR1-R1</option>
+<option value="19">BR2-R2</option>
+<option value="20">BR3-R3</option>
+<option value="21">BR4-R4</option>
+</select>															
+									</div>
+								</li>	
+										
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+								<li>
+									<label class="desc">Populasi Pemeriksaan Jantan</label>
+									<div>
+										<input class="field text small" readonly name="pops_jantan_ulangan" type="text" size="25" maxlength="25"  value="100"/>
+									</div>
+								</li>
+																<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+								<li>
+									<label class="desc">Jumlah Titik Contoh Jantan</label>
+									<div>
+										<input class="field text small" name="jumlah_titik_contoh_jantan_ulangan" type="text" size="25" readonly maxlength="25" /> (Otomatis)
+									</div>
+								</li>
+																<!-- ----------------------------------------------------------------------->
+								<li>
+									<label class="desc">Populasi Pemeriksaan Betina</label>
+									<div>
+										<input class="field text small" readonly name="pops_betina_ulangan" type="text" size="25" maxlength="25" value="100"/>
+									</div>
+								</li>
+																<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->									
+								<li>
+									<label class="desc">Jumlah Titik Contoh Betina</label>
+									<div>
+										<input class="field text small" name="jumlah_titik_contoh_betina_ulangan" type="text" size="25" readonly maxlength="25"  value=""/> (Otomatis)
+									</div>
+								</li>
+																<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+								
+								<li>
+									<label class="desc">Kondisi Rerumputan*</label>
+									<div>
+										<select name="rerumputan_ulangan" id="rerumputan"  class="field text select">
+											<option value="0"
+											selected											>Bersih/Tidak Bersih *)</option>
+											<option value="1" >Tidak Bersih</option>
+											<option value="2" >Bersih</option>>
+										</select>													
+									</div>
+								</li>		
+									
+								<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --- ---->
+								
+								<li>
+									<label class="desc">Sifat Pertanaman*</label>
+									<div>
+										<select name="sifat_pertanaman_ulangan" id="sifat_pertanaman" required class="field text select">
+											<option value="Sesuai / Tidak Sesuai *)" 
+											selected=true											>Sesuai / Tidak Sesuai *)</option>
+											<option value="Sesuai" >Sesuai</option>
+											<option value="Tidak Sesuai" >Tidak Sesuai</option>
+										</select>														
+									</div>
+								</li>		
+									
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+								
+								<li>
+									<label class="desc">Serangan Hama/Penyakit*</label>
+									<div>
+										<select name="serangan_hama_penyakit_ulangan" id="serangan_hama_penyakit" required class="field text select">
+											<option  value="Ada Terkendali / Ada Tidak Terkendali / Tidak Ada Serangan *)"
+											selected											>Ada Terkendali / Ada Tidak Terkendali / Tidak Ada Serangan *)</option>
+											<option value="Ada Terkendali" >Ada Terkendali</option>
+											<option value="Ada Tidak Terkendali" >Ada Tidak Terkendali</option>
+											<option value="Tidak Ada Serangan" >Tidak Ada Serangan</option>
+										</select>														
+									</div>
+								</li>		
+									
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+								
+							</ul>
+							</td>
+							<td>
+							<ul>
+								<li>
+								<label class="desc">Tanggal Realisasi</label>
+								<span>
+								<div id="newline-wrapper">
+								<table class="tbl_tanggal" cellpadding="0" cellspacing="0" border="1">
+									<thead>
+										<tr><th>&nbsp;</th><th>BETINA</th><th>JANTAN</th></tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Realisasi Tanam 1</td>
+											<td><input type="date" readonly  name="TGL_REALISASI_ulangan" required value="2026-08-21" />	</td>
+											<td><input type="date" readonly   name="TGL_REALISASI_TANAM_JANTAN_1_ulangan" required value="2026-08-21" />	</td>
+										<tr>
+										<tr>
+											<td>Realisasi Tanam 2</td>
+											<td>	</td>
+											<td><input type="date" readonly name="TGL_REALISASI_TANAM_JANTAN_2_ulangan"  value="" />	</td>
+										<tr>
+										<tr>
+											<td>Realisasi Tanam 3</td>
+											<td>	</td>
+											<td><input type="date" readonly name="TGL_REALISASI_TANAM_JANTAN_3_ulangan"  value="" />	</td>
+										<tr>
+										<tr>
+											<td>Realisasi Semai 1</td>
+											<td><input type="date" readonly name="TGL_REALISASI_SEMAI_ulangan"  value="" />	</td>
+											<td><input type="date" readonly name="TGL_REALISASI_SEMAI_JANTAN_1_ulangan"  value="" />	</td>
+										<tr>
+										<tr>
+											<td>Realisasi Semai 2</td>
+											<td>	</td>
+											<td><input type="date" readonly name="TGL_REALISASI_SEMAI_JANTAN_2_ulangan"  value="" />	</td>
+										<tr>
+										<tr>
+											<td>Realisasi Semai 3</td>
+											<td>	</td>
+											<td><input type="date" readonly name="TGL_REALISASI_SEMAI_JANTAN_3_ulangan"  value="" />	</td>
+										<tr>
+									</tbody>
+								</table>
+								</div>
+								</span>
+								</li>
+																<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->									
+								<li>
+									<label class="desc">Petugas Pengawas Benih*</label>
+									<div>
+										<select name="pegawai_ulangan" id="pegawai"  class="field text select">
+<option value="0">-- Pilih Pegawai --</option>
+<option value="518" selected="selected">..........</option>
+<option value="519">..........</option>
+<option value="434">Achmad Cholil, S.P.</option>
+<option value="494">Ade Irma Safitri, S.P.</option>
+<option value="524">Admin Simbenih 1</option>
+<option value="525">Admin Simbenih 2</option>
+<option value="526">Admin Simbenih 3</option>
+<option value="527">Admin Simbenih 4</option>
+<option value="528">Admin Simbenih 5</option>
+<option value="529">Admin Simbenih 6</option>
+<option value="522">ADMINISTRATOR</option>
+<option value="418">Agus Pujiono Priyoatmojo, S.P</option>
+<option value="437">Aldino Hadianto, A.Md.</option>
+<option value="481">Amaniz Diharwati, S.P.</option>
+<option value="472">Amri Farhan S, A.Md</option>
+<option value="499">Ana Yunita Sari, S.P.</option>
+<option value="485">Anastry Galuh K, S.P.</option>
+<option value="445">Angela Firdausa Alif I, STP</option>
+<option value="523">Annisatul Jamilah, S.P.</option>
+<option value="480">Apriliana, S.P.</option>
+<option value="331">Ari Sujanto, S.P.</option>
+<option value="466">Arif Fathoni, SP</option>
+<option value="517">Ary Danar Kisworo, SP</option>
+<option value="500">Asep Abdul Haris, S.ST</option>
+<option value="459">Asyhar Danny Farid</option>
+<option value="502">Aulia Hasanah, S.P.</option>
+<option value="270">Avianita Agustianti, S.TP.</option>
+<option value="534">Briliyan Natalina Sudarjayanti, S.Si.</option>
+<option value="537">Bugiyarto, S.P.</option>
+<option value="489">Buyung Safitra, S.P.</option>
+<option value="473">Deanika Yanuar P, A.Md.</option>
+<option value="440">Dedy Kristiyawan, S.P.</option>
+<option value="444">Dewi Ayundadari, S.T.</option>
+<option value="505">Dian Intan Karuniasari, S.P.</option>
+<option value="483">Dinar Budi Kerina, S.P.</option>
+<option value="506">Diny Evitasari, S.P.</option>
+<option value="360">Edi Hariyanto, S.P.</option>
+<option value="491">Elank Dhayu Finayungan, S.P.</option>
+<option value="533">Elisa Dewanti, S.P.</option>
+<option value="280">Erithrina Rosmarini, S.P.</option>
+<option value="510">Farida Muthia, S.P.</option>
+<option value="503">Fifi Oktaviyanti, S.P.</option>
+<option value="531">Firmansyah, S.Si.</option>
+<option value="501">Fisabella Ayuning P.U, S.P.</option>
+<option value="514">Harumi Farah Setyaningastuti, S.P.</option>
+<option value="530">Hikma Salsabila Yusuf, S.SI</option>
+<option value="479">Indah Putri Utami, S.P.</option>
+<option value="477">Intan Hapsari, S.P.</option>
+<option value="380">Ir. Dzanuri</option>
+<option value="356">Ir. Hari Mularsono</option>
+<option value="428">Ir. Rahmad</option>
+<option value="353">Ir. Suryo</option>
+<option value="394">Ir. Syahdan</option>
+<option value="521">Ir. Yuli Maftuchah Budiarti</option>
+<option value="450">Irma Awali Nur C, S.P.</option>
+<option value="520">Joni Prasetyo, S.P</option>
+<option value="536">Kasi Yantek</option>
+<option value="478">Lambang Budiantoro, S.P.</option>
+<option value="416">Lina Asri W, S.P., M.P.</option>
+<option value="475">M. Bahrul Ulum, A.Md.</option>
+<option value="347">M. Suaidin, S.P.</option>
+<option value="429">Masedi Sugiantono</option>
+<option value="465">Masumah, S.P.</option>
+<option value="486">Miki Afriliya Sari, S.P.</option>
+<option value="511">Moh. Taufik Sujatmiko, S.ST.</option>
+<option value="373">Muhammad Suhelmi Faruq, S.P.</option>
+<option value="424">Muhammad Syaifudin Malik</option>
+<option value="509">Muthmainnah Ridahayanti, S.P.</option>
+<option value="464">Nasarudin Latif, S.P.</option>
+<option value="490">Nedya Putri Bachtiar, S.P.</option>
+<option value="417">Neetha Elinda, S.P.</option>
+<option value="535">Nina Indriya Siswandini</option>
+<option value="435">Niyah Nala Kumala Sari, S.P.</option>
+<option value="488">Nur Annisa Iftitah, S.P.</option>
+<option value="482">Nuri Dwi Wulandari, S.P.</option>
+<option value="474">Nuur Annisa, A.Md.</option>
+<option value="436">Ois Jati Setiyawan, S.P.</option>
+<option value="476">Okky Tiara Sari D, S.P.</option>
+<option value="407">Pariono, S.P.</option>
+<option value="423">Prima S Welli Candra, A.Md.</option>
+<option value="484">Prisya Niken M.P, S.P.</option>
+<option value="487">Puspita Dewi H, S.P.</option>
+<option value="449">Putri Sakinah, S.I.Kom</option>
+<option value="469">Rahmi Mahanani, A.Md</option>
+<option value="425">Rakhmad Priyadi</option>
+<option value="498">Rendri Puspita Dewi, S.P.</option>
+<option value="504">Resqi Eko Wahyu , S.St</option>
+<option value="532">Sanggita Rani Dhea, S.Si.</option>
+<option value="515">Sekar Dewi Indah Sari, S.P.</option>
+<option value="393">Setiyani</option>
+<option value="496">Shanty Anitasari, S.P.</option>
+<option value="471">Shifatur Rahmah, S.P.</option>
+<option value="432">Shofiana Widiningtyas</option>
+<option value="308">Slamet Pudjiono</option>
+<option value="507">Sri Rejeki Ambarwati, S.P</option>
+<option value="495">Sugeng Supriyanto, S.P.</option>
+<option value="427">Sukmandari, S.TP</option>
+<option value="516">Sulistyowati, S.TP.</option>
+<option value="359">Sumarno</option>
+<option value="330">Sumidi, S.P.</option>
+<option value="309">Suprapti, S.P.</option>
+<option value="343">Sutrisno</option>
+<option value="283">Tedy Irawan, S.TP.</option>
+<option value="497">tes</option>
+<option value="439">Titik Widayati, S.P.</option>
+<option value="410">Tjahjani Dwi Sulistijowati, S.P.</option>
+<option value="508">Tri Hadi Supratman, S.P.</option>
+<option value="415">Triyono Iswanto, S.P.</option>
+<option value="412">Wahyuni Dyah Anggraini</option>
+<option value="446">Yani Rahmawati, S.TP</option>
+<option value="470">Yorainiprina Amadea DL, A.Md.</option>
+<option value="332">Yudhi Asmoro, S.P.</option>
+</select>									</div>			
+								</li>		
+										
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+									
+								<li>
+									<label class="desc">Catatan Fase Berbunga Ulangan</label>
+									<div>
+										<textarea class="field text medium"  name="hasil_periksa_ulangan" cols="30" rows="50"></textarea>
+									</div>								
+								</li>
+									
+								<!-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->	
+			
+							</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</fieldset>			
+		</div>
+
 		<div class="dhtmlgoodies_aTab">
 			<fieldset class="fieldset_tab2">
 				<legend>Pemeriksaan Campuran Varietas Lain (CVL)</legend>
@@ -2854,6 +3218,9 @@
 	</fieldset>
 
 </form>
+<script type="text/javascript">
+	initTabs('tab4', Array('Informasi', 'Pemohon', 'Pemeriksaan Berbunga', 'Pemeriksaan Berbunga Ulangan', 'Pemeriksaan Campuran Varietas Lain (CVL)', 'Bunga Jantan Tertinggal Pada Induk Betina', 'Isolasi Jarak', 'Hama Penyakit', 'Kesimpulan Fase*'), 0, '100%', '', Array(false, false, false, false, false, false, false, false, false));
+</script>
 <script>
 var no_induk_pengajuan='JghHI.R.3507120.0911.0339';
 var sp=no_induk_pengajuan.split('.');
@@ -2902,21 +3269,21 @@ $('#kelas_benih').change(function(){
                         dataType: "html",
                         data: "id_produsen="+ prp, //the name of the $_POST variable and its value
                         success: function (response) {
-                             document.form_edit_fase_berbunga3.alamat_produsen.value = response;
+                             document.form_edit_fase_berbunga.alamat_produsen.value = response;
                         }
                 });
               return false;
 	}
         
 	function hapus_tanggal_tumbuh(){
-		document.form_edit_fase_berbunga3.tgl_vegetatif.value = '';
-		document.form_edit_fase_berbunga3.bln_vegetatif.value = '';
-		document.form_edit_fase_berbunga3.thn_vegetatif.value = '';
+		document.form_edit_fase_berbunga.tgl_vegetatif.value = '';
+		document.form_edit_fase_berbunga.bln_vegetatif.value = '';
+		document.form_edit_fase_berbunga.thn_vegetatif.value = '';
 	}
 	function hapus_tanggal_realisasi(){
-		document.form_edit_fase_berbunga3.tgl_realisasi.value = '';
-		document.form_edit_fase_berbunga3.bln_realisasi.value = '';
-		document.form_edit_fase_berbunga3.thn_realisasi.value = '';
+		document.form_edit_fase_berbunga.tgl_realisasi.value = '';
+		document.form_edit_fase_berbunga.bln_realisasi.value = '';
+		document.form_edit_fase_berbunga.thn_realisasi.value = '';
 	}		
 	function isInteger(s){
 	     
@@ -2934,9 +3301,9 @@ $('#kelas_benih').change(function(){
 
     function cekTotal(s, jenis){
             if (jenis == 'b')
-                var tot = document.form_edit_fase_berbunga3.sb_total.value;
+                var tot = document.form_edit_fase_berbunga.sb_total.value;
             if (jenis == 'j')
-                var tot = document.form_edit_fase_berbunga3.sj_total.value;
+                var tot = document.form_edit_fase_berbunga.sj_total.value;
 
             if (tot == ''){
                 alert('Harap mengisi nilai sample lebih dahulu');
@@ -2954,202 +3321,202 @@ $('#kelas_benih').change(function(){
 	}
 
 	function sum_total_sb(){
-		if(document.form_edit_fase_berbunga3.pops_betina.value == ''){		
+		if(document.form_edit_fase_berbunga.pops_betina.value == ''){		
 			alert('Populasi Pemeriksaan Kosong !\nTidak dapat melakukan perhitungan CVL');
-			document.form_edit_fase_berbunga3.sb1.value='';
-			document.form_edit_fase_berbunga3.sb2.value='';
-			document.form_edit_fase_berbunga3.sb3.value='';
-			document.form_edit_fase_berbunga3.sb4.value='';
-			document.form_edit_fase_berbunga3.sb5.value='';
-			document.form_edit_fase_berbunga3.sb6.value='';
-			document.form_edit_fase_berbunga3.sb7.value='';
-			document.form_edit_fase_berbunga3.sb8.value='';
-			document.form_edit_fase_berbunga3.sb9.value='';
-			document.form_edit_fase_berbunga3.sb10.value='';
-			document.form_edit_fase_berbunga3.sb11.value='';
-			document.form_edit_fase_berbunga3.sb12.value='';		
-			document.form_edit_fase_berbunga3.sb13.value='';		
-			document.form_edit_fase_berbunga3.sb14.value='';		
-			document.form_edit_fase_berbunga3.sb15.value='';		
-			document.form_edit_fase_berbunga3.sb16.value='';		
+			document.form_edit_fase_berbunga.sb1.value='';
+			document.form_edit_fase_berbunga.sb2.value='';
+			document.form_edit_fase_berbunga.sb3.value='';
+			document.form_edit_fase_berbunga.sb4.value='';
+			document.form_edit_fase_berbunga.sb5.value='';
+			document.form_edit_fase_berbunga.sb6.value='';
+			document.form_edit_fase_berbunga.sb7.value='';
+			document.form_edit_fase_berbunga.sb8.value='';
+			document.form_edit_fase_berbunga.sb9.value='';
+			document.form_edit_fase_berbunga.sb10.value='';
+			document.form_edit_fase_berbunga.sb11.value='';
+			document.form_edit_fase_berbunga.sb12.value='';		
+			document.form_edit_fase_berbunga.sb13.value='';		
+			document.form_edit_fase_berbunga.sb14.value='';		
+			document.form_edit_fase_berbunga.sb15.value='';		
+			document.form_edit_fase_berbunga.sb16.value='';		
 		}else{
-			var populasi = 100/parseInt(document.form_edit_fase_berbunga3.pops_betina.value);
-			var p1 = parseInt(document.form_edit_fase_berbunga3.sb1.value==''?0:document.form_edit_fase_berbunga3.sb1.value);
-			var p2 = parseInt(document.form_edit_fase_berbunga3.sb2.value==''?0:document.form_edit_fase_berbunga3.sb2.value);
-			var p3 = parseInt(document.form_edit_fase_berbunga3.sb3.value==''?0:document.form_edit_fase_berbunga3.sb3.value);
-			var p4 = parseInt(document.form_edit_fase_berbunga3.sb4.value==''?0:document.form_edit_fase_berbunga3.sb4.value);
-			var p5 = parseInt(document.form_edit_fase_berbunga3.sb5.value==''?0:document.form_edit_fase_berbunga3.sb5.value);
-			var p6 = parseInt(document.form_edit_fase_berbunga3.sb6.value==''?0:document.form_edit_fase_berbunga3.sb6.value);
-			var p7 = parseInt(document.form_edit_fase_berbunga3.sb7.value==''?0:document.form_edit_fase_berbunga3.sb7.value);
-			var p8 = parseInt(document.form_edit_fase_berbunga3.sb8.value==''?0:document.form_edit_fase_berbunga3.sb8.value);
-			var p9 = parseInt(document.form_edit_fase_berbunga3.sb9.value==''?0:document.form_edit_fase_berbunga3.sb9.value);
-			var p10 = parseInt(document.form_edit_fase_berbunga3.sb10.value==''?0:document.form_edit_fase_berbunga3.sb10.value);
-			var p11 = parseInt(document.form_edit_fase_berbunga3.sb11.value==''?0:document.form_edit_fase_berbunga3.sb11.value);
-			var p12 = parseInt(document.form_edit_fase_berbunga3.sb12.value==''?0:document.form_edit_fase_berbunga3.sb12.value);
-			var p13 = parseInt(document.form_edit_fase_berbunga3.sb13.value==''?0:document.form_edit_fase_berbunga3.sb13.value);
-			var p14 = parseInt(document.form_edit_fase_berbunga3.sb14.value==''?0:document.form_edit_fase_berbunga3.sb14.value);
-			var p15 = parseInt(document.form_edit_fase_berbunga3.sb15.value==''?0:document.form_edit_fase_berbunga3.sb15.value);
-			var p16 = parseInt(document.form_edit_fase_berbunga3.sb16.value==''?0:document.form_edit_fase_berbunga3.sb16.value);
+			var populasi = 100/parseInt(document.form_edit_fase_berbunga.pops_betina.value);
+			var p1 = parseInt(document.form_edit_fase_berbunga.sb1.value==''?0:document.form_edit_fase_berbunga.sb1.value);
+			var p2 = parseInt(document.form_edit_fase_berbunga.sb2.value==''?0:document.form_edit_fase_berbunga.sb2.value);
+			var p3 = parseInt(document.form_edit_fase_berbunga.sb3.value==''?0:document.form_edit_fase_berbunga.sb3.value);
+			var p4 = parseInt(document.form_edit_fase_berbunga.sb4.value==''?0:document.form_edit_fase_berbunga.sb4.value);
+			var p5 = parseInt(document.form_edit_fase_berbunga.sb5.value==''?0:document.form_edit_fase_berbunga.sb5.value);
+			var p6 = parseInt(document.form_edit_fase_berbunga.sb6.value==''?0:document.form_edit_fase_berbunga.sb6.value);
+			var p7 = parseInt(document.form_edit_fase_berbunga.sb7.value==''?0:document.form_edit_fase_berbunga.sb7.value);
+			var p8 = parseInt(document.form_edit_fase_berbunga.sb8.value==''?0:document.form_edit_fase_berbunga.sb8.value);
+			var p9 = parseInt(document.form_edit_fase_berbunga.sb9.value==''?0:document.form_edit_fase_berbunga.sb9.value);
+			var p10 = parseInt(document.form_edit_fase_berbunga.sb10.value==''?0:document.form_edit_fase_berbunga.sb10.value);
+			var p11 = parseInt(document.form_edit_fase_berbunga.sb11.value==''?0:document.form_edit_fase_berbunga.sb11.value);
+			var p12 = parseInt(document.form_edit_fase_berbunga.sb12.value==''?0:document.form_edit_fase_berbunga.sb12.value);
+			var p13 = parseInt(document.form_edit_fase_berbunga.sb13.value==''?0:document.form_edit_fase_berbunga.sb13.value);
+			var p14 = parseInt(document.form_edit_fase_berbunga.sb14.value==''?0:document.form_edit_fase_berbunga.sb14.value);
+			var p15 = parseInt(document.form_edit_fase_berbunga.sb15.value==''?0:document.form_edit_fase_berbunga.sb15.value);
+			var p16 = parseInt(document.form_edit_fase_berbunga.sb16.value==''?0:document.form_edit_fase_berbunga.sb16.value);
 			
 			var digit_counter = 0;
-			if(document.form_edit_fase_berbunga3.sb1.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb2.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb3.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb4.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb5.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb6.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb7.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb8.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb9.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb10.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb11.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sb12.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sb13.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sb14.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sb15.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sb16.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sb1.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb2.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb3.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb4.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb5.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb6.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb7.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb8.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb9.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb10.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb11.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sb12.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sb13.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sb14.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sb15.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sb16.value != '' )digit_counter = digit_counter+1;		
 			console.log('Jumlah Terisi'+digit_counter);
 			var rata_sample = (p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13+p14+p15+p16)/digit_counter;
 			var hasil_penyakit = rata_sample*populasi;
 			var result 		= set_result(hasil_penyakit);			
-			document.form_edit_fase_berbunga3.sb_total.value = result;
-			document.form_edit_fase_berbunga3.jumlah_titik_contoh_betina.value = digit_counter;
-		//	document.form_edit_fase_berbunga3.sb_penyelia.value = result;
+			document.form_edit_fase_berbunga.sb_total.value = result;
+			document.form_edit_fase_berbunga.jumlah_titik_contoh_betina.value = digit_counter;
+		//	document.form_edit_fase_berbunga.sb_penyelia.value = result;
 		}
 	}
 	sum_total_sb();
 	
 	function sum_total_sj(){
-		if(document.form_edit_fase_berbunga3.pops_jantan.value == ''){		
+		if(document.form_edit_fase_berbunga.pops_jantan.value == ''){		
 			alert('Populasi Pemeriksaan Jantan Kosong !\nTidak dapat melakukan perhitungan CVL');
-			document.form_edit_fase_berbunga3.sj1.value='';
-			document.form_edit_fase_berbunga3.sj2.value='';
-			document.form_edit_fase_berbunga3.sj3.value='';
-			document.form_edit_fase_berbunga3.sj4.value='';
-			document.form_edit_fase_berbunga3.sj5.value='';
-			document.form_edit_fase_berbunga3.sj6.value='';
-			document.form_edit_fase_berbunga3.sj7.value='';
-			document.form_edit_fase_berbunga3.sj8.value='';
-			document.form_edit_fase_berbunga3.sj9.value='';
-			document.form_edit_fase_berbunga3.sj10.value='';
-			document.form_edit_fase_berbunga3.sj11.value='';
-			document.form_edit_fase_berbunga3.sj12.value='';		
-			document.form_edit_fase_berbunga3.sj13.value='';		
-			document.form_edit_fase_berbunga3.sj14.value='';		
-			document.form_edit_fase_berbunga3.sj15.value='';		
-			document.form_edit_fase_berbunga3.sj16.value='';		
+			document.form_edit_fase_berbunga.sj1.value='';
+			document.form_edit_fase_berbunga.sj2.value='';
+			document.form_edit_fase_berbunga.sj3.value='';
+			document.form_edit_fase_berbunga.sj4.value='';
+			document.form_edit_fase_berbunga.sj5.value='';
+			document.form_edit_fase_berbunga.sj6.value='';
+			document.form_edit_fase_berbunga.sj7.value='';
+			document.form_edit_fase_berbunga.sj8.value='';
+			document.form_edit_fase_berbunga.sj9.value='';
+			document.form_edit_fase_berbunga.sj10.value='';
+			document.form_edit_fase_berbunga.sj11.value='';
+			document.form_edit_fase_berbunga.sj12.value='';		
+			document.form_edit_fase_berbunga.sj13.value='';		
+			document.form_edit_fase_berbunga.sj14.value='';		
+			document.form_edit_fase_berbunga.sj15.value='';		
+			document.form_edit_fase_berbunga.sj16.value='';		
 		}
 		else{
-			var populasi = 100/parseInt(document.form_edit_fase_berbunga3.pops_jantan.value);
+			var populasi = 100/parseInt(document.form_edit_fase_berbunga.pops_jantan.value);
 		
-			var p1 = parseInt(document.form_edit_fase_berbunga3.sj1.value==''?0:document.form_edit_fase_berbunga3.sj1.value);
-			var p2 = parseInt(document.form_edit_fase_berbunga3.sj2.value==''?0:document.form_edit_fase_berbunga3.sj2.value);
-			var p3 = parseInt(document.form_edit_fase_berbunga3.sj3.value==''?0:document.form_edit_fase_berbunga3.sj3.value);
-			var p4 = parseInt(document.form_edit_fase_berbunga3.sj4.value==''?0:document.form_edit_fase_berbunga3.sj4.value);
-			var p5 = parseInt(document.form_edit_fase_berbunga3.sj5.value==''?0:document.form_edit_fase_berbunga3.sj5.value);
-			var p6 = parseInt(document.form_edit_fase_berbunga3.sj6.value==''?0:document.form_edit_fase_berbunga3.sj6.value);
-			var p7 = parseInt(document.form_edit_fase_berbunga3.sj7.value==''?0:document.form_edit_fase_berbunga3.sj7.value);
-			var p8 = parseInt(document.form_edit_fase_berbunga3.sj8.value==''?0:document.form_edit_fase_berbunga3.sj8.value);
-			var p9 = parseInt(document.form_edit_fase_berbunga3.sj9.value==''?0:document.form_edit_fase_berbunga3.sj9.value);
-			var p10 = parseInt(document.form_edit_fase_berbunga3.sj10.value==''?0:document.form_edit_fase_berbunga3.sj10.value);
-			var p11 = parseInt(document.form_edit_fase_berbunga3.sj11.value==''?0:document.form_edit_fase_berbunga3.sj11.value);
-			var p12 = parseInt(document.form_edit_fase_berbunga3.sj12.value==''?0:document.form_edit_fase_berbunga3.sj12.value);
-			var p13 = parseInt(document.form_edit_fase_berbunga3.sj13.value==''?0:document.form_edit_fase_berbunga3.sj13.value);
-			var p14 = parseInt(document.form_edit_fase_berbunga3.sj14.value==''?0:document.form_edit_fase_berbunga3.sj14.value);
-			var p15 = parseInt(document.form_edit_fase_berbunga3.sj15.value==''?0:document.form_edit_fase_berbunga3.sj15.value);
-			var p16 = parseInt(document.form_edit_fase_berbunga3.sj16.value==''?0:document.form_edit_fase_berbunga3.sj16.value);
+			var p1 = parseInt(document.form_edit_fase_berbunga.sj1.value==''?0:document.form_edit_fase_berbunga.sj1.value);
+			var p2 = parseInt(document.form_edit_fase_berbunga.sj2.value==''?0:document.form_edit_fase_berbunga.sj2.value);
+			var p3 = parseInt(document.form_edit_fase_berbunga.sj3.value==''?0:document.form_edit_fase_berbunga.sj3.value);
+			var p4 = parseInt(document.form_edit_fase_berbunga.sj4.value==''?0:document.form_edit_fase_berbunga.sj4.value);
+			var p5 = parseInt(document.form_edit_fase_berbunga.sj5.value==''?0:document.form_edit_fase_berbunga.sj5.value);
+			var p6 = parseInt(document.form_edit_fase_berbunga.sj6.value==''?0:document.form_edit_fase_berbunga.sj6.value);
+			var p7 = parseInt(document.form_edit_fase_berbunga.sj7.value==''?0:document.form_edit_fase_berbunga.sj7.value);
+			var p8 = parseInt(document.form_edit_fase_berbunga.sj8.value==''?0:document.form_edit_fase_berbunga.sj8.value);
+			var p9 = parseInt(document.form_edit_fase_berbunga.sj9.value==''?0:document.form_edit_fase_berbunga.sj9.value);
+			var p10 = parseInt(document.form_edit_fase_berbunga.sj10.value==''?0:document.form_edit_fase_berbunga.sj10.value);
+			var p11 = parseInt(document.form_edit_fase_berbunga.sj11.value==''?0:document.form_edit_fase_berbunga.sj11.value);
+			var p12 = parseInt(document.form_edit_fase_berbunga.sj12.value==''?0:document.form_edit_fase_berbunga.sj12.value);
+			var p13 = parseInt(document.form_edit_fase_berbunga.sj13.value==''?0:document.form_edit_fase_berbunga.sj13.value);
+			var p14 = parseInt(document.form_edit_fase_berbunga.sj14.value==''?0:document.form_edit_fase_berbunga.sj14.value);
+			var p15 = parseInt(document.form_edit_fase_berbunga.sj15.value==''?0:document.form_edit_fase_berbunga.sj15.value);
+			var p16 = parseInt(document.form_edit_fase_berbunga.sj16.value==''?0:document.form_edit_fase_berbunga.sj16.value);
 			
 			var digit_counter = 0;
-			if(document.form_edit_fase_berbunga3.sj1.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj2.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj3.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj4.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj5.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj6.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj7.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj8.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj9.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj10.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj11.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.sj12.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sj13.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sj14.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sj15.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.sj16.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sj1.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj2.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj3.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj4.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj5.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj6.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj7.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj8.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj9.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj10.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj11.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.sj12.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sj13.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sj14.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sj15.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.sj16.value != '' )digit_counter = digit_counter+1;		
 			console.log("Jumlah SJ : "+digit_counter)
 			var rata_sample = (p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13+p14+p15+p16)/digit_counter;
 
 			var hasil_sj = rata_sample*populasi;
 			var result 		= set_result(hasil_sj);			
-			document.form_edit_fase_berbunga3.sj_total.value = result;
-			document.form_edit_fase_berbunga3.jumlah_titik_contoh_jantan.value = digit_counter;
-			console.log(document.form_edit_fase_berbunga3.jumlah_titik_contoh_jantan.value)
+			document.form_edit_fase_berbunga.sj_total.value = result;
+			document.form_edit_fase_berbunga.jumlah_titik_contoh_jantan.value = digit_counter;
+			console.log(document.form_edit_fase_berbunga.jumlah_titik_contoh_jantan.value)
 		}
 	}
 	sum_total_sj();
 
 	function sum_total_pbjtpi(){
-		if(document.form_edit_fase_berbunga3.pops_jantan.value == ''){		
+		if(document.form_edit_fase_berbunga.pops_jantan.value == ''){		
 			alert('Populasi Pemeriksaan Jantan Kosong !\nTidak dapat melakukan perhitungan CVL');
-			document.form_edit_fase_berbunga3.sj1.value='';
-			document.form_edit_fase_berbunga3.sj2.value='';
-			document.form_edit_fase_berbunga3.sj3.value='';
-			document.form_edit_fase_berbunga3.sj4.value='';
-			document.form_edit_fase_berbunga3.sj5.value='';
-			document.form_edit_fase_berbunga3.sj6.value='';
-			document.form_edit_fase_berbunga3.sj7.value='';
-			document.form_edit_fase_berbunga3.sj8.value='';
-			document.form_edit_fase_berbunga3.sj9.value='';
-			document.form_edit_fase_berbunga3.sj10.value='';
-			document.form_edit_fase_berbunga3.sj11.value='';
-			document.form_edit_fase_berbunga3.sj12.value='';		
-			document.form_edit_fase_berbunga3.sj13.value='';		
-			document.form_edit_fase_berbunga3.sj14.value='';		
-			document.form_edit_fase_berbunga3.sj15.value='';		
-			document.form_edit_fase_berbunga3.sj16.value='';		
+			document.form_edit_fase_berbunga.sj1.value='';
+			document.form_edit_fase_berbunga.sj2.value='';
+			document.form_edit_fase_berbunga.sj3.value='';
+			document.form_edit_fase_berbunga.sj4.value='';
+			document.form_edit_fase_berbunga.sj5.value='';
+			document.form_edit_fase_berbunga.sj6.value='';
+			document.form_edit_fase_berbunga.sj7.value='';
+			document.form_edit_fase_berbunga.sj8.value='';
+			document.form_edit_fase_berbunga.sj9.value='';
+			document.form_edit_fase_berbunga.sj10.value='';
+			document.form_edit_fase_berbunga.sj11.value='';
+			document.form_edit_fase_berbunga.sj12.value='';		
+			document.form_edit_fase_berbunga.sj13.value='';		
+			document.form_edit_fase_berbunga.sj14.value='';		
+			document.form_edit_fase_berbunga.sj15.value='';		
+			document.form_edit_fase_berbunga.sj16.value='';		
 		}else{
-			var populasi = 100/parseInt(document.form_edit_fase_berbunga3.pops_jantan.value);
-			var p1 = parseInt(document.form_edit_fase_berbunga3.pbjtpi1.value==''?0:document.form_edit_fase_berbunga3.pbjtpi1.value);
-			var p2 = parseInt(document.form_edit_fase_berbunga3.pbjtpi2.value==''?0:document.form_edit_fase_berbunga3.pbjtpi2.value);
-			var p3 = parseInt(document.form_edit_fase_berbunga3.pbjtpi3.value==''?0:document.form_edit_fase_berbunga3.pbjtpi3.value);
-			var p4 = parseInt(document.form_edit_fase_berbunga3.pbjtpi4.value==''?0:document.form_edit_fase_berbunga3.pbjtpi4.value);
-			var p5 = parseInt(document.form_edit_fase_berbunga3.pbjtpi5.value==''?0:document.form_edit_fase_berbunga3.pbjtpi5.value);
-			var p6 = parseInt(document.form_edit_fase_berbunga3.pbjtpi6.value==''?0:document.form_edit_fase_berbunga3.pbjtpi6.value);
-			var p7 = parseInt(document.form_edit_fase_berbunga3.pbjtpi7.value==''?0:document.form_edit_fase_berbunga3.pbjtpi7.value);
-			var p8 = parseInt(document.form_edit_fase_berbunga3.pbjtpi8.value==''?0:document.form_edit_fase_berbunga3.pbjtpi8.value);
-			var p9 = parseInt(document.form_edit_fase_berbunga3.pbjtpi9.value==''?0:document.form_edit_fase_berbunga3.pbjtpi9.value);
-			var p10 = parseInt(document.form_edit_fase_berbunga3.pbjtpi10.value==''?0:document.form_edit_fase_berbunga3.pbjtpi10.value);
-			var p11 = parseInt(document.form_edit_fase_berbunga3.pbjtpi11.value==''?0:document.form_edit_fase_berbunga3.pbjtpi11.value);
-			var p12 = parseInt(document.form_edit_fase_berbunga3.pbjtpi12.value==''?0:document.form_edit_fase_berbunga3.pbjtpi12.value);
-			var p13 = parseInt(document.form_edit_fase_berbunga3.pbjtpi13.value==''?0:document.form_edit_fase_berbunga3.pbjtpi13.value);
-			var p14 = parseInt(document.form_edit_fase_berbunga3.pbjtpi14.value==''?0:document.form_edit_fase_berbunga3.pbjtpi14.value);
-			var p15 = parseInt(document.form_edit_fase_berbunga3.pbjtpi15.value==''?0:document.form_edit_fase_berbunga3.pbjtpi15.value);
-			var p16 = parseInt(document.form_edit_fase_berbunga3.pbjtpi16.value==''?0:document.form_edit_fase_berbunga3.pbjtpi16.value);
+			var populasi = 100/parseInt(document.form_edit_fase_berbunga.pops_jantan.value);
+			var p1 = parseInt(document.form_edit_fase_berbunga.pbjtpi1.value==''?0:document.form_edit_fase_berbunga.pbjtpi1.value);
+			var p2 = parseInt(document.form_edit_fase_berbunga.pbjtpi2.value==''?0:document.form_edit_fase_berbunga.pbjtpi2.value);
+			var p3 = parseInt(document.form_edit_fase_berbunga.pbjtpi3.value==''?0:document.form_edit_fase_berbunga.pbjtpi3.value);
+			var p4 = parseInt(document.form_edit_fase_berbunga.pbjtpi4.value==''?0:document.form_edit_fase_berbunga.pbjtpi4.value);
+			var p5 = parseInt(document.form_edit_fase_berbunga.pbjtpi5.value==''?0:document.form_edit_fase_berbunga.pbjtpi5.value);
+			var p6 = parseInt(document.form_edit_fase_berbunga.pbjtpi6.value==''?0:document.form_edit_fase_berbunga.pbjtpi6.value);
+			var p7 = parseInt(document.form_edit_fase_berbunga.pbjtpi7.value==''?0:document.form_edit_fase_berbunga.pbjtpi7.value);
+			var p8 = parseInt(document.form_edit_fase_berbunga.pbjtpi8.value==''?0:document.form_edit_fase_berbunga.pbjtpi8.value);
+			var p9 = parseInt(document.form_edit_fase_berbunga.pbjtpi9.value==''?0:document.form_edit_fase_berbunga.pbjtpi9.value);
+			var p10 = parseInt(document.form_edit_fase_berbunga.pbjtpi10.value==''?0:document.form_edit_fase_berbunga.pbjtpi10.value);
+			var p11 = parseInt(document.form_edit_fase_berbunga.pbjtpi11.value==''?0:document.form_edit_fase_berbunga.pbjtpi11.value);
+			var p12 = parseInt(document.form_edit_fase_berbunga.pbjtpi12.value==''?0:document.form_edit_fase_berbunga.pbjtpi12.value);
+			var p13 = parseInt(document.form_edit_fase_berbunga.pbjtpi13.value==''?0:document.form_edit_fase_berbunga.pbjtpi13.value);
+			var p14 = parseInt(document.form_edit_fase_berbunga.pbjtpi14.value==''?0:document.form_edit_fase_berbunga.pbjtpi14.value);
+			var p15 = parseInt(document.form_edit_fase_berbunga.pbjtpi15.value==''?0:document.form_edit_fase_berbunga.pbjtpi15.value);
+			var p16 = parseInt(document.form_edit_fase_berbunga.pbjtpi16.value==''?0:document.form_edit_fase_berbunga.pbjtpi16.value);
 			
 			var digit_counter = 0;
-			if(document.form_edit_fase_berbunga3.pbjtpi1.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi2.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi3.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi4.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi5.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi6.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi7.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi8.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi9.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi10.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi11.value != '' )digit_counter = digit_counter+1;
-			if(document.form_edit_fase_berbunga3.pbjtpi12.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.pbjtpi13.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.pbjtpi14.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.pbjtpi15.value != '' )digit_counter = digit_counter+1;		
-			if(document.form_edit_fase_berbunga3.pbjtpi16.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.pbjtpi1.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi2.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi3.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi4.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi5.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi6.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi7.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi8.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi9.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi10.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi11.value != '' )digit_counter = digit_counter+1;
+			if(document.form_edit_fase_berbunga.pbjtpi12.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.pbjtpi13.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.pbjtpi14.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.pbjtpi15.value != '' )digit_counter = digit_counter+1;		
+			if(document.form_edit_fase_berbunga.pbjtpi16.value != '' )digit_counter = digit_counter+1;		
 			
 			var rata_sample = (p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13+p14+p15+p16)/digit_counter;
 
 			var hasil_pbjtpi = rata_sample*populasi;
 			var result 		= set_result(hasil_pbjtpi);			
-			document.form_edit_fase_berbunga3.pbjtpi_total.value = result;
-			document.form_edit_fase_berbunga3.jumlah_titik_contoh_pbjtpi.value = digit_counter;
+			document.form_edit_fase_berbunga.pbjtpi_total.value = result;
+			document.form_edit_fase_berbunga.jumlah_titik_contoh_pbjtpi.value = digit_counter;
 		}
 	}
 	sum_total_pbjtpi();

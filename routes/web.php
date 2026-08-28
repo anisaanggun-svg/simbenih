@@ -37,6 +37,18 @@ Route::prefix('admin/sertifikasi')->name('sertifikasi.')->group(function () {
     // Fase Vegetatif Routes
     Route::get('/pengajuan/fase_vegetatif/{id}', [SertifikasiController::class, 'faseVegetatif'])->name('pengajuan.fase_vegetatif');
 
+    // Fase Berbunga Routes
+    Route::get('/pengajuan/fase_berbunga/{id}', [SertifikasiController::class, 'faseBerbunga'])->name('pengajuan.fase_berbunga');
+
+    // Fase Berbunga Ulangan Routes
+    Route::get('/pengajuan/fase_berbunga_ulangan/{id}', [SertifikasiController::class, 'faseBerbungaUlangan'])->name('pengajuan.fase_berbunga_ulangan');
+
+    // Fase Masak Routes
+    Route::get('/pengajuan/fase_masak/{id}', [SertifikasiController::class, 'faseMasak'])->name('pengajuan.fase_masak');
+
+    // Fase Panen Routes
+    Route::get('/pengajuan/fase_panen/{id}', [SertifikasiController::class, 'fasePanen'])->name('pengajuan.fase_panen');
+
     // AJAX endpoint for getting produsen address
     Route::post('/pengajuan/dapatkan_alamat_produsen', [SertifikasiController::class, 'dapatkanAlamatProdusen'])->name('pengajuan.dapatkan_alamat');
 });
