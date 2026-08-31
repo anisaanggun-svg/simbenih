@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\SertifikasiController;
+use App\Http\Controllers\LabController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -83,4 +84,18 @@ Route::prefix('admin/sertifikasi')->name('sertifikasi.')->group(function () {
     Route::post('/label_standart/delete', [SertifikasiController::class, 'konsepLabelStandartDelete'])->name('konsep_label_standart.delete');
     Route::get('/label_standart/grid', [SertifikasiController::class, 'gridKonsepLabelStandart'])->name('konsep_label_standart.grid');
     Route::get('/label_standart/grid_permohonan', [SertifikasiController::class, 'gridPermohonanKonsepLabelStandart'])->name('konsep_label_standart.grid_permohonan');
+});
+
+// Laboratorium Routes
+Route::prefix('admin/lab')->name('lab.')->group(function () {
+    Route::get('/uji', [LabController::class, 'index'])->name('uji_laboratorium.index');
+    Route::get('/uji/tambah', [LabController::class, 'create'])->name('uji_laboratorium.create');
+    Route::get('/uji/lihat/{id}/{a}/{b}/{mode}', [LabController::class, 'show'])->name('uji_laboratorium.show');
+    Route::get('/uji/edit/{id}', [LabController::class, 'edit'])->name('uji_laboratorium.edit');
+    Route::post('/uji/store', [LabController::class, 'store'])->name('uji_laboratorium.store');
+    Route::post('/uji/update/{id}', [LabController::class, 'update'])->name('uji_laboratorium.update');
+    Route::post('/uji/delete', [LabController::class, 'destroy'])->name('uji_laboratorium.delete');
+    Route::get('/uji/cetak/{id}', [LabController::class, 'cetak'])->name('uji_laboratorium.cetak');
+    Route::get('/buku-induk', [LabController::class, 'bukuInduk'])->name('buku_induk');
+    Route::post('/buku-induk', [LabController::class, 'bukuIndukDownload'])->name('buku_induk.download');
 });
