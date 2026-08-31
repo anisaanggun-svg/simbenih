@@ -2,21 +2,90 @@
 
 @section("title", "Fase Berbunga - Sertifikasi")
 
-@section("header")
+@push("header")
 <!-- Select2 -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 <style>
     #berbungaContent .card { margin-bottom: 1.5rem; }
     #berbungaContent .form-group { margin-bottom: 1.1rem; }
-    .cvl-table td { padding: 4px 8px; vertical-align: middle; }
-    .cvl-input { width: 50px; display: inline-block; text-align: center; }
+    
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container {
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+    .cvl-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    .cvl-table td {
+        padding: 5px 2px !important;
+        vertical-align: middle !important;
+    }
+    .cvl-table td.col-num {
+        width: 2.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+    .cvl-table td.col-input {
+        width: 8.5% !important;
+        text-align: left !important;
+        padding-right: 8px !important;
+    }
+    .cvl-table td.col-label-stat {
+        width: 5.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: bold !important;
+        white-space: nowrap !important;
+    }
+    .cvl-table td.col-input-stat {
+        width: 6.5% !important;
+        text-align: left !important;
+        white-space: nowrap !important;
+    }
+    .cvl-input {
+        width: 100% !important;
+        max-width: 70px !important;
+        height: 28px !important;
+        text-align: center !important;
+        border: 1px solid #767676 !important;
+        border-radius: 3px !important;
+        padding: 1px 4px !important;
+        font-size: 0.85rem !important;
+        background-color: #fff !important;
+        display: inline-block !important;
+        box-sizing: border-box !important;
+    }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] {
+        width: 100% !important;
+        max-width: 75px !important;
+    }
+
     .tbl-realisasi th, .tbl-realisasi td { padding: 6px 10px; border: 1px solid #dee2e6; text-align: center; }
     .tbl-realisasi th { background-color: #f8f9fa; }
 </style>
-@endsection
+@endpush
 
 @section("content")
+<style>
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container { width: 100% !important; overflow: hidden !important; }
+    .cvl-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; font-size: 0.85rem !important; margin-bottom: 0.75rem !important; }
+    .cvl-table td { padding: 5px 2px !important; vertical-align: middle !important; }
+    .cvl-table td.col-num { width: 2.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: 600 !important; color: #333 !important; }
+    .cvl-table td.col-input { width: 8.5% !important; text-align: left !important; padding-right: 8px !important; }
+    .cvl-table td.col-label-stat { width: 5.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: bold !important; white-space: nowrap !important; }
+    .cvl-table td.col-input-stat { width: 6.5% !important; text-align: left !important; white-space: nowrap !important; }
+    .cvl-input { width: 100% !important; max-width: 70px !important; height: 28px !important; text-align: center !important; border: 1px solid #767676 !important; border-radius: 3px !important; padding: 1px 4px !important; font-size: 0.85rem !important; background-color: #fff !important; display: inline-block !important; box-sizing: border-box !important; }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] { width: 100% !important; max-width: 75px !important; }
+</style>
 <section class="content">
     <div class="container-fluid">
         <div class="card">
@@ -273,57 +342,58 @@
                                     <h3 class="card-title">Pemeriksaan Campuran Varietas Lain (CVL)</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <label class="desc">Tanaman Betina</label>
-                                        <table class="table cvl-table">
+                                    <h6 class="font-weight-bold mb-2">Tanaman Betina</h6>
+                                    <div class="cvl-container mb-3">
+                                        <table class="cvl-table">
                                             <tr>
-                                                <td>1</td><td><input type="text" class="cvl-input" name="sb1" maxlength="2"></td>
-                                                <td>2</td><td><input type="text" class="cvl-input" name="sb2" maxlength="2"></td>
-                                                <td>3</td><td><input type="text" class="cvl-input" name="sb3" maxlength="2"></td>
-                                                <td>4</td><td><input type="text" class="cvl-input" name="sb4" maxlength="2"></td>
-                                                <td>5</td><td><input type="text" class="cvl-input" name="sb5" maxlength="2"></td>
-                                                <td>6</td><td><input type="text" class="cvl-input" name="sb6" maxlength="2"></td>
-                                                <td>7</td><td><input type="text" class="cvl-input" name="sb7" maxlength="2"></td>
-                                                <td>8</td><td><input type="text" class="cvl-input" name="sb8" maxlength="2"></td>
-                                                <td>TOTAL</td><td><input type="text" class="cvl-input" name="sb_total" readonly> %</td>
+                                                <td class="col-num">1</td><td class="col-input"><input type="text" class="cvl-input" name="sb1" maxlength="2"></td>
+                                                <td class="col-num">2</td><td class="col-input"><input type="text" class="cvl-input" name="sb2" maxlength="2"></td>
+                                                <td class="col-num">3</td><td class="col-input"><input type="text" class="cvl-input" name="sb3" maxlength="2"></td>
+                                                <td class="col-num">4</td><td class="col-input"><input type="text" class="cvl-input" name="sb4" maxlength="2"></td>
+                                                <td class="col-num">5</td><td class="col-input"><input type="text" class="cvl-input" name="sb5" maxlength="2"></td>
+                                                <td class="col-num">6</td><td class="col-input"><input type="text" class="cvl-input" name="sb6" maxlength="2"></td>
+                                                <td class="col-num">7</td><td class="col-input"><input type="text" class="cvl-input" name="sb7" maxlength="2"></td>
+                                                <td class="col-num">8</td><td class="col-input"><input type="text" class="cvl-input" name="sb8" maxlength="2"></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input type="text" class="cvl-input font-weight-bold" name="sb_total" readonly> %</td>
                                             </tr>
                                             <tr>
-                                                <td>9</td><td><input type="text" class="cvl-input" name="sb9" maxlength="2"></td>
-                                                <td>10</td><td><input type="text" class="cvl-input" name="sb10" maxlength="2"></td>
-                                                <td>11</td><td><input type="text" class="cvl-input" name="sb11" maxlength="2"></td>
-                                                <td>12</td><td><input type="text" class="cvl-input" name="sb12" maxlength="2"></td>
-                                                <td>13</td><td><input type="text" class="cvl-input" name="sb13" maxlength="2"></td>
-                                                <td>14</td><td><input type="text" class="cvl-input" name="sb14" maxlength="2"></td>
-                                                <td>15</td><td><input type="text" class="cvl-input" name="sb15" maxlength="2"></td>
-                                                <td>16</td><td><input type="text" class="cvl-input" name="sb16" maxlength="2"></td>
-                                                <td>Penyelia</td><td><input type="text" class="cvl-input" name="sb_penyelia"> %</td>
+                                                <td class="col-num">9</td><td class="col-input"><input type="text" class="cvl-input" name="sb9" maxlength="2"></td>
+                                                <td class="col-num">10</td><td class="col-input"><input type="text" class="cvl-input" name="sb10" maxlength="2"></td>
+                                                <td class="col-num">11</td><td class="col-input"><input type="text" class="cvl-input" name="sb11" maxlength="2"></td>
+                                                <td class="col-num">12</td><td class="col-input"><input type="text" class="cvl-input" name="sb12" maxlength="2"></td>
+                                                <td class="col-num">13</td><td class="col-input"><input type="text" class="cvl-input" name="sb13" maxlength="2"></td>
+                                                <td class="col-num">14</td><td class="col-input"><input type="text" class="cvl-input" name="sb14" maxlength="2"></td>
+                                                <td class="col-num">15</td><td class="col-input"><input type="text" class="cvl-input" name="sb15" maxlength="2"></td>
+                                                <td class="col-num">16</td><td class="col-input"><input type="text" class="cvl-input" name="sb16" maxlength="2"></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input type="text" class="cvl-input" name="sb_penyelia"> %</td>
                                             </tr>
                                         </table>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="desc">Tanaman Jantan</label>
-                                        <table class="table cvl-table">
+
+                                    <h6 class="font-weight-bold mb-2">Tanaman Jantan</h6>
+                                    <div class="cvl-container">
+                                        <table class="cvl-table">
                                             <tr>
-                                                <td>1</td><td><input type="text" class="cvl-input" name="sj1" maxlength="2"></td>
-                                                <td>2</td><td><input type="text" class="cvl-input" name="sj2" maxlength="2"></td>
-                                                <td>3</td><td><input type="text" class="cvl-input" name="sj3" maxlength="2"></td>
-                                                <td>4</td><td><input type="text" class="cvl-input" name="sj4" maxlength="2"></td>
-                                                <td>5</td><td><input type="text" class="cvl-input" name="sj5" maxlength="2"></td>
-                                                <td>6</td><td><input type="text" class="cvl-input" name="sj6" maxlength="2"></td>
-                                                <td>7</td><td><input type="text" class="cvl-input" name="sj7" maxlength="2"></td>
-                                                <td>8</td><td><input type="text" class="cvl-input" name="sj8" maxlength="2"></td>
-                                                <td>TOTAL</td><td><input type="text" class="cvl-input" name="sj_total" readonly> %</td>
+                                                <td class="col-num">1</td><td class="col-input"><input type="text" class="cvl-input" name="sj1" maxlength="2"></td>
+                                                <td class="col-num">2</td><td class="col-input"><input type="text" class="cvl-input" name="sj2" maxlength="2"></td>
+                                                <td class="col-num">3</td><td class="col-input"><input type="text" class="cvl-input" name="sj3" maxlength="2"></td>
+                                                <td class="col-num">4</td><td class="col-input"><input type="text" class="cvl-input" name="sj4" maxlength="2"></td>
+                                                <td class="col-num">5</td><td class="col-input"><input type="text" class="cvl-input" name="sj5" maxlength="2"></td>
+                                                <td class="col-num">6</td><td class="col-input"><input type="text" class="cvl-input" name="sj6" maxlength="2"></td>
+                                                <td class="col-num">7</td><td class="col-input"><input type="text" class="cvl-input" name="sj7" maxlength="2"></td>
+                                                <td class="col-num">8</td><td class="col-input"><input type="text" class="cvl-input" name="sj8" maxlength="2"></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input type="text" class="cvl-input font-weight-bold" name="sj_total" readonly> %</td>
                                             </tr>
                                             <tr>
-                                                <td>9</td><td><input type="text" class="cvl-input" name="sj9" maxlength="2"></td>
-                                                <td>10</td><td><input type="text" class="cvl-input" name="sj10" maxlength="2"></td>
-                                                <td>11</td><td><input type="text" class="cvl-input" name="sj11" maxlength="2"></td>
-                                                <td>12</td><td><input type="text" class="cvl-input" name="sj12" maxlength="2"></td>
-                                                <td>13</td><td><input type="text" class="cvl-input" name="sj13" maxlength="2"></td>
-                                                <td>14</td><td><input type="text" class="cvl-input" name="sj14" maxlength="2"></td>
-                                                <td>15</td><td><input type="text" class="cvl-input" name="sj15" maxlength="2"></td>
-                                                <td>16</td><td><input type="text" class="cvl-input" name="sj16" maxlength="2"></td>
-                                                <td>Penyelia</td><td><input type="text" class="cvl-input" name="sj_penyelia"> %</td>
+                                                <td class="col-num">9</td><td class="col-input"><input type="text" class="cvl-input" name="sj9" maxlength="2"></td>
+                                                <td class="col-num">10</td><td class="col-input"><input type="text" class="cvl-input" name="sj10" maxlength="2"></td>
+                                                <td class="col-num">11</td><td class="col-input"><input type="text" class="cvl-input" name="sj11" maxlength="2"></td>
+                                                <td class="col-num">12</td><td class="col-input"><input type="text" class="cvl-input" name="sj12" maxlength="2"></td>
+                                                <td class="col-num">13</td><td class="col-input"><input type="text" class="cvl-input" name="sj13" maxlength="2"></td>
+                                                <td class="col-num">14</td><td class="col-input"><input type="text" class="cvl-input" name="sj14" maxlength="2"></td>
+                                                <td class="col-num">15</td><td class="col-input"><input type="text" class="cvl-input" name="sj15" maxlength="2"></td>
+                                                <td class="col-num">16</td><td class="col-input"><input type="text" class="cvl-input" name="sj16" maxlength="2"></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input type="text" class="cvl-input" name="sj_penyelia"> %</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -338,29 +408,29 @@
                                     <h3 class="card-title">Bunga Jantan Tertinggal Pada Induk Betina</h3>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <table class="table cvl-table">
+                                    <div class="cvl-container">
+                                        <table class="cvl-table">
                                             <tr>
-                                                <td>1</td><td><input type="text" class="cvl-input" name="pbjtpi1" maxlength="2"></td>
-                                                <td>2</td><td><input type="text" class="cvl-input" name="pbjtpi2" maxlength="2"></td>
-                                                <td>3</td><td><input type="text" class="cvl-input" name="pbjtpi3" maxlength="2"></td>
-                                                <td>4</td><td><input type="text" class="cvl-input" name="pbjtpi4" maxlength="2"></td>
-                                                <td>5</td><td><input type="text" class="cvl-input" name="pbjtpi5" maxlength="2"></td>
-                                                <td>6</td><td><input type="text" class="cvl-input" name="pbjtpi6" maxlength="2"></td>
-                                                <td>7</td><td><input type="text" class="cvl-input" name="pbjtpi7" maxlength="2"></td>
-                                                <td>8</td><td><input type="text" class="cvl-input" name="pbjtpi8" maxlength="2"></td>
-                                                <td>TOTAL</td><td><input type="text" class="cvl-input" name="pbjtpi_total" readonly> %</td>
+                                                <td class="col-num">1</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi1" maxlength="2"></td>
+                                                <td class="col-num">2</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi2" maxlength="2"></td>
+                                                <td class="col-num">3</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi3" maxlength="2"></td>
+                                                <td class="col-num">4</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi4" maxlength="2"></td>
+                                                <td class="col-num">5</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi5" maxlength="2"></td>
+                                                <td class="col-num">6</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi6" maxlength="2"></td>
+                                                <td class="col-num">7</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi7" maxlength="2"></td>
+                                                <td class="col-num">8</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi8" maxlength="2"></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input type="text" class="cvl-input font-weight-bold" name="pbjtpi_total" readonly> %</td>
                                             </tr>
                                             <tr>
-                                                <td>9</td><td><input type="text" class="cvl-input" name="pbjtpi9" maxlength="2"></td>
-                                                <td>10</td><td><input type="text" class="cvl-input" name="pbjtpi10" maxlength="2"></td>
-                                                <td>11</td><td><input type="text" class="cvl-input" name="pbjtpi11" maxlength="2"></td>
-                                                <td>12</td><td><input type="text" class="cvl-input" name="pbjtpi12" maxlength="2"></td>
-                                                <td>13</td><td><input type="text" class="cvl-input" name="pbjtpi13" maxlength="2"></td>
-                                                <td>14</td><td><input type="text" class="cvl-input" name="pbjtpi14" maxlength="2"></td>
-                                                <td>15</td><td><input type="text" class="cvl-input" name="pbjtpi15" maxlength="2"></td>
-                                                <td>16</td><td><input type="text" class="cvl-input" name="pbjtpi16" maxlength="2"></td>
-                                                <td>Penyelia</td><td><input type="text" class="cvl-input" name="pbjtpi_penyelia"> %</td>
+                                                <td class="col-num">9</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi9" maxlength="2"></td>
+                                                <td class="col-num">10</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi10" maxlength="2"></td>
+                                                <td class="col-num">11</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi11" maxlength="2"></td>
+                                                <td class="col-num">12</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi12" maxlength="2"></td>
+                                                <td class="col-num">13</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi13" maxlength="2"></td>
+                                                <td class="col-num">14</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi14" maxlength="2"></td>
+                                                <td class="col-num">15</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi15" maxlength="2"></td>
+                                                <td class="col-num">16</td><td class="col-input"><input type="text" class="cvl-input" name="pbjtpi16" maxlength="2"></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input type="text" class="cvl-input" name="pbjtpi_penyelia"> %</td>
                                             </tr>
                                         </table>
                                     </div>

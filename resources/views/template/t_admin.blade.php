@@ -7,8 +7,10 @@
     <title>@yield("title")</title>
     <link rel="icon" href="{{  asset('assets/img/icon.png') }}" type="image/png">
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Google Fonts: Poppins & Source Sans Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{  asset('assets/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Ionicons -->
@@ -77,7 +79,9 @@
                         <img src="{{  asset('assets/img/icon.png') }}" alt="BPSB" class="brand-image" style="-webkit-filter: drop-shadow(0px 0px 5px #feffd9);filter: drop-shadow(0px 0px 5px #aaaaaa);">
                     </div>
                     <div class="col-9">
-                        <span class="brand-text font-weight-light text-center">UPT. PSBTPH<br>Jawa Timur</span>
+                        <span class="brand-text" style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.3px;">
+                            SISTEM INFORMASI<br>PERBENIHAN
+                        </span>
                     </div>
                 </div>
             </a>
@@ -85,23 +89,13 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
+                @auth
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex text-center">
                     <div class="info" style="width: 100%;">
-                        <i><a class="d-block" id="akun_name"></a></i>
+                        <i><a class="d-block" id="akun_name">{{ Auth::user()->name ?? 'Administrator' }}</a></i>
                     </div>
                 </div>
-
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                @endauth
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
@@ -128,7 +122,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{url('admin/sertifikasi/pasca')}}" class="nav-link">
+                                    <a href="{{url('admin/sertifikasi/pasca_lapangan')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pasca Lapangan</p>
                                     </a>
@@ -137,6 +131,12 @@
                                     <a href="{{url('admin/sertifikasi/label')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Konsep Label</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{url('admin/sertifikasi/label_standart')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Konsep Label Standart</p>
                                     </a>
                                 </li>
                             </ul>
@@ -347,6 +347,100 @@
                 </nav>
                 <!-- /.sidebar-menu -->
             </div>
+            <script>
+                // Active menu state
+                $(document).ready(function() {
+                    var currentPath = window.location.pathname;
+                    // Remove /admin prefix for matching
+                    var relativePath = currentPath.replace(/^\/admin\/?/, '/');
+                    
+                    // Helper to add active class
+                    function setActive(selector) {
+                        $(selector).addClass('active');
+                        // If it's a submenu item, also add menu-open to parent
+                        $(selector).closest('.nav-treeview').prev('.nav-link').addClass('active');
+                        $(selector).closest('.nav-treeview').prev('.nav-link').parent().addClass('menu-open');
+                    }
+                    
+                    // Sertifikasi submenu
+                    if (relativePath.indexOf('/sertifikasi/pengajuan') !== -1) {
+                        setActive('a[href*="sertifikasi/pengajuan"]');
+                    } else if (relativePath.indexOf('/sertifikasi/pasca_lapangan') !== -1) {
+                        setActive('a[href*="sertifikasi/pasca_lapangan"]');
+                    } else if (relativePath.indexOf('/sertifikasi/label_standart') !== -1) {
+                        setActive('a[href*="sertifikasi/label_standart"]');
+                    } else if (relativePath.indexOf('/sertifikasi/label') !== -1) {
+                        setActive('a[href*="sertifikasi/label"]');
+                    }
+                    
+                    // Laboratorium submenu
+                    if (relativePath.indexOf('/lab/uji') !== -1) {
+                        setActive('a[href*="lab/uji"]');
+                    } else if (relativePath.indexOf('/lab/buku-induk') !== -1) {
+                        setActive('a[href*="lab/buku-induk"]');
+                    } else if (relativePath.indexOf('/lab/log') !== -1) {
+                        setActive('a[href*="lab/log"]');
+                    }
+                    
+                    // Data Master submenu
+                    if (relativePath.indexOf('/master/golongan') !== -1) {
+                        setActive('a[href*="master/golongan"]');
+                    } else if (relativePath.indexOf('/master/kumpulan') !== -1) {
+                        setActive('a[href*="master/kumpulan"]');
+                    } else if (relativePath.indexOf('/master/jenis-tanaman') !== -1) {
+                        setActive('a[href*="master/jenis-tanaman"]');
+                    } else if (relativePath.indexOf('/master/varietas') !== -1) {
+                        setActive('a[href*="master/varietas"]');
+                    } else if (relativePath.indexOf('/master/gol-kelas-benih') !== -1) {
+                        setActive('a[href*="master/gol-kelas-benih"]');
+                    } else if (relativePath.indexOf('/master/kelas-benih') !== -1) {
+                        setActive('a[href*="master/kelas-benih"]');
+                    } else if (relativePath.indexOf('/master/penyakit') !== -1) {
+                        setActive('a[href*="master/penyakit"]');
+                    } else if (relativePath.indexOf('/master/kabupaten') !== -1) {
+                        setActive('a[href*="master/kabupaten"]');
+                    } else if (relativePath.indexOf('/master/kecamatan') !== -1) {
+                        setActive('a[href*="master/kecamatan"]');
+                    } else if (relativePath.indexOf('/master/satuan') !== -1) {
+                        setActive('a[href*="master/satuan"]');
+                    } else if (relativePath.indexOf('/master/wilayah-kerja') !== -1) {
+                        setActive('a[href*="master/wilayah-kerja"]');
+                    } else if (relativePath.indexOf('/master/status') !== -1) {
+                        setActive('a[href*="master/status"]');
+                    } else if (relativePath.indexOf('/master/produsen') !== -1) {
+                        setActive('a[href*="master/produsen"]');
+                    } else if (relativePath.indexOf('/master/pegawai') !== -1) {
+                        setActive('a[href*="master/pegawai"]');
+                    } else if (relativePath.indexOf('/master/m-anggaran') !== -1) {
+                        setActive('a[href*="master/m-anggaran"]');
+                    } else if (relativePath.indexOf('/master/konfigurasi-user') !== -1) {
+                        setActive('a[href*="master/konfigurasi-user"]');
+                    } else if (relativePath.indexOf('/master/daftar-user') !== -1) {
+                        setActive('a[href*="master/daftar-user"]');
+                    }
+                    
+                    // Manajemen Aplikasi submenu
+                    if (relativePath.indexOf('/app/serti-log') !== -1) {
+                        setActive('a[href*="app/serti-log"]');
+                    } else if (relativePath.indexOf('/app/lab-log') !== -1) {
+                        setActive('a[href*="app/lab-log"]');
+                    } else if (relativePath.indexOf('/app/restore-db') !== -1) {
+                        setActive('a[href*="app/restore-db"]');
+                    } else if (relativePath.indexOf('/app/backup-db') !== -1) {
+                        setActive('a[href*="app/backup-db"]');
+                    }
+                    
+                    // User Info
+                    if (relativePath.indexOf('/user-info') !== -1) {
+                        setActive('a[href*="user-info"]');
+                    }
+                    
+                    // User Menu
+                    if (relativePath.indexOf('/feedback') !== -1) {
+                        setActive('a[href*="feedback"]');
+                    }
+                });
+            </script>
             <!-- /.sidebar -->
         </aside>
 
@@ -358,13 +452,6 @@
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0">@yield("title")</h1>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard v1</li>
-                            </ol>
                         </div>
                         <!-- /.col -->
                     </div>

@@ -2,7 +2,7 @@
 
 @section("title", "Fase Vegetatif - Sertifikasi")
 
-@section("header")
+@push("header")
 <!-- Select2 -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
@@ -21,19 +21,69 @@
     .isolasi-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 0.4rem;
     }
     @media (max-width: 768px) {
         .isolasi-grid { grid-template-columns: 1fr; }
     }
 
-    /* CVL number inputs */
-    .cvl-input {
-        width: 20px;
-        display: inline-block;
-        text-align: center;
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container {
+        width: 100% !important;
+        overflow: hidden !important;
     }
-    .cvl-table td { padding: 4px 8px; vertical-align: middle; }
+    .cvl-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    .cvl-table td {
+        padding: 5px 2px !important;
+        vertical-align: middle !important;
+    }
+    .cvl-table td.col-num {
+        width: 2.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+    .cvl-table td.col-input {
+        width: 8.5% !important;
+        text-align: left !important;
+        padding-right: 8px !important;
+    }
+    .cvl-table td.col-label-stat {
+        width: 5.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: bold !important;
+        white-space: nowrap !important;
+    }
+    .cvl-table td.col-input-stat {
+        width: 6.5% !important;
+        text-align: left !important;
+        white-space: nowrap !important;
+    }
+    .cvl-input {
+        width: 100% !important;
+        max-width: 70px !important;
+        height: 28px !important;
+        text-align: center !important;
+        border: 1px solid #767676 !important;
+        border-radius: 3px !important;
+        padding: 1px 4px !important;
+        font-size: 0.85rem !important;
+        background-color: #fff !important;
+        display: inline-block !important;
+        box-sizing: border-box !important;
+    }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] {
+        width: 100% !important;
+        max-width: 75px !important;
+    }
 
     /* Realisasi table */
     .tbl-realisasi th, .tbl-realisasi td {
@@ -46,22 +96,48 @@
     .radio-group .custom-control { margin-bottom: .35rem; }
 
     /* Pemeriksaan Vegetatif - improve spacing/neatness */
-    #pemeriksaan_vegetatif .form-group { margin-bottom: 1.25rem; }
+    #pemeriksaan_vegetatif .form-group { margin-bottom: 0.6rem; }
     #pemeriksaan_vegetatif .tbl-realisasi { width: 100%; }
     #pemeriksaan_vegetatif .tbl-realisasi th,
-    #pemeriksaan_vegetatif .tbl-realisasi td { padding: 8px 12px; }
+    #pemeriksaan_vegetatif .tbl-realisasi td { padding: 4px 8px; }
     #pemeriksaan_vegetatif .tbl-realisasi th:first-child,
     #pemeriksaan_vegetatif .tbl-realisasi td:first-child { text-align: left; }
     #pemeriksaan_vegetatif .tbl-realisasi input[type="date"] { width: 100%; }
 
-    /* Overall layout neatness for all sections */
-    #vegetatifContent .card { margin-bottom: 1.5rem; }
-    #vegetatifContent .form-group { margin-bottom: 1.1rem; }
-    #vegetatifContent .cvl-table { width: 100%; max-width: 560px; }
+    /* Overall layout neatness for all sections - COMPACT */
+    #vegetatifContent .card { margin-bottom: 0.6rem !important; }
+    #vegetatifContent .card-body { padding: 0.75rem !important; }
+    #vegetatifContent .card-header { padding: 0.5rem 0.75rem !important; }
+    #vegetatifContent .form-group { margin-bottom: 0.5rem !important; }
+    #vegetatifContent .form-control { padding: 0.25rem 0.5rem; font-size: 0.875rem; }
+    #vegetatifContent label { margin-bottom: 0.1rem; font-size: 0.85rem; }
+    #vegetatifContent .cvl-table { width: 100%; }
+    #vegetatifContent h6 { margin-bottom: 0.25rem !important; font-size: 0.9rem; }
+    .content { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
 </style>
-@endsection
+@endpush
 
 @section("content")
+<style>
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container { width: 100% !important; overflow: hidden !important; }
+    .cvl-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; font-size: 0.85rem !important; margin-bottom: 0.75rem !important; }
+    .cvl-table td { padding: 5px 2px !important; vertical-align: middle !important; }
+    .cvl-table td.col-num { width: 2.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: 600 !important; color: #333 !important; }
+    .cvl-table td.col-input { width: 8.5% !important; text-align: left !important; padding-right: 8px !important; }
+    .cvl-table td.col-label-stat { width: 5.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: bold !important; white-space: nowrap !important; }
+    .cvl-table td.col-input-stat { width: 6.5% !important; text-align: left !important; white-space: nowrap !important; }
+    .cvl-input { width: 100% !important; max-width: 70px !important; height: 28px !important; text-align: center !important; border: 1px solid #767676 !important; border-radius: 3px !important; padding: 1px 4px !important; font-size: 0.85rem !important; background-color: #fff !important; display: inline-block !important; box-sizing: border-box !important; }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] { width: 100% !important; max-width: 75px !important; }
+    /* Compact spacing */
+    #vegetatifContent .card { margin-bottom: 0.6rem !important; }
+    #vegetatifContent .card-body { padding: 0.75rem !important; }
+    #vegetatifContent .card-header { padding: 0.5rem 0.75rem !important; }
+    #vegetatifContent .form-group { margin-bottom: 0.5rem !important; }
+    #vegetatifContent label { margin-bottom: 0.1rem; font-size: 0.85rem; }
+    #vegetatifContent h6 { margin-bottom: 0.25rem !important; font-size: 0.9rem; }
+    .isolasi-grid { gap: 0.4rem !important; }
+</style>
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -314,7 +390,7 @@
 
                                             <div class="form-group">
                                                 <label for="hasil_periksa">Catatan Fase Vegetatif</label>
-                                                <textarea class="form-control" name="hasil_periksa" id="hasil_periksa" rows="5" placeholder="Masukkan catatan fase vegetatif..."></textarea>
+                                                <textarea class="form-control" name="hasil_periksa" id="hasil_periksa" rows="2" placeholder="Masukkan catatan fase vegetatif..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -329,58 +405,58 @@
                                     <h3 class="card-title">Pemeriksaan Campuran Varietas Lain (CVL)</h3>
                                 </div>
                                 <div class="card-body">
-                                    <h6 class="font-weight-bold">Tanaman Betina</h6>
-                                    <div class="table-responsive mb-3">
+                                    <h6 class="font-weight-bold mb-2">Tanaman Betina</h6>
+                                    <div class="cvl-container mb-3">
                                         <table class="cvl-table">
                                             <tr>
-                                                <td>1</td><td><input autocomplete="off" class="cvl-input" name="sb1" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>2</td><td><input autocomplete="off" class="cvl-input" name="sb2" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>3</td><td><input autocomplete="off" class="cvl-input" name="sb3" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>4</td><td><input autocomplete="off" class="cvl-input" name="sb4" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>5</td><td><input autocomplete="off" class="cvl-input" name="sb5" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>6</td><td><input autocomplete="off" class="cvl-input" name="sb6" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>7</td><td><input autocomplete="off" class="cvl-input" name="sb7" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>8</td><td><input autocomplete="off" class="cvl-input" name="sb8" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>TOTAL</td><td><input class="cvl-input" name="sb_total" type="text" size="3" maxlength="3" value="0" readonly/> %</td>
+                                                <td class="col-num">1</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb1" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">2</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb2" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">3</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb3" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">4</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb4" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">5</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb5" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">6</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb6" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">7</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb7" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">8</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb8" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input class="cvl-input font-weight-bold" name="sb_total" type="text" size="3" maxlength="3" value="0" readonly/> %</td>
                                             </tr>
                                             <tr>
-                                                <td>9</td><td><input autocomplete="off" class="cvl-input" name="sb9" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>10</td><td><input autocomplete="off" class="cvl-input" name="sb10" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>11</td><td><input autocomplete="off" class="cvl-input" name="sb11" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>12</td><td><input autocomplete="off" class="cvl-input" name="sb12" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>13</td><td><input autocomplete="off" class="cvl-input" name="sb13" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>14</td><td><input autocomplete="off" class="cvl-input" name="sb14" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>15</td><td><input autocomplete="off" class="cvl-input" name="sb15" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>16</td><td><input autocomplete="off" class="cvl-input" name="sb16" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
-                                                <td>Penyelia</td><td><input class="cvl-input" autocomplete="off" name="sb_penyelia" type="text" size="3" maxlength="3" value="" onKeyup="cekTotal(this, 'b');"/> %</td>
+                                                <td class="col-num">9</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb9" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">10</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb10" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">11</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb11" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">12</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb12" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">13</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb13" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">14</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb14" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">15</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb15" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">16</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb16" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input class="cvl-input" autocomplete="off" name="sb_penyelia" type="text" size="3" maxlength="3" value="" onKeyup="cekTotal(this, 'b');"/> %</td>
                                             </tr>
                                         </table>
                                     </div>
 
-                                    <h6 class="font-weight-bold">Tanaman Jantan</h6>
-                                    <div class="table-responsive">
+                                    <h6 class="font-weight-bold mb-2">Tanaman Jantan</h6>
+                                    <div class="cvl-container">
                                         <table class="cvl-table">
                                             <tr>
-                                                <td>1</td><td><input autocomplete="off" class="cvl-input" name="sj1" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>2</td><td><input autocomplete="off" class="cvl-input" name="sj2" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>3</td><td><input autocomplete="off" class="cvl-input" name="sj3" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>4</td><td><input autocomplete="off" class="cvl-input" name="sj4" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>5</td><td><input autocomplete="off" class="cvl-input" name="sj5" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>6</td><td><input autocomplete="off" class="cvl-input" name="sj6" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>7</td><td><input autocomplete="off" class="cvl-input" name="sj7" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>8</td><td><input autocomplete="off" class="cvl-input" name="sj8" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>TOTAL</td><td><input class="cvl-input" name="sj_total" type="text" size="3" maxlength="3" value="0" readonly/> %</td>
+                                                <td class="col-num">1</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj1" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">2</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj2" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">3</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj3" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">4</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj4" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">5</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj5" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">6</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj6" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">7</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj7" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">8</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj8" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input class="cvl-input font-weight-bold" name="sj_total" type="text" size="3" maxlength="3" value="0" readonly/> %</td>
                                             </tr>
                                             <tr>
-                                                <td>9</td><td><input autocomplete="off" class="cvl-input" name="sj9" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>10</td><td><input autocomplete="off" class="cvl-input" name="sj10" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>11</td><td><input autocomplete="off" class="cvl-input" name="sj11" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>12</td><td><input autocomplete="off" class="cvl-input" name="sj12" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>13</td><td><input autocomplete="off" class="cvl-input" name="sj13" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>14</td><td><input autocomplete="off" class="cvl-input" name="sj14" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>15</td><td><input autocomplete="off" class="cvl-input" name="sj15" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>16</td><td><input autocomplete="off" class="cvl-input" name="sj16" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
-                                                <td>Penyelia</td><td><input class="cvl-input" autocomplete="off" name="sj_penyelia" type="text" size="3" maxlength="3" value="" onKeyup="cekTotal(this, 'j');"/> %</td>
+                                                <td class="col-num">9</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj9" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">10</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj10" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">11</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj11" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">12</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj12" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">13</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj13" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">14</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj14" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">15</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj15" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">16</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj16" type="text" maxlength="2" value="" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input class="cvl-input" autocomplete="off" name="sj_penyelia" type="text" size="3" maxlength="3" value="" onKeyup="cekTotal(this, 'j');"/> %</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -741,7 +817,7 @@
 </section>
 @endsection
 
-@section("footer")
+@push("footer")
 <!-- Select2 -->
 <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
 <script>
@@ -943,4 +1019,4 @@ function set_result(rata_sample){
     return result;
 }
 </script>
-@endsection</
+@endpush

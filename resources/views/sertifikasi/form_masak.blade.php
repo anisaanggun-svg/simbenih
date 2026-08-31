@@ -2,320 +2,585 @@
 
 @section("title", "Fase Masak - Sertifikasi")
 
-@section("header")
+@push("header")
+<!-- Select2 -->
+<link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 <style>
+    /* Split date fields */
+    .split-date-wrap input {
+        display: inline-block;
+        text-align: center;
+    }
+    .split-date-wrap .w2em { width: 3rem; }
+    .split-date-wrap .w4em { width: 4.5rem; }
+    .split-date-wrap label { font-weight: 400; color: #6c757d; margin: 0 4px 0 2px; }
+    .split-date-wrap img { cursor: pointer; margin-left: 6px; vertical-align: middle; }
+
+    /* Isolasi grid */
+    .isolasi-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    @media (max-width: 768px) {
+        .isolasi-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container {
+        width: 100% !important;
+        overflow: hidden !important;
+    }
+    .cvl-table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    .cvl-table td {
+        padding: 5px 2px !important;
+        vertical-align: middle !important;
+    }
+    .cvl-table td.col-num {
+        width: 2.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+    .cvl-table td.col-input {
+        width: 8.5% !important;
+        text-align: left !important;
+        padding-right: 8px !important;
+    }
+    .cvl-table td.col-label-stat {
+        width: 5.5% !important;
+        text-align: right !important;
+        padding-right: 4px !important;
+        font-weight: bold !important;
+        white-space: nowrap !important;
+    }
+    .cvl-table td.col-input-stat {
+        width: 6.5% !important;
+        text-align: left !important;
+        white-space: nowrap !important;
+    }
+    .cvl-input {
+        width: 100% !important;
+        max-width: 70px !important;
+        height: 28px !important;
+        text-align: center !important;
+        border: 1px solid #767676 !important;
+        border-radius: 3px !important;
+        padding: 1px 4px !important;
+        font-size: 0.85rem !important;
+        background-color: #fff !important;
+        display: inline-block !important;
+        box-sizing: border-box !important;
+    }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] {
+        width: 100% !important;
+        max-width: 75px !important;
+    }
+
+    /* Realisasi table */
+    .tbl-realisasi th, .tbl-realisasi td {
+        padding: 6px 10px;
+        border: 1px solid #dee2e6;
+        text-align: center;
+    }
+    .tbl-realisasi th { background-color: #f8f9fa; }
+
+    .radio-group .custom-control { margin-bottom: .35rem; }
+
+    .grey { background: #e9ecef !important; }
+
+    /* Overall layout neatness */
     #masakContent .card { margin-bottom: 1.5rem; }
     #masakContent .form-group { margin-bottom: 1.1rem; }
-
-    /* Enhanced Info Box */
-    .info-box {
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        border-left: 4px solid #2196f3;
-        padding: 1.25rem;
-        margin-bottom: 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .info-box .no-induk {
-        font-weight: 700;
-        color: #1565c0;
-        background-color: rgba(255,255,255,0.7);
-        padding: 0.15rem 0.5rem;
-        border-radius: 0.25rem;
-        font-family: 'Courier New', monospace;
-        letter-spacing: 0.5px;
-    }
-    .info-box strong {
-        color: #455a64;
-    }
-
-    /* Enhanced Phase Navigation */
-    .phase-nav {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid #dee2e6;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-    .phase-nav strong {
-        color: #495057;
-        font-weight: 600;
-        margin-right: 0.75rem;
-    }
-    .phase-nav a {
-        color: #495057;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: 0.375rem;
-        display: inline-block;
-        margin-right: 0.25rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-    .phase-nav a:hover {
-        background-color: #e3f2fd;
-        color: #007bff;
-        transform: translateY(-1px);
-    }
-    .phase-nav a.active {
-        background-color: #007bff;
-        color: #fff;
-        box-shadow: 0 2px 4px rgba(0,123,255,0.3);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .phase-nav a {
-            padding: 0.4rem 0.75rem;
-            font-size: 0.8125rem;
-        }
-    }
+    #masakContent .cvl-table { width: 100%; }
 </style>
-@endsection
+@endpush
 
 @section("content")
+<style>
+    /* CVL fluid compact table & inputs filling full card width */
+    .cvl-container { width: 100% !important; overflow: hidden !important; }
+    .cvl-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; font-size: 0.85rem !important; margin-bottom: 0.75rem !important; }
+    .cvl-table td { padding: 5px 2px !important; vertical-align: middle !important; }
+    .cvl-table td.col-num { width: 2.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: 600 !important; color: #333 !important; }
+    .cvl-table td.col-input { width: 8.5% !important; text-align: left !important; padding-right: 8px !important; }
+    .cvl-table td.col-label-stat { width: 5.5% !important; text-align: right !important; padding-right: 4px !important; font-weight: bold !important; white-space: nowrap !important; }
+    .cvl-table td.col-input-stat { width: 6.5% !important; text-align: left !important; white-space: nowrap !important; }
+    .cvl-input { width: 100% !important; max-width: 70px !important; height: 28px !important; text-align: center !important; border: 1px solid #767676 !important; border-radius: 3px !important; padding: 1px 4px !important; font-size: 0.85rem !important; background-color: #fff !important; display: inline-block !important; box-sizing: border-box !important; }
+    .cvl-input[readonly], .cvl-input[name$="_total"], .cvl-input[name$="_penyelia"] { width: 100% !important; max-width: 75px !important; }
+</style>
+<!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Fase Masak (Jenis Tanaman Hibrida)</h3>
+                <div class="card-tools">
+                    <a href="{{ url('') }}/admin/sertifikasi/laporan_lapangan_hibrida/cetak/{{ $id ?? 105271 }}/15/1"
+                       class="btn btn-sm btn-outline-secondary mr-1" target="_blank">
+                        <i class="fas fa-print mr-1"></i> Print Laporan Lapangan
+                    </a>
+                    <a href="https://daftar.bpsbjatim.com/simbenihkesehatan/{{ $id ?? 105271 }}/15"
+                       class="btn btn-sm btn-outline-info mr-1" target="_blank">
+                        <i class="fas fa-file-medical mr-1"></i> Print Kesehatan
+                    </a>
+                    <a href="https://daftar.bpsbjatim.com/generatetaksasi/{{ $id ?? 105271 }}"
+                       class="btn btn-sm btn-outline-success" target="_blank">
+                        <i class="fas fa-calculator mr-1"></i> Print Taksasi
+                    </a>
+                </div>
             </div>
             <div class="card-body">
 
-                <!-- Info Box -->
-                <div class="info-box">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-12 col-sm-6">
-                                    <strong>No. Berkas:</strong><br>
-                                    <span class="no-induk">TP26.401.0339</span>
-                                </div>
-                                <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                    <strong>No Induk Lapangan:</strong><br>
-                                    <span class="no-induk">JghHI.R.3507120.0911.0339</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-md-right mt-3 mt-md-0">
-                            <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modalInputPermohonan">
-                                <i class="fas fa-plus mr-1"></i> Input Permohonan Baru
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal Input Permohonan Baru -->
-                <div class="modal fade" id="modalInputPermohonan" tabindex="-1" role="dialog" aria-labelledby="modalInputPermohonanLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalInputPermohonanLabel">
-                                    <i class="fas fa-file-alt mr-2"></i> Pilih Tipe Form Permohonan
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="tipeFormPermohonan">Tipe Form <span class="text-danger">*</span></label>
-                                    <select name="tipe_form" id="tipeFormPermohonan" class="form-control">
-                                        <option value="">-- Pilih Tipe Form --</option>
-                                        <option value="1">Form Tipe Hibrida</option>
-                                        <option value="2">Form Tipe Non Hibrida</option>
-                                        <option value="4">Form Tipe Umbi/Rimpang</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                    <i class="fas fa-times mr-1"></i> Batal
-                                </button>
-                                <button type="button" class="btn btn-primary" onclick="pilihTipeForm()">
-                                    <i class="fas fa-check mr-1"></i> OK
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase Navigation -->
-                <div class="phase-nav">
-                    <strong>Fase:</strong>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/edit/{{ $id ?? 1 }}">Pengajuan</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_pendahuluan/{{ $id ?? 1 }}">Pendahuluan</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_vegetatif/{{ $id ?? 1 }}">Vegetatif</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_berbunga/{{ $id ?? 1 }}">Berbunga</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_berbunga_ulangan/{{ $id ?? 1 }}">Berb.Ulangan</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_masak/{{ $id ?? 1 }}" class="active">Masak</a>
-                    <a href="{{ url('') }}/admin/sertifikasi/pengajuan/fase_panen/{{ $id ?? 1 }}">Panen</a>
-                </div>
-
-                <script>
-                function pilihTipeForm() {
-                    var tipeForm = document.getElementById("tipeFormPermohonan").value;
-                    if (!tipeForm) {
-                        alert('Pilih tipe form terlebih dahulu!');
-                        return false;
-                    }
-                    window.location.href = "{{ url('') }}/admin/sertifikasi/pengajuan/tambah?tipe=" + tipeForm;
-                }
-                </script>
+                @include('sertifikasi.partials.header_fase', ['active_fase' => 'masak', 'id_permohonan' => $id ?? 105271])
 
                 <form action="{{ url('') }}/admin/sertifikasi/pengajuan/update" method="post" name="form_edit_fase_masak" id="form_edit_fase_masak">
                     @csrf
-                    <input type="hidden" value="15" name="kode_fase">
-                    <input type="hidden" value="Masak" name="nama_fase">
 
                     <div id="masakContent">
-                        <!-- Informasi -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Informasi</h3>
+
+                        <!-- ===================== INFORMASI ===================== -->
+                        <div id="informasi">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Informasi</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="25%" class="font-weight-bold">Jenis Tanaman</td>
+                                                    <td width="25%">: Jagung Hibrida</td>
+                                                    <td width="25%" class="font-weight-bold">Desa</td>
+                                                    <td width="25%">: Wonokasian</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">Varietas (Kode Var)</td>
+                                                    <td>: LG 38778 (JghHI)</td>
+                                                    <td class="font-weight-bold">Kecamatan (Kode)</td>
+                                                    <td>: Turen (120)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold">Tanggal Rencana Tanam</td>
+                                                    <td>: 14-08-2026</td>
+                                                    <td class="font-weight-bold">Kabupaten (Kode)</td>
+                                                    <td>: Malang (07)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped">
-                                        <tbody>
+                        </div>
+
+                        <!-- ===================== PEMOHON ===================== -->
+                        <div id="pemohon">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">| Pemohon |</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="no_induk">NOMER INDUK NASIONAL (Otomatis)</label>
+                                                <input required autocomplete="off" class="form-control grey" readonly
+                                                    title="***.*.***.******.****.****.****.**.***" name="nomor_induk"
+                                                    value="JghHI.R.3507120.0911.0339"
+                                                    id="no_induk" type="text" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="nama_produsen">Nama Produsen <span class="text-danger">*</span></label>
+                                                <select name="nama_produsen" id="nama_produsen" class="form-control select2" onChange="dapatkan_alamat()">
+                                                    <option value="0">-- Pilih Produsen --</option>
+                                                    @isset($produsen_list)
+                                                        @foreach($produsen_list as $p)
+                                                            <option value="{{ $p->id ?? $p->id_produsen }}" {{ (isset($selected_produsen) && $selected_produsen == ($p->id ?? $p->id_produsen)) ? 'selected' : '' }}>
+                                                                {{ $p->nama ?? $p->nama_produsen }}
+                                                            </option>
+                                                        @endforeach
+                                                    @else
+                                                        <option value="2424" selected>LIMAGRAIN AGRICON INDONESIA - PT. - Surabaya - TANAMAN PANGAN-0911</option>
+                                                        <option value="1538">SUMBERDAWESARI - KB. - Pasuruan - TANAMAN PANGAN-0300</option>
+                                                        <option value="1407">PANDHEGA NUSA BERSAUDARA - PT. - Kota Malang - TANAMAN PANGAN-0285</option>
+                                                    @endisset
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="alamat_produsen">Alamat Produsen</label>
+                                                <textarea name="alamat_produsen" id="alamat_produsen" class="form-control" rows="4" readonly>{{ old('alamat_produsen', 'Desa Genteng, Kec. Genteng, Kota Surabaya') }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================== PEMERIKSAAN MASAK ===================== -->
+                        <div id="pemeriksaan_masak">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Pemeriksaan Masak</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="tgl_vegetatif">Tanggal Masak <span class="text-danger">*</span></label>
+                                                <div class="split-date-wrap" id="newline-wrapper">
+                                                    <input type="text" class="form-control w2em" id="date-31-dd" readonly name="tgl_vegetatif" maxlength="2" value="{{ old('tgl_vegetatif', '1') }}" placeholder="DD"/>-
+                                                    <input type="text" class="form-control w2em" id="date-31-mm" readonly name="bln_vegetatif" maxlength="2" value="{{ old('bln_vegetatif', '8') }}" placeholder="MM"/>-
+                                                    <input type="text" class="form-control w4em highlight-days-67 split-date" readonly id="date-31" name="thn_vegetatif" maxlength="4" value="{{ old('thn_vegetatif', '2026') }}" placeholder="YYYY"/>
+                                                    <i class="fas fa-eraser text-danger" style="cursor:pointer; margin-left:6px;" onclick="hapus_tanggal_tumbuh();" title="Hapus Tanggal"></i>
+                                                </div>
+                                                <small class="form-text text-muted">Format: DD-MM-YYYY</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="luas_lulus_v">Luas Lulus Masak <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input autocomplete="off" class="form-control" name="luas_lulus_v" type="text" size="25" maxlength="25" value="{{ old('luas_lulus_v', '1') }}"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">Hektare</span>
+                                                    </div>
+                                                </div>
+                                                <small class="form-text text-muted">Angka, contoh: 4 atau 3.4 jika desimal</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="kelas_benih">Kelas Benih <span class="text-danger">*</span></label>
+                                                <select name="kelas_benih" id="kelas_benih" class="form-control">
+                                                    <option value="0">---</option>
+                                                    <option value="1">NS-N</option>
+                                                    <option value="2">BS-S</option>
+                                                    <option value="7">BD-D</option>
+                                                    <option value="12">BP-P</option>
+                                                    <option value="13">BP1-P1</option>
+                                                    <option value="14">BP2-P2</option>
+                                                    <option value="17" selected="selected">BR-R</option>
+                                                    <option value="18">BR1-R1</option>
+                                                    <option value="19">BR2-R2</option>
+                                                    <option value="20">BR3-R3</option>
+                                                    <option value="21">BR4-R4</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="pops_jantan">Populasi Pemeriksaan Jantan</label>
+                                                <input class="form-control" readonly name="pops_jantan" type="text" size="25" maxlength="25" value="100"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="jumlah_titik_contoh_jantan">Jumlah Titik Contoh Jantan</label>
+                                                <input class="form-control" name="jumlah_titik_contoh_jantan" type="text" size="25" readonly maxlength="25" placeholder="(Otomatis)"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="jumlah_titik_contoh_pbjtpi">Jumlah Titik Contoh Induk Yang Tertinggal</label>
+                                                <input class="form-control" name="jumlah_titik_contoh_pbjtpi" type="text" size="25" readonly maxlength="25" placeholder="(Otomatis)"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="pops_betina">Populasi Pemeriksaan Betina</label>
+                                                <input class="form-control" readonly name="pops_betina" type="text" size="25" maxlength="25" value="100"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="jumlah_titik_contoh_betina">Jumlah Titik Contoh Betina</label>
+                                                <input class="form-control" name="jumlah_titik_contoh_betina" type="text" size="25" readonly maxlength="25" placeholder="(Otomatis)"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="rerumputan">Kondisi Rerumputan <span class="text-danger">*</span></label>
+                                                <select name="rerumputan" id="rerumputan" class="form-control">
+                                                    <option value="0" selected>Bersih/Tidak Bersih *)</option>
+                                                    <option value="1">Tidak Bersih</option>
+                                                    <option value="2">Bersih</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="sifat_pertanaman">Sifat Pertanaman <span class="text-danger">*</span></label>
+                                                <select name="sifat_pertanaman" id="sifat_pertanaman" required class="form-control">
+                                                    <option value="Sesuai / Tidak Sesuai *)" selected>Sesuai / Tidak Sesuai *)</option>
+                                                    <option value="Sesuai">Sesuai</option>
+                                                    <option value="Tidak Sesuai">Tidak Sesuai</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="serangan_hama_penyakit">Serangan Hama/Penyakit <span class="text-danger">*</span></label>
+                                                <select name="serangan_hama_penyakit" id="serangan_hama_penyakit" required class="form-control">
+                                                    <option value="Ada Terkendali / Ada Tidak Terkendali / Tidak Ada Serangan *)" selected>Ada Terkendali / Ada Tidak Terkendali / Tidak Ada Serangan *)</option>
+                                                    <option value="Ada Terkendali">Ada Terkendali</option>
+                                                    <option value="Ada Tidak Terkendali">Ada Tidak Terkendali</option>
+                                                    <option value="Tidak Ada Serangan">Tidak Ada Serangan</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Tanggal Realisasi</label>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-sm tbl-realisasi">
+                                                        <thead class="thead-light">
+                                                            <tr><th>Kegiatan</th><th class="text-center">BETINA</th><th class="text-center">JANTAN</th></tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Realisasi Tanam 1</td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI" required value="{{ old('TGL_REALISASI', '2026-08-21') }}"/></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_TANAM_JANTAN_1" required value="{{ old('TGL_REALISASI_TANAM_JANTAN_1', '2026-08-21') }}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Realisasi Tanam 2</td>
+                                                                <td></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_TANAM_JANTAN_2" value="{{ old('TGL_REALISASI_TANAM_JANTAN_2') }}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Realisasi Tanam 3</td>
+                                                                <td></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_TANAM_JANTAN_3" value="{{ old('TGL_REALISASI_TANAM_JANTAN_3') }}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Realisasi Semai 1</td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_SEMAI" value="{{ old('TGL_REALISASI_SEMAI') }}"/></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_SEMAI_JANTAN_1" value="{{ old('TGL_REALISASI_SEMAI_JANTAN_1') }}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Realisasi Semai 2</td>
+                                                                <td></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_SEMAI_JANTAN_2" value="{{ old('TGL_REALISASI_SEMAI_JANTAN_2') }}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Realisasi Semai 3</td>
+                                                                <td></td>
+                                                                <td><input type="date" class="form-control form-control-sm" name="TGL_REALISASI_SEMAI_JANTAN_3" value="{{ old('TGL_REALISASI_SEMAI_JANTAN_3') }}"/></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="perkiraan_tanggal_panen">Perkiraan Tanggal Panen</label>
+                                                <input type="date" class="form-control" name="perkiraan_tanggal_panen" id="perkiraan_tanggal_panen" value="{{ old('perkiraan_tanggal_panen') }}"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="taksasi_hasil">Taksasi Hasil GKS (Kg)</label>
+                                                <input type="number" class="form-control" name="taksasi_hasil" id="taksasi_hasil" value="{{ old('taksasi_hasil') }}"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="pegawai">Petugas Pengawas Benih <span class="text-danger">*</span></label>
+                                                <select name="pegawai" id="pegawai" class="form-control select2">
+                                                    <option value="0">-- Pilih Pegawai --</option>
+                                                    @isset($pegawai_list)
+                                                        @foreach($pegawai_list as $pg)
+                                                            <option value="{{ $pg->id ?? $pg->id_pegawai }}" {{ (isset($selected_pegawai) && $selected_pegawai == ($pg->id ?? $pg->id_pegawai)) ? 'selected' : '' }}>
+                                                                {{ $pg->nama ?? $pg->nama_pegawai }}
+                                                            </option>
+                                                        @endforeach
+                                                    @else
+                                                        <option value="518" selected>..........</option>
+                                                        <option value="434">Achmad Cholil, S.P.</option>
+                                                        <option value="494">Ade Irma Safitri, S.P.</option>
+                                                        <option value="418">Agus Pujiono Priyoatmojo, S.P</option>
+                                                    @endisset
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="hasil_periksa">Catatan Fase Masak</label>
+                                                <textarea class="form-control" name="hasil_periksa" id="hasil_periksa" rows="5" placeholder="Masukkan catatan fase masak...">{{ old('hasil_periksa') }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================== CVL ===================== -->
+                        <div id="cvl">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Pemeriksaan Campuran Varietas Lain (CVL)</h3>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="font-weight-bold mb-2">Tanaman Betina</h6>
+                                    <div class="cvl-container mb-3">
+                                        <table class="cvl-table">
                                             <tr>
-                                                <td width="25%" class="font-weight-bold">Jenis Tanaman</td>
-                                                <td width="25%">: Jagung Hibrida</td>
-                                                <td width="25%" class="font-weight-bold">Desa</td>
-                                                <td width="25%">: Wonokasian</td>
+                                                <td class="col-num">1</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb1" type="text" maxlength="2" value="{{ old('sb1') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">2</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb2" type="text" maxlength="2" value="{{ old('sb2') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">3</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb3" type="text" maxlength="2" value="{{ old('sb3') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">4</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb4" type="text" maxlength="2" value="{{ old('sb4') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">5</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb5" type="text" maxlength="2" value="{{ old('sb5') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">6</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb6" type="text" maxlength="2" value="{{ old('sb6') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">7</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb7" type="text" maxlength="2" value="{{ old('sb7') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">8</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb8" type="text" maxlength="2" value="{{ old('sb8') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input class="cvl-input font-weight-bold" name="sb_total" type="text" size="3" maxlength="3" value="{{ old('sb_total') }}" readonly/> %</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-weight-bold">Varietas (Kode Var)</td>
-                                                <td>: LG 38778 (JghHI)</td>
-                                                <td class="font-weight-bold">Kecamatan (Kode)</td>
-                                                <td>: Turen (120)</td>
+                                                <td class="col-num">9</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb9" type="text" maxlength="2" value="{{ old('sb9') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">10</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb10" type="text" maxlength="2" value="{{ old('sb10') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">11</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb11" type="text" maxlength="2" value="{{ old('sb11') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">12</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb12" type="text" maxlength="2" value="{{ old('sb12') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">13</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb13" type="text" maxlength="2" value="{{ old('sb13') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">14</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb14" type="text" maxlength="2" value="{{ old('sb14') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">15</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb15" type="text" maxlength="2" value="{{ old('sb15') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-num">16</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sb16" type="text" maxlength="2" value="{{ old('sb16') }}" onKeyup="isInteger(this);sum_total_sb();"/></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input class="cvl-input" autocomplete="off" name="sb_penyelia" type="text" size="3" maxlength="3" value="{{ old('sb_penyelia') }}" onKeyup="cekTotal(this, 'b');"/> %</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <h6 class="font-weight-bold mb-2">Tanaman Jantan</h6>
+                                    <div class="cvl-container mb-3">
+                                        <table class="cvl-table">
+                                            <tr>
+                                                <td class="col-num">1</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj1" type="text" maxlength="2" value="{{ old('sj1') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">2</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj2" type="text" maxlength="2" value="{{ old('sj2') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">3</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj3" type="text" maxlength="2" value="{{ old('sj3') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">4</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj4" type="text" maxlength="2" value="{{ old('sj4') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">5</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj5" type="text" maxlength="2" value="{{ old('sj5') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">6</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj6" type="text" maxlength="2" value="{{ old('sj6') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">7</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj7" type="text" maxlength="2" value="{{ old('sj7') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">8</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj8" type="text" maxlength="2" value="{{ old('sj8') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input class="cvl-input font-weight-bold" name="sj_total" type="text" size="3" maxlength="3" value="{{ old('sj_total') }}" readonly/> %</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-weight-bold">Kabupaten (Kode)</td>
-                                                <td>: Malang (07)</td>
-                                                <td class="font-weight-bold">Tanggal Rencana Tanam</td>
-                                                <td>: 14-08-2026</td>
+                                                <td class="col-num">9</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj9" type="text" maxlength="2" value="{{ old('sj9') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">10</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj10" type="text" maxlength="2" value="{{ old('sj10') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">11</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj11" type="text" maxlength="2" value="{{ old('sj11') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">12</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj12" type="text" maxlength="2" value="{{ old('sj12') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">13</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj13" type="text" maxlength="2" value="{{ old('sj13') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">14</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj14" type="text" maxlength="2" value="{{ old('sj14') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">15</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj15" type="text" maxlength="2" value="{{ old('sj15') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-num">16</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="sj16" type="text" maxlength="2" value="{{ old('sj16') }}" onKeyup="isInteger(this);sum_total_sj();"/></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input class="cvl-input" autocomplete="off" name="sj_penyelia" type="text" size="3" maxlength="3" value="{{ old('sj_penyelia') }}" onKeyup="cekTotal(this, 'j');"/> %</td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Fase Masak -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Fase Masak</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="desc">Tanggal Pemeriksaan Masak*</label>
-                                            <input type="date" class="form-control" name="tanggal_pemeriksaan_masak" value="{{ old('tanggal_pemeriksaan_masak') }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="desc">Tanggal Laporan*</label>
-                                            <input type="date" class="form-control" name="tgl_laporan" value="{{ old('tgl_laporan') }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="desc">Pengawas Benih Lapangan*</label>
-                                    <select name="nama_pegawai" id="nama_pegawai" class="form-control select2">
-                                        <option value="0">-- Pilih Pegawai --</option>
-                                        @isset($pegawai_list)
-                                            @foreach($pegawai_list as $p)
-                                                <option value="{{ $p->id }}">{{ $p->nama }}</option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pemohon -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">| Pemohon |</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="nama_produsen">Nama Produsen <span class="text-danger">*</span></label>
-                                            <select name="nama_produsen" id="nama_produsen" class="form-control select2" onchange="dapatkan_alamat()">
-                                                <option value="0">-- Pilih Produsen --</option>
-                                                @isset($produsen_list)
-                                                    @foreach($produsen_list as $p)
-                                                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
-                                                    @endforeach
-                                                @endisset
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="alamat_produsen">Alamat Produsen</label>
-                                            <textarea class="form-control" name="alamat_produsen" id="alamat_produsen" rows="3" readonly="">{{ old('alamat_produsen') }}</textarea>
-                                        </div>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pemeriksaan Peralatan Fase Masak -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Pemeriksaan Peralatan Fase Masak</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="desc">Sabit*</label>
-                                            <select name="sabit" id="sabit" class="form-control">
-                                                <option value="0">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
-                                                <option value="1">Tidak Memenuhi Syarat</option>
-                                                <option value="2" selected="">Memenuhi Syarat</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Timbangan*</label>
-                                            <select name="timbangan" id="timbangan" class="form-control">
-                                                <option value="0">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
-                                                <option value="1">Tidak Memenuhi Syarat</option>
-                                                <option value="2" selected="">Memenuhi Syarat</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Alat Perontok*</label>
-                                            <select name="alat_perontok" id="alat_perontok" class="form-control">
-                                                <option value="0">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
-                                                <option value="1">Tidak Memenuhi Syarat</option>
-                                                <option value="2" selected="">Memenuhi Syarat</option>
-                                            </select>
-                                        </div>
+                        <!-- ===================== INDUK JANTAN / RESTORER YANG TERTINGGAL ===================== -->
+                        <div id="induk_jantan_tertinggal">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Induk Jantan / Restorer Yang Tertinggal</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="cvl-container">
+                                        <table class="cvl-table">
+                                            <tr>
+                                                <td class="col-num">1</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi1" type="text" maxlength="2" value="{{ old('pbjtpi1') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">2</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi2" type="text" maxlength="2" value="{{ old('pbjtpi2') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">3</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi3" type="text" maxlength="2" value="{{ old('pbjtpi3') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">4</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi4" type="text" maxlength="2" value="{{ old('pbjtpi4') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">5</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi5" type="text" maxlength="2" value="{{ old('pbjtpi5') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">6</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi6" type="text" maxlength="2" value="{{ old('pbjtpi6') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">7</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi7" type="text" maxlength="2" value="{{ old('pbjtpi7') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">8</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi8" type="text" maxlength="2" value="{{ old('pbjtpi8') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-label-stat">TOTAL</td><td class="col-input-stat"><input class="cvl-input font-weight-bold" name="pbjtpi_total" type="text" size="3" maxlength="3" value="{{ old('pbjtpi_total') }}" readonly/> %</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-num">9</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi9" type="text" maxlength="2" value="{{ old('pbjtpi9') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">10</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi10" type="text" maxlength="2" value="{{ old('pbjtpi10') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">11</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi11" type="text" maxlength="2" value="{{ old('pbjtpi11') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">12</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi12" type="text" maxlength="2" value="{{ old('pbjtpi12') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">13</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi13" type="text" maxlength="2" value="{{ old('pbjtpi13') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">14</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi14" type="text" maxlength="2" value="{{ old('pbjtpi14') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">15</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi15" type="text" maxlength="2" value="{{ old('pbjtpi15') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-num">16</td><td class="col-input"><input autocomplete="off" class="cvl-input" name="pbjtpi16" type="text" maxlength="2" value="{{ old('pbjtpi16') }}" onKeyup="isInteger(this);sum_total_pbjtpi();"/></td>
+                                                <td class="col-label-stat">Penyelia</td><td class="col-input-stat"><input class="cvl-input" autocomplete="off" name="pbjtpi_penyelia" type="text" size="3" maxlength="3" value="{{ old('pbjtpi_penyelia') }}"/> %</td>
+                                            </tr>
+                                        </table>
                                     </div>
-                                    <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================== ISOLASI ===================== -->
+                        <div id="isolasi">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Isolasi</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="isolasi-grid">
                                         <div class="form-group">
-                                            <label class="desc">Karung Goni*</label>
-                                            <select name="karung_goni" id="karung_goni" class="form-control">
-                                                <option value="0">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
-                                                <option value="1">Tidak Memenuhi Syarat</option>
-                                                <option value="2" selected="">Memenuhi Syarat</option>
+                                            <label for="iso_timur">Isolasi Timur</label>
+                                            <select name="iso_timur" id="iso_timur" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
                                             </select>
                                         </div>
+
                                         <div class="form-group">
-                                            <label class="desc">Identitas Karung*</label>
-                                            <select name="identitas_karung" id="identitas_karung" class="form-control">
-                                                <option value="0">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
-                                                <option value="1">Tidak Memenuhi Syarat</option>
-                                                <option value="2" selected="">Memenuhi Syarat</option>
+                                            <label for="iso_utara">Isolasi Utara</label>
+                                            <select name="iso_utara" id="iso_utara" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iso_barat">Isolasi Barat</label>
+                                            <select name="iso_barat" id="iso_barat" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iso_selatan">Isolasi Selatan</label>
+                                            <select name="iso_selatan" id="iso_selatan" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="isolasi_waktu">Isolasi Waktu</label>
+                                            <select name="isolasi_waktu" id="isolasi_waktu" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iso_barier">Isolasi Barier</label>
+                                            <select name="iso_barier" id="iso_barier" class="form-control">
+                                                <option value="-" selected>-</option>
+                                                <option value="Memenuhi Syarat / Tidak Memenuhi Syarat *)">Memenuhi Syarat / Tidak Memenuhi Syarat *)</option>
+                                                <option value="Memenuhi Syarat">Memenuhi Syarat</option>
+                                                <option value="Tidak Memenuhi Syarat">Tidak Memenuhi Syarat</option>
                                             </select>
                                         </div>
                                     </div>
@@ -323,165 +588,509 @@
                             </div>
                         </div>
 
-                        <!-- Pengawasan Masak -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Pengawasan Masak</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="desc">Tanggal Masak Awal*</label>
-                                            <input type="date" class="form-control" name="tanggal_masak_awal" id="tanggal_masak_awal" value="{{ old('tanggal_masak_awal') }}">
+                        <!-- ===================== HAMA PENYAKIT ===================== -->
+                        <div id="hama_penyakit">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Hama Penyakit</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="hama1">Hama 1</label>
+                                                <select name="hama1" id="hama1" class="form-control select2">
+                                                    <option value="">Pilih Hama 1</option>
+                                                    <option value="Aphid">Aphid</option>
+                                                    <option value="Diaphorina citri">Diaphorina citri</option>
+                                                    <option value="Lalat rimpang">Lalat rimpang</option>
+                                                    <option value="Mealbugs">Mealbugs</option>
+                                                    <option value="Mite">Mite</option>
+                                                    <option value="Nematoda">Nematoda</option>
+                                                    <option value="Nematoda sista kuning">Nematoda sista kuning</option>
+                                                    <option value="Pentalonia nigrohervosa">Pentalonia nigrohervosa</option>
+                                                    <option value="Lalat / Serangga penggerek">Lalat / Serangga penggerek</option>
+                                                    <option value="Wereng Batang Coklat">Wereng Batang Coklat</option>
+                                                    <option value="Kerusakan Mekanis">Kerusakan Mekanis</option>
+                                                    <option value="Penggerek Batang">Penggerek Batang</option>
+                                                    <option value="Boleng">Boleng</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="hama2">Hama 2</label>
+                                                <select name="hama2" id="hama2" class="form-control select2">
+                                                    <option value="">Pilih Hama 2</option>
+                                                    <option value="Aphid">Aphid</option>
+                                                    <option value="Diaphorina citri">Diaphorina citri</option>
+                                                    <option value="Lalat rimpang">Lalat rimpang</option>
+                                                    <option value="Mealbugs">Mealbugs</option>
+                                                    <option value="Mite">Mite</option>
+                                                    <option value="Nematoda">Nematoda</option>
+                                                    <option value="Nematoda sista kuning">Nematoda sista kuning</option>
+                                                    <option value="Pentalonia nigrohervosa">Pentalonia nigrohervosa</option>
+                                                    <option value="Lalat / Serangga penggerek">Lalat / Serangga penggerek</option>
+                                                    <option value="Wereng Batang Coklat">Wereng Batang Coklat</option>
+                                                    <option value="Kerusakan Mekanis">Kerusakan Mekanis</option>
+                                                    <option value="Penggerek Batang">Penggerek Batang</option>
+                                                    <option value="Boleng">Boleng</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="hama3">Hama 3</label>
+                                                <select name="hama3" id="hama3" class="form-control select2">
+                                                    <option value="">Pilih Hama 3</option>
+                                                    <option value="Aphid">Aphid</option>
+                                                    <option value="Diaphorina citri">Diaphorina citri</option>
+                                                    <option value="Lalat rimpang">Lalat rimpang</option>
+                                                    <option value="Mealbugs">Mealbugs</option>
+                                                    <option value="Mite">Mite</option>
+                                                    <option value="Nematoda">Nematoda</option>
+                                                    <option value="Nematoda sista kuning">Nematoda sista kuning</option>
+                                                    <option value="Pentalonia nigrohervosa">Pentalonia nigrohervosa</option>
+                                                    <option value="Lalat / Serangga penggerek">Lalat / Serangga penggerek</option>
+                                                    <option value="Wereng Batang Coklat">Wereng Batang Coklat</option>
+                                                    <option value="Kerusakan Mekanis">Kerusakan Mekanis</option>
+                                                    <option value="Penggerek Batang">Penggerek Batang</option>
+                                                    <option value="Boleng">Boleng</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="desc">Tanggal Masak Akhir*</label>
-                                            <input type="date" class="form-control" name="tanggal_masak_akhir" id="tanggal_masak_akhir" value="{{ old('tanggal_masak_akhir') }}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Lama Masak*</label>
-                                            <input type="number" class="form-control" name="lama_masak" id="lama_masak" value="{{ old('lama_masak') }}" readonly=""> Hari <i>(otomatis)</i>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Umur Masak*</label>
-                                            <input type="number" class="form-control" name="umur_masak" id="umur_masak" value="{{ old('umur_masak') }}" readonly=""> Hari <i>(otomatis)</i>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Cuaca Fase Masak*</label>
-                                            <select name="pilihan_cuaca" id="pilihan_cuaca" class="form-control">
-                                                <option value="0">Cerah / Mendung / Hujan *)</option>
-                                                <option value="1">Cerah</option>
-                                                <option value="2">Mendung</option>
-                                                <option value="3">Hujan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="desc">Jumlah Masak* (Angka, contoh: 1000)</label>
-                                            <input type="text" class="form-control" name="jumlah_masak" value="{{ old('jumlah_masak') }}">
-                                            <input type="text" class="form-control" name="satuan_jumlah_masak" value="Kilogram" disabled="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Catatan Fase Masak</label>
-                                            <textarea class="form-control" name="catatan_masak" rows="5">{{ old('catatan_masak') }}</textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="desc">Lokasi Pengolahan</label>
-                                            <select name="LOKASI_OLAH" class="form-control">
-                                                <option value="">Pilih lokasi Pengolahan</option>
-                                                <option value="1">Surabaya</option>
-                                                <option value="2">Sidoarjo</option>
-                                                <option value="3">Jombang</option>
-                                                <option value="4">Gresik</option>
-                                                <option value="5">Lamongan</option>
-                                                <option value="6">Bojonegoro</option>
-                                                <option value="7">Tuban</option>
-                                                <option value="8">Bangkalan</option>
-                                                <option value="9">Sampang</option>
-                                                <option value="10">Pamekasan</option>
-                                                <option value="11">Sumenep</option>
-                                                <option value="12">Madiun</option>
-                                                <option value="13">Kota Madiun</option>
-                                                <option value="14">Ngawi</option>
-                                                <option value="15">Magetan</option>
-                                                <option value="16">Ponorogo</option>
-                                                <option value="17">Pacitan</option>
-                                                <option value="18">Kediri</option>
-                                                <option value="19">Kota Kediri</option>
-                                                <option value="20">Blitar</option>
-                                                <option value="21">Tulungagung</option>
-                                                <option value="22">Trenggalek</option>
-                                                <option value="23">Nganjuk</option>
-                                                <option value="24">Malang</option>
-                                                <option value="25">Kota Malang</option>
-                                                <option value="26">Kota Batu</option>
-                                                <option value="27">Pasuruan</option>
-                                                <option value="28">Kota Pasuruan</option>
-                                                <option value="29">Mojokerto</option>
-                                                <option value="30">Kota Mojokerto</option>
-                                                <option value="31">Probolinggo</option>
-                                                <option value="32">Kota Probolinggo</option>
-                                                <option value="33">Jember</option>
-                                                <option value="34">Lumajang</option>
-                                                <option value="35">Bondowoso</option>
-                                                <option value="36">Banyuwangi</option>
-                                                <option value="37">Situbondo</option>
-                                                <option value="38">Kota Blitar</option>
-                                            </select>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="penyakit1">Penyakit 1</label>
+                                                <select name="penyakit1" id="penyakit1" class="form-control select2">
+                                                    <option value="">Pilih Penyakit 1</option>
+                                                    <option value="Altenaria brassiceae pv. Vesicatoria">Altenaria brassiceae pv. Vesicatoria</option>
+                                                    <option value="Altenaria brassisicola pv. Vesicatoria">Altenaria brassisicola pv. Vesicatoria</option>
+                                                    <option value="Altenaria porii">Altenaria porii</option>
+                                                    <option value="Bakteri">Bakteri</option>
+                                                    <option value="Botritis alii">Botritis alii</option>
+                                                    <option value="Bunchy Top Virus">Bunchy Top Virus</option>
+                                                    <option value="Banana Streak Virus">Banana Streak Virus</option>
+                                                    <option value="Busuk umbi">Busuk umbi</option>
+                                                    <option value="Cendawan">Cendawan</option>
+                                                    <option value="Colletotricum capsici">Colletotricum capsici</option>
+                                                    <option value="Colletotricum gloeosporoides">Colletotricum gloeosporoides</option>
+                                                    <option value="Colletotricum legenarium">Colletotricum legenarium</option>
+                                                    <option value="Colletotricum lindemuthianum">Colletotricum lindemuthianum</option>
+                                                    <option value="CMAV">CMAV</option>
+                                                    <option value="Cucumber mosaic Virus">Cucumber mosaic Virus</option>
+                                                    <option value="Cytrus floem degeration">Cytrus floem degeration</option>
+                                                    <option value="Cymbidium mozaic virus">Cymbidium mozaic virus</option>
+                                                    <option value="Erwinia carotovora">Erwinia carotovora</option>
+                                                    <option value="Exocortis">Exocortis</option>
+                                                    <option value="Fusarium sp">Fusarium sp</option>
+                                                    <option value="Hawar Daun Bakteri">Hawar Daun Bakteri</option>
+                                                    <option value="Karat daun">Karat daun</option>
+                                                    <option value="Kudis">Kudis</option>
+                                                    <option value="Layu Bakteri">Layu Bakteri</option>
+                                                    <option value="Layu Fusarium">Layu Fusarium</option>
+                                                    <option value="Leak yellow stripe virus">Leak yellow stripe virus</option>
+                                                    <option value="Odontoglossium ring spot virus">Odontoglossium ring spot virus</option>
+                                                    <option value="Onion Yellow Dwarf virus">Onion Yellow Dwarf virus</option>
+                                                    <option value="Phoma spp">Phoma spp</option>
+                                                    <option value="Peronospora destruktor">Peronospora destruktor</option>
+                                                    <option value="Pseudomonas lachrymans">Pseudomonas lachrymans</option>
+                                                    <option value="Phomopsis spp">Phomopsis spp</option>
+                                                    <option value="Psorosis">Psorosis</option>
+                                                    <option value="Phyllostica sp">Phyllostica sp</option>
+                                                    <option value="Pseudomonas syringae">Pseudomonas syringae</option>
+                                                    <option value="Phomopsis vexsans">Phomopsis vexsans</option>
+                                                    <option value="Ralstonia solanacearum">Ralstonia solanacearum</option>
+                                                    <option value="Shallot laten virus">Shallot laten virus</option>
+                                                    <option value="Tatter leaf">Tatter leaf</option>
+                                                    <option value="Tristeza">Tristeza</option>
+                                                    <option value="Virus">Virus</option>
+                                                    <option value="Vein enation">Vein enation</option>
+                                                    <option value="Xanthomonas campestris">Xanthomonas campestris</option>
+                                                    <option value="Xanthomonas campestris pv. Vesicatoria">Xanthomonas campestris pv. Vesicatoria</option>
+                                                    <option value="Xyloporosis">Xyloporosis</option>
+                                                    <option value="Tungro">Tungro</option>
+                                                    <option value="Bulai (Peronosclerospora maydis)">Bulai (Peronosclerospora maydis)</option>
+                                                    <option value="Hawar daun (Helminthosporium turcikum)">Hawar daun (Helminthosporium turcikum)</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="penyakit2">Penyakit 2</label>
+                                                <select name="penyakit2" id="penyakit2" class="form-control select2">
+                                                    <option value="">Pilih Penyakit 2</option>
+                                                    <option value="Altenaria brassiceae pv. Vesicatoria">Altenaria brassiceae pv. Vesicatoria</option>
+                                                    <option value="Altenaria brassisicola pv. Vesicatoria">Altenaria brassisicola pv. Vesicatoria</option>
+                                                    <option value="Altenaria porii">Altenaria porii</option>
+                                                    <option value="Bakteri">Bakteri</option>
+                                                    <option value="Botritis alii">Botritis alii</option>
+                                                    <option value="Bunchy Top Virus">Bunchy Top Virus</option>
+                                                    <option value="Banana Streak Virus">Banana Streak Virus</option>
+                                                    <option value="Busuk umbi">Busuk umbi</option>
+                                                    <option value="Cendawan">Cendawan</option>
+                                                    <option value="Colletotricum capsici">Colletotricum capsici</option>
+                                                    <option value="Colletotricum gloeosporoides">Colletotricum gloeosporoides</option>
+                                                    <option value="Colletotricum legenarium">Colletotricum legenarium</option>
+                                                    <option value="Colletotricum lindemuthianum">Colletotricum lindemuthianum</option>
+                                                    <option value="CMAV">CMAV</option>
+                                                    <option value="Cucumber mosaic Virus">Cucumber mosaic Virus</option>
+                                                    <option value="Cytrus floem degeration">Cytrus floem degeration</option>
+                                                    <option value="Cymbidium mozaic virus">Cymbidium mozaic virus</option>
+                                                    <option value="Erwinia carotovora">Erwinia carotovora</option>
+                                                    <option value="Exocortis">Exocortis</option>
+                                                    <option value="Fusarium sp">Fusarium sp</option>
+                                                    <option value="Hawar Daun Bakteri">Hawar Daun Bakteri</option>
+                                                    <option value="Karat daun">Karat daun</option>
+                                                    <option value="Kudis">Kudis</option>
+                                                    <option value="Layu Bakteri">Layu Bakteri</option>
+                                                    <option value="Layu Fusarium">Layu Fusarium</option>
+                                                    <option value="Leak yellow stripe virus">Leak yellow stripe virus</option>
+                                                    <option value="Odontoglossium ring spot virus">Odontoglossium ring spot virus</option>
+                                                    <option value="Onion Yellow Dwarf virus">Onion Yellow Dwarf virus</option>
+                                                    <option value="Phoma spp">Phoma spp</option>
+                                                    <option value="Peronospora destruktor">Peronospora destruktor</option>
+                                                    <option value="Pseudomonas lachrymans">Pseudomonas lachrymans</option>
+                                                    <option value="Phomopsis spp">Phomopsis spp</option>
+                                                    <option value="Psorosis">Psorosis</option>
+                                                    <option value="Phyllostica sp">Phyllostica sp</option>
+                                                    <option value="Pseudomonas syringae">Pseudomonas syringae</option>
+                                                    <option value="Phomopsis vexsans">Phomopsis vexsans</option>
+                                                    <option value="Ralstonia solanacearum">Ralstonia solanacearum</option>
+                                                    <option value="Shallot laten virus">Shallot laten virus</option>
+                                                    <option value="Tatter leaf">Tatter leaf</option>
+                                                    <option value="Tristeza">Tristeza</option>
+                                                    <option value="Virus">Virus</option>
+                                                    <option value="Vein enation">Vein enation</option>
+                                                    <option value="Xanthomonas campestris">Xanthomonas campestris</option>
+                                                    <option value="Xanthomonas campestris pv. Vesicatoria">Xanthomonas campestris pv. Vesicatoria</option>
+                                                    <option value="Xyloporosis">Xyloporosis</option>
+                                                    <option value="Tungro">Tungro</option>
+                                                    <option value="Bulai (Peronosclerospora maydis)">Bulai (Peronosclerospora maydis)</option>
+                                                    <option value="Hawar daun (Helminthosporium turcikum)">Hawar daun (Helminthosporium turcikum)</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="penyakit3">Penyakit 3</label>
+                                                <select name="penyakit3" id="penyakit3" class="form-control select2">
+                                                    <option value="">Pilih Penyakit 3</option>
+                                                    <option value="Altenaria brassiceae pv. Vesicatoria">Altenaria brassiceae pv. Vesicatoria</option>
+                                                    <option value="Altenaria brassisicola pv. Vesicatoria">Altenaria brassisicola pv. Vesicatoria</option>
+                                                    <option value="Altenaria porii">Altenaria porii</option>
+                                                    <option value="Bakteri">Bakteri</option>
+                                                    <option value="Botritis alii">Botritis alii</option>
+                                                    <option value="Bunchy Top Virus">Bunchy Top Virus</option>
+                                                    <option value="Banana Streak Virus">Banana Streak Virus</option>
+                                                    <option value="Busuk umbi">Busuk umbi</option>
+                                                    <option value="Cendawan">Cendawan</option>
+                                                    <option value="Colletotricum capsici">Colletotricum capsici</option>
+                                                    <option value="Colletotricum gloeosporoides">Colletotricum gloeosporoides</option>
+                                                    <option value="Colletotricum legenarium">Colletotricum legenarium</option>
+                                                    <option value="Colletotricum lindemuthianum">Colletotricum lindemuthianum</option>
+                                                    <option value="CMAV">CMAV</option>
+                                                    <option value="Cucumber mosaic Virus">Cucumber mosaic Virus</option>
+                                                    <option value="Cytrus floem degeration">Cytrus floem degeration</option>
+                                                    <option value="Cymbidium mozaic virus">Cymbidium mozaic virus</option>
+                                                    <option value="Erwinia carotovora">Erwinia carotovora</option>
+                                                    <option value="Exocortis">Exocortis</option>
+                                                    <option value="Fusarium sp">Fusarium sp</option>
+                                                    <option value="Hawar Daun Bakteri">Hawar Daun Bakteri</option>
+                                                    <option value="Karat daun">Karat daun</option>
+                                                    <option value="Kudis">Kudis</option>
+                                                    <option value="Layu Bakteri">Layu Bakteri</option>
+                                                    <option value="Layu Fusarium">Layu Fusarium</option>
+                                                    <option value="Leak yellow stripe virus">Leak yellow stripe virus</option>
+                                                    <option value="Odontoglossium ring spot virus">Odontoglossium ring spot virus</option>
+                                                    <option value="Onion Yellow Dwarf virus">Onion Yellow Dwarf virus</option>
+                                                    <option value="Phoma spp">Phoma spp</option>
+                                                    <option value="Peronospora destruktor">Peronospora destruktor</option>
+                                                    <option value="Pseudomonas lachrymans">Pseudomonas lachrymans</option>
+                                                    <option value="Phomopsis spp">Phomopsis spp</option>
+                                                    <option value="Psorosis">Psorosis</option>
+                                                    <option value="Phyllostica sp">Phyllostica sp</option>
+                                                    <option value="Pseudomonas syringae">Pseudomonas syringae</option>
+                                                    <option value="Phomopsis vexsans">Phomopsis vexsans</option>
+                                                    <option value="Ralstonia solanacearum">Ralstonia solanacearum</option>
+                                                    <option value="Shallot laten virus">Shallot laten virus</option>
+                                                    <option value="Tatter leaf">Tatter leaf</option>
+                                                    <option value="Tristeza">Tristeza</option>
+                                                    <option value="Virus">Virus</option>
+                                                    <option value="Vein enation">Vein enation</option>
+                                                    <option value="Xanthomonas campestris">Xanthomonas campestris</option>
+                                                    <option value="Xanthomonas campestris pv. Vesicatoria">Xanthomonas campestris pv. Vesicatoria</option>
+                                                    <option value="Xyloporosis">Xyloporosis</option>
+                                                    <option value="Tungro">Tungro</option>
+                                                    <option value="Bulai (Peronosclerospora maydis)">Bulai (Peronosclerospora maydis)</option>
+                                                    <option value="Hawar daun (Helminthosporium turcikum)">Hawar daun (Helminthosporium turcikum)</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Kesimpulan Fase -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Kesimpulan Fase*</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label class="desc">Kesimpulan Fase Masak</label>
-                                    <div>
-                                        <input type="radio" name="kesimpulan_fase" value="2"> Memenuhi Syarat (Lulus) / Tidak Memenuhi Syarat (Tidak Lulus) *)<br>
-                                        <input type="radio" name="kesimpulan_fase" value="1" checked=""> Memenuhi Syarat (Lulus) <br>
-                                        <input type="radio" name="kesimpulan_fase" value="0"> Tidak Memenuhi Syarat (Tidak Lulus)
+                        <!-- ===================== KESIMPULAN FASE ===================== -->
+                        <div id="kesimpulan_fase">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Kesimpulan Fase <span class="text-danger">*</span></h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Kesimpulan Fase Masak <span class="text-danger">*</span></label>
+                                        <div class="radio-group">
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio" id="kesimpulan_fase_2" name="kesimpulan_fase" value="2">
+                                                <label for="kesimpulan_fase_2" class="custom-control-label">Memenuhi Syarat / Tidak Memenuhi Syarat *)</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio" id="kesimpulan_fase_1" name="kesimpulan_fase" value="1" checked>
+                                                <label for="kesimpulan_fase_1" class="custom-control-label">Memenuhi Syarat</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio" id="kesimpulan_fase_0" name="kesimpulan_fase" value="0">
+                                                <label for="kesimpulan_fase_0" class="custom-control-label">Tidak Memenuhi Syarat</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" value="{{ $id_fase_lapangan ?? 175213 }}" name="id_fase_lapangan" />
+                                    <input type="hidden" value="{{ $id ?? 105271 }}" name="id_permohonan" />
+                                    <input type="hidden" value="15" name="kode_fase" />
+                                    <input type="hidden" value="Masak" name="nama_fase" />
+
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save mr-1"></i> Simpan Data
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary">
+                                            <i class="fas fa-undo mr-1"></i> Reset
+                                        </button>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Simpan Data</button>
                             </div>
                         </div>
+
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </section>
-
-<script>
-    var date_diff_indays = function(date1, date2) {
-        dt1 = new Date(date1);
-        dt2 = new Date(date2);
-    return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24))+1;
-    }
-    function hitung_lama_masak(){
-        let tanggal_masak_awal=new Date($('#tanggal_masak_awal').val());
-        let tanggal_masak_akhir=new Date($('#tanggal_masak_akhir').val());
-        $('#lama_masak').val(date_diff_indays(tanggal_masak_awal,tanggal_masak_akhir));
-    }
-    function hitung_umur_masak(){
-        let tanggal_tanam=new Date('2026-08-21');
-        let tanggal_masak_awal=new Date($('#tanggal_masak_awal').val());
-        console.log(date_diff_indays(tanggal_tanam,tanggal_masak_awal));
-        $('#umur_masak').val(date_diff_indays(tanggal_tanam,tanggal_masak_awal));
-    }
-    $('#tanggal_masak_awal').change(function(){
-        console.log('trigger awal masak');
-        hitung_lama_masak();
-        hitung_umur_masak();
-    });
-    $('#tanggal_masak_akhir').change(function(){
-        hitung_lama_masak();
-    });
-    hitung_lama_masak();
-        hitung_umur_masak();
-
-    function dapatkan_alamat(){
-        var prp = $("#nama_produsen").val();
-        $.ajax({
-                url: "{{ url('') }}/admin/sertifikasi/pengajuan/dapatkan_alamat_produsen/",
-                global: false,
-                type: "POST",
-                async: false,
-                dataType: "html",
-                data: "id_produsen="+ prp,
-                success: function (response) {
-                     document.form_edit_fase_masak.alamat_produsen.value = response;
-                }
-        });
-        return false;
-    }
-</script>
 @endsection
+
+@push("footer")
+<!-- Select2 -->
+<script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+<script>
+$(function () {
+    // Initialize Select2 Elements
+    $('.select2').select2({
+        theme: 'bootstrap4',
+        width: '100%'
+    });
+
+    generate_nomer_induk();
+    sum_total_sb();
+    sum_total_sj();
+    sum_total_pbjtpi();
+});
+
+var no_induk_pengajuan = 'JghHI.R.3507120.0911.0339';
+var sp = no_induk_pengajuan.split('.');
+var no_induk = 'JghHI.R.3507120.0911.0339';
+var split = no_induk.split('.');
+var kode_varietas = sp[0] || 'JghHI';
+var kode_kelas_benih = split[1] || 'R';
+var kodelokasi = sp[2] || '3507120';
+var kode_produsen = split[3] || '0911';
+var nourut_sertifikasi = sp[4] || '0339';
+
+function generate_nomer_induk(){
+    let no_induk = kode_varietas + "." + kode_kelas_benih + "." + kodelokasi + "." + kode_produsen + "." + nourut_sertifikasi;
+    $('#no_induk').val(no_induk);
+}
+
+$('#kelas_benih').change(function(){
+    let textnya = $("#kelas_benih option:selected").text();
+    let kdv = textnya.split('-');
+    kode_kelas_benih = kdv.at(-1).trim();
+    generate_nomer_induk();
+});
+
+function dapatkan_alamat(){
+    var prp = $("#nama_produsen").val();
+    $.ajax({
+        url: "{{ url('') }}/admin/sertifikasi/pengajuan/dapatkan_alamat_produsen/",
+        global: false,
+        type: "POST",
+        async: false,
+        dataType: "html",
+        data: "id_produsen=" + prp,
+        success: function (response) {
+            if(document.form_edit_fase_masak && document.form_edit_fase_masak.alamat_produsen){
+                document.form_edit_fase_masak.alamat_produsen.value = response;
+            } else {
+                $("#alamat_produsen").val(response);
+            }
+        }
+    });
+    return false;
+}
+
+function hapus_tanggal_tumbuh(){
+    if(document.form_edit_fase_masak){
+        document.form_edit_fase_masak.tgl_vegetatif.value = '';
+        document.form_edit_fase_masak.bln_vegetatif.value = '';
+        document.form_edit_fase_masak.thn_vegetatif.value = '';
+    }
+}
+
+function hapus_tanggal_realisasi(){
+    if(document.form_edit_fase_masak){
+        if(document.form_edit_fase_masak.tgl_realisasi) document.form_edit_fase_masak.tgl_realisasi.value = '';
+        if(document.form_edit_fase_masak.bln_realisasi) document.form_edit_fase_masak.bln_realisasi.value = '';
+        if(document.form_edit_fase_masak.thn_realisasi) document.form_edit_fase_masak.thn_realisasi.value = '';
+    }
+}
+
+function isInteger(s){
+    var p = s.value.toString();
+    for (var i = 0; i < p.length; i++){
+        var c = p.charAt(i);
+        if (isNaN(c)) {
+            alert("Harap masukan Angka");
+            s.value = "";
+            return false;
+        }
+    }
+    return true;
+}
+
+function cekTotal(s, jenis){
+    var form = document.form_edit_fase_masak;
+    var tot = '';
+    if (jenis == 'b') tot = form.sb_total.value;
+    if (jenis == 'j') tot = form.sj_total.value;
+
+    if (tot == ''){
+        alert('Harap mengisi nilai sample lebih dahulu');
+        s.value = "";
+        return false;
+    } else {
+        if (isNaN(parseFloat(s.value.toString()))) {
+            alert("Harap masukan Angka");
+            s.value = "";
+            return false;
+        }
+    }
+    return true;
+}
+
+function sum_total_sb(){
+    var form = document.form_edit_fase_masak;
+    if(!form) return;
+    if(!form.pops_betina || form.pops_betina.value == ''){
+        alert('Populasi Pemeriksaan Kosong !\nTidak dapat melakukan perhitungan CVL');
+        for(var i=1; i<=16; i++){
+            if(form['sb'+i]) form['sb'+i].value = '';
+        }
+    } else {
+        var populasi = 100 / parseInt(form.pops_betina.value);
+        var total_val = 0;
+        var digit_counter = 0;
+
+        for(var i=1; i<=16; i++){
+            var fieldVal = form['sb'+i] ? form['sb'+i].value : '';
+            if(fieldVal !== ''){
+                digit_counter++;
+                total_val += parseInt(fieldVal);
+            }
+        }
+
+        if(digit_counter > 0){
+            var rata_sample = total_val / digit_counter;
+            var hasil_penyakit = rata_sample * populasi;
+            var result = set_result(hasil_penyakit);
+            form.sb_total.value = result;
+            form.jumlah_titik_contoh_betina.value = digit_counter;
+        } else {
+            form.sb_total.value = '0.00';
+            form.jumlah_titik_contoh_betina.value = '0';
+        }
+    }
+}
+
+function sum_total_sj(){
+    var form = document.form_edit_fase_masak;
+    if(!form) return;
+    if(!form.pops_jantan || form.pops_jantan.value == ''){
+        alert('Populasi Pemeriksaan Jantan Kosong !\nTidak dapat melakukan perhitungan CVL');
+        for(var i=1; i<=16; i++){
+            if(form['sj'+i]) form['sj'+i].value = '';
+        }
+    } else {
+        var populasi = 100 / parseInt(form.pops_jantan.value);
+        var total_val = 0;
+        var digit_counter = 0;
+
+        for(var i=1; i<=16; i++){
+            var fieldVal = form['sj'+i] ? form['sj'+i].value : '';
+            if(fieldVal !== ''){
+                digit_counter++;
+                total_val += parseInt(fieldVal);
+            }
+        }
+
+        if(digit_counter > 0){
+            var rata_sample = total_val / digit_counter;
+            var hasil_sj = rata_sample * populasi;
+            var result = set_result(hasil_sj);
+            form.sj_total.value = result;
+            form.jumlah_titik_contoh_jantan.value = digit_counter;
+        } else {
+            form.sj_total.value = '0.00';
+            form.jumlah_titik_contoh_jantan.value = '0';
+        }
+    }
+}
+
+function sum_total_pbjtpi(){
+    var form = document.form_edit_fase_masak;
+    if(!form) return;
+    if(!form.pops_jantan || form.pops_jantan.value == ''){
+        alert('Populasi Pemeriksaan Jantan Kosong !\nTidak dapat melakukan perhitungan CVL');
+        for(var i=1; i<=16; i++){
+            if(form['pbjtpi'+i]) form['pbjtpi'+i].value = '';
+        }
+    } else {
+        var populasi = 100 / parseInt(form.pops_jantan.value);
+        var total_val = 0;
+        var digit_counter = 0;
+
+        for(var i=1; i<=16; i++){
+            var fieldVal = form['pbjtpi'+i] ? form['pbjtpi'+i].value : '';
+            if(fieldVal !== ''){
+                digit_counter++;
+                total_val += parseInt(fieldVal);
+            }
+        }
+
+        if(digit_counter > 0){
+            var rata_sample = total_val / digit_counter;
+            var hasil_pbjtpi = rata_sample * populasi;
+            var result = set_result(hasil_pbjtpi);
+            form.pbjtpi_total.value = result;
+            form.jumlah_titik_contoh_pbjtpi.value = digit_counter;
+        } else {
+            form.pbjtpi_total.value = '0.00';
+            form.jumlah_titik_contoh_pbjtpi.value = '0';
+        }
+    }
+}
+
+function set_result(rata_sample){
+    return Number(rata_sample).toFixed(2);
+}
+</script>
+@endpush

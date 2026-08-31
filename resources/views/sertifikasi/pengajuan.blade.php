@@ -31,14 +31,28 @@
     }
     .filter-form {
         background-color: #f8f9fa;
-        padding: 1rem;
+        padding: 0.5rem 0.75rem;
         border-radius: 0.25rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    .filter-form .form-group {
+        margin-bottom: 0;
+        margin-right: 1rem;
+    }
+    .filter-form label {
+        margin-bottom: 0;
+        margin-right: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
     }
     .card-tools {
         display: flex;
         gap: 0.5rem;
         flex-wrap: wrap;
+        align-items: center;
+    }
+    .card-tools .input-group {
+        margin-bottom: 0;
     }
 </style>
 @endpush
@@ -53,22 +67,19 @@
                     <button type="button" class="btn btn-success btn-sm" onclick="tambahData()">
                         <i class="fas fa-plus"></i> Tambah
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="hapusData()">
+                    <button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapusData()">
                         <i class="fas fa-trash"></i> Hapus
                     </button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown">
-                            <i class="fas fa-check-double"></i> Pilih Semua
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" onclick="pilihSemua()">Pilih Semua</a>
-                            <a class="dropdown-item" href="#" onclick="uncheckAll()">Uncheck</a>
+                    <div class="input-group input-group-sm ml-2" style="width: 200px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
+                        <input type="text" id="searchBox" class="form-control" placeholder="kata kunci pencarian" aria-controls="pengajuanTable">
                     </div>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="printData()">
+                    <button type="button" class="btn btn-secondary btn-sm ml-1" onclick="printData()">
                         <i class="fas fa-print"></i> Print
                     </button>
-                    <button type="button" class="btn btn-success btn-sm" onclick="exportExcel()">
+                    <button type="button" class="btn btn-success btn-sm ml-1" onclick="exportExcel()">
                         <i class="fas fa-file-excel"></i> Excel
                     </button>
                 </div>
@@ -226,10 +237,6 @@
 <!-- DataTables -->
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
 <script>
 $(function() {
@@ -242,34 +249,7 @@ $(function() {
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/id.json"
         },
-        "dom": 'Bfrtip',
-        "buttons": [
-            {
-                extend: 'copy',
-                text: '<i class="fas fa-copy"></i> Copy',
-                className: 'btn btn-secondary btn-sm'
-            },
-            {
-                extend: 'csv',
-                text: '<i class="fas fa-file-csv"></i> CSV',
-                className: 'btn btn-success btn-sm'
-            },
-            {
-                extend: 'excel',
-                text: '<i class="fas fa-file-excel"></i> Excel',
-                className: 'btn btn-success btn-sm'
-            },
-            {
-                extend: 'pdf',
-                text: '<i class="fas fa-file-pdf"></i> PDF',
-                className: 'btn btn-danger btn-sm'
-            },
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i> Print',
-                className: 'btn btn-info btn-sm'
-            }
-        ],
+        "dom": 'lrtip',
         "columnDefs": [
             { "orderable": false, "targets": [0, 2, 3] },
             { "className": "text-center", "targets": [0, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 19, 20] },
@@ -281,6 +261,12 @@ $(function() {
     $("#checkAll").click(function() {
         $(".row-check").prop("checked", this.checked);
     });
+
+    // Custom search box
+    $('#searchBox').on('keyup', function() {
+        table.search(this.value).draw();
+    });
+    var table = $('#pengajuanTable').DataTable();
 });
 
 function tambahData() {
@@ -304,18 +290,11 @@ function hapusData() {
     }
     if (confirm("Anda yakin ingin menghapus " + selected.length + " buah data?")) {
         var itemlist = selected.map(function() { return this.value; }).get().join(",");
-        // AJAX delete here
-        alert("Data terpilih: " + itemlist);
+        $.post("{{ url('') }}/admin/sertifikasi/pengajuan/hapus", {_token:"{{ csrf_token() }}", items: itemlist}, function(d){
+            alert(d.message || 'Berhasil');
+            location.reload();
+        });
     }
-}
-
-function pilihSemua() {
-    $(".row-check").prop("checked", true);
-}
-
-function uncheckAll() {
-    $(".row-check").prop("checked", false);
-    $("#checkAll").prop("checked", false);
 }
 
 function printData() {
