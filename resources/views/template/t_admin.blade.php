@@ -178,13 +178,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{url('admin/master/golongan')}}" class="nav-link">
+                                    <a href="{{route('master.komoditas.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Master Golongan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{url('admin/master/kumpulan')}}" class="nav-link">
+                                    <a href="{{route('master.kumpulan.index')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Master Kumpulan</p>
                                     </a>
@@ -383,8 +383,8 @@
                     }
                     
                     // Data Master submenu
-                    if (relativePath.indexOf('/master/golongan') !== -1) {
-                        setActive('a[href*="master/golongan"]');
+                    if (relativePath.indexOf('/master/komoditas') !== -1 || relativePath.indexOf('/master/golongan') !== -1) {
+                        setActive('a[href*="master/komoditas"]');
                     } else if (relativePath.indexOf('/master/kumpulan') !== -1) {
                         setActive('a[href*="master/kumpulan"]');
                     } else if (relativePath.indexOf('/master/jenis-tanaman') !== -1) {
