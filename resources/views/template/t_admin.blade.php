@@ -26,13 +26,26 @@
     -->
     <!-- Theme style -->
     <link rel="stylesheet" href="{{  asset('assets/css/adminlte.min.css') }}">
-    <!-- overlayScrollbars 
+    <!-- overlayScrollbars
     <link rel="stylesheet" href="{{  asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     -->
-    <!-- Daterange picker 
+    <!-- Daterange picker
     <link rel="stylesheet" href="{{  asset('assets/plugins/daterangepicker/daterangepicker.css')}}"> -->
-    <!-- summernote 
+    <!-- summernote
     <link rel="stylesheet" href="{{  asset('assets/plugins/summernote/summernote-bs4.min.css')}}"> -->
+    <style>
+        /* Global DataTables spacing fix */
+        .dataTables_wrapper .row:first-child {
+            padding-top: 10px;
+            padding-bottom: 6px;
+        }
+        .dataTables_wrapper .dataTables_length {
+            padding-top: 4px;
+        }
+        .dataTables_wrapper .dataTables_filter {
+            padding-top: 4px;
+        }
+    </style>
      @stack("header")
 </head>
 

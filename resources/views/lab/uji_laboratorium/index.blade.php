@@ -99,7 +99,7 @@
                     <table id="ujiLabTable" class="table table-bordered table-striped table-hover">
                         <thead class="thead-light">
                             <tr>
-                                <th width="40" class="text-center" data-priority="1">
+                                <th width="40" class="text-center all" data-priority="1">
                                     <input type="checkbox" id="checkAll" title="Pilih Semua">
                                 </th>
                                 <th>No. Induk Lapangan</th>
@@ -117,7 +117,7 @@
                         <tbody>
                             @forelse($data as $row)
                             <tr>
-                                <td class="text-center">
+                                <td class="text-center all">
                                     <input type="checkbox" class="checkItem" name="items[]" value="{{ $row->id }}">
                                 </td>
                                 <td>{{ $row->no_induk_lapangan ?? '-' }}</td>
@@ -194,6 +194,9 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            // Hide the built-in DataTables footer filter ("Cari:") input;
+            // we use the toolbar search box (#searchBox) instead.
+            "dom": "lrtip",
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
             }
@@ -204,18 +207,26 @@
             table.search(this.value).draw();
         });
 
-        // Set to track selected item ids across pagination / search
+        // Set untuk melacak ID yang dipilih lintas halaman / search
         var selectedIds = new Set();
 
-        // Sync the "check all" checkbox state (checked / indeterminate / unchecked)
         function syncCheckAllState() {
-            var total = $('#ujiLabTable tbody .checkItem').length;
-            var checked = $('#ujiLabTable tbody .checkItem:checked').length;
-            $('#checkAll').prop('checked', total > 0 && total === checked);
-            $('#checkAll').prop('indeterminate', checked > 0 && checked < total);
+            var totalRows = table.rows().count();
+            var selectedCount = selectedIds.size;
+
+            if (selectedCount === 0) {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', false);
+            } else if (selectedCount === totalRows) {
+                $('#checkAll').prop('checked', true);
+                $('#checkAll').prop('indeterminate', false);
+            } else {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', true);
+            }
         }
 
-        // Individual checkbox change
+        // Perubahan checkbox tiap baris
         $('#ujiLabTable tbody').on('change', '.checkItem', function () {
             var id = $(this).val();
             if (this.checked) {
@@ -226,28 +237,28 @@
             syncCheckAllState();
         });
 
-        // Check all / uncheck all (works across all pages via DataTables nodes)
+        // Check all (mencakup semua halaman via DataTables rows())
         $('#checkAll').on('change', function () {
             var isChecked = this.checked;
             if (isChecked) {
                 table.rows().every(function () {
-                    var cb = $(this.node()).find('.checkItem');
-                    if (cb.length) {
-                        selectedIds.add(cb.val());
+                    var rowData = this.data();
+                    if (rowData && rowData.id) {
+                        selectedIds.add(String(rowData.id));
                     }
                 });
             } else {
                 selectedIds.clear();
             }
-            // Apply visual state to currently rendered rows
             $('#ujiLabTable tbody .checkItem').prop('checked', isChecked);
             syncCheckAllState();
         });
 
-        // Re-apply selection state after DataTables redraw (search, pagination, sort, etc.)
+        // Terapkan ulang status pilihan setelah DataTables redraw
         table.on('draw', function () {
             $('#ujiLabTable tbody .checkItem').each(function () {
-                $(this).prop('checked', selectedIds.has($(this).val()));
+                var id = $(this).val();
+                $(this).prop('checked', selectedIds.has(id));
             });
             syncCheckAllState();
         });

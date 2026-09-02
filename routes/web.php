@@ -139,4 +139,34 @@ Route::prefix('admin/master')->name('master.')->group(function () {
     Route::post('/jenis-tanaman/update/{id}', [MasterController::class, 'jenisTanamanUpdate'])->name('jenis-tanaman.update');
     Route::post('/jenis-tanaman/delete', [MasterController::class, 'jenisTanamanDestroy'])->name('jenis-tanaman.delete');
     Route::get('/jenis-tanaman/delete/{id}', [MasterController::class, 'jenisTanamanDelete'])->name('jenis-tanaman.delete.single');
+
+    // Varietas (Master Varietas) Routes
+    Route::get('/varietas', [MasterController::class, 'varietasIndex'])->name('varietas.index');
+    Route::get('/varietas/grid', [MasterController::class, 'varietasGrid'])->name('varietas.grid');
+    Route::get('/varietas/create', [MasterController::class, 'varietasCreate'])->name('varietas.create');
+    Route::post('/varietas/store', [MasterController::class, 'varietasStore'])->name('varietas.store');
+    Route::get('/varietas/edit/{id}', [MasterController::class, 'varietasEdit'])->name('varietas.edit');
+    Route::post('/varietas/update/{id}', [MasterController::class, 'varietasUpdate'])->name('varietas.update');
+    Route::post('/varietas/delete', [MasterController::class, 'varietasDestroy'])->name('varietas.delete');
+    Route::get('/varietas/delete/{id}', [MasterController::class, 'varietasDelete'])->name('varietas.delete.single');
+
+    // Gol Kelas Benih (Master Gol Kelas Benih) Routes
+    Route::get('/gol-kelas-benih', [MasterController::class, 'golKelasBenihIndex'])->name('gol-kelas-benih.index');
+    Route::get('/gol-kelas-benih/grid', [MasterController::class, 'golKelasBenihGrid'])->name('gol-kelas-benih.grid');
+    Route::get('/gol-kelas-benih/create', [MasterController::class, 'golKelasBenihCreate'])->name('gol-kelas-benih.create');
+    Route::post('/gol-kelas-benih/store', [MasterController::class, 'golKelasBenihStore'])->name('gol-kelas-benih.store');
+    Route::get('/gol-kelas-benih/edit/{id}', [MasterController::class, 'golKelasBenihEdit'])->name('gol-kelas-benih.edit');
+    Route::post('/gol-kelas-benih/update/{id}', [MasterController::class, 'golKelasBenihUpdate'])->name('gol-kelas-benih.update');
+    Route::post('/gol-kelas-benih/delete', [MasterController::class, 'golKelasBenihDestroy'])->name('gol-kelas-benih.delete');
+    Route::get('/gol-kelas-benih/delete/{id}', [MasterController::class, 'golKelasBenihDelete'])->name('gol-kelas-benih.delete.single');
+
+    // Kelas Benih (Master Kelas Benih) Routes
+    Route::get('/kelas-benih', [MasterController::class, 'kelasBenihIndex'])->name('kelas-benih.index');
+    Route::get('/kelas-benih/grid', [MasterController::class, 'kelasBenihGrid'])->name('kelas-benih.grid');
+    Route::get('/kelas-benih/create', [MasterController::class, 'kelasBenihCreate'])->name('kelas-benih.create');
+    Route::post('/kelas-benih/store', [MasterController::class, 'kelasBenihStore'])->name('kelas-benih.store');
+    Route::get('/kelas-benih/edit/{id}', [MasterController::class, 'kelasBenihEdit'])->name('kelas-benih.edit');
+    Route::post('/kelas-benih/update/{id}', [MasterController::class, 'kelasBenihUpdate'])->name('kelas-benih.update');
+    Route::post('/kelas-benih/delete', [MasterController::class, 'kelasBenihDestroy'])->name('kelas-benih.delete');
+    Route::get('/kelas-benih/delete/{id}', [MasterController::class, 'kelasBenihDelete'])->name('kelas-benih.delete.single');
 });

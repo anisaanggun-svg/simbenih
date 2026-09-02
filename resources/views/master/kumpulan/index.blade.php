@@ -29,6 +29,38 @@
     .action-buttons .btn {
         margin: 0;
     }
+    /* Soft colors for Aktif / Tidak Aktif badges */
+    #kumpulanTable .badge.badge-success {
+        background-color: #dff3e1 !important;
+        color: #2e7d32 !important;
+        border: 1px solid #c8e6c9;
+    }
+    #kumpulanTable .badge.badge-danger {
+        background-color: #fde2e2 !important;
+        color: #c62828 !important;
+        border: 1px solid #efcfcf;
+    }
+    /* Soft colors for Jenis Golongan badges */
+    #kumpulanTable .badge.badge-warning {
+        background-color: #fff8e1 !important;
+        color: #f57f17 !important;
+        border: 1px solid #ffecb3;
+    }
+    #kumpulanTable .badge.badge-info {
+        background-color: #e1f5fe !important;
+        color: #0277bd !important;
+        border: 1px solid #b3e5fc;
+    }
+    #kumpulanTable .badge.badge-primary {
+        background-color: #e3f2fd !important;
+        color: #1565c0 !important;
+        border: 1px solid #bbdefb;
+    }
+    #kumpulanTable .badge.badge-secondary {
+        background-color: #f5f5f5 !important;
+        color: #616161 !important;
+        border: 1px solid #e0e0e0;
+    }
 </style>
 @endpush
 
@@ -179,7 +211,7 @@
             "order": [[2, "asc"]],
             "paging": true,
             "lengthChange": true,
-            "searching": true,
+            "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
@@ -198,10 +230,19 @@
         var selectedIds = new Set();
 
         function syncCheckAllState() {
-            var total = $('#kumpulanTable tbody .checkItem').length;
-            var checked = $('#kumpulanTable tbody .checkItem:checked').length;
-            $('#checkAll').prop('checked', total > 0 && total === checked);
-            $('#checkAll').prop('indeterminate', checked > 0 && checked < total);
+            var totalRows = table.rows().count();
+            var selectedCount = selectedIds.size;
+
+            if (selectedCount === 0) {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', false);
+            } else if (selectedCount === totalRows) {
+                $('#checkAll').prop('checked', true);
+                $('#checkAll').prop('indeterminate', false);
+            } else {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', true);
+            }
         }
 
         // Perubahan checkbox tiap baris

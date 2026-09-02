@@ -95,12 +95,6 @@
         font-size: 0.8rem;
     }
 
-    /* Row highlight */
-    #jenisTanamanTable tbody tr.table-selected td {
-        background-color: #cfe2ff !important;
-        cursor: pointer;
-    }
-
     /* Soft colors for Ya / Tidak badges */
     #jenisTanamanTable .badge.badge-success {
         background-color: #dff3e1 !important;
@@ -134,18 +128,14 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Data Master > Manajemen Jenis Tanaman</h3>
+                <h3 class="card-title">Data Master &raquo; Manajemen Jenis Tanaman</h3>
                 <div class="card-tools">
                     <a href="{{ route('master.jenis-tanaman.create') }}" class="btn btn-success btn-sm">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
-                    <button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapusData()" disabled id="btnHapusMassal">
-                        <i class="fas fa-trash"></i> Hapus <span id="selectedCount" class="badge badge-light ml-1" style="display:none;"></span>
+                    <button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapusData()">
+                        <i class="fas fa-trash"></i> Hapus
                     </button>
-                    <div class="custom-control custom-checkbox ml-2 d-flex align-items-center" title="Pilih Semua">
-                        <input type="checkbox" id="checkAll" class="custom-control-input">
-                        <label for="checkAll" class="custom-control-label" style="font-size: 0.85rem; font-weight: normal; margin-bottom: 0; cursor: pointer;">Pilih Semua</label>
-                    </div>
                     <div class="input-group input-group-sm ml-2" style="width: 200px;">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
@@ -161,6 +151,9 @@
                     <table id="jenisTanamanTable" class="table table-bordered table-striped table-hover">
                         <thead class="thead-light">
                             <tr>
+                                <th width="40" class="text-center all" data-priority="1">
+                                    <input type="checkbox" id="checkAll" title="Pilih Semua">
+                                </th>
                                 <th width="50" class="text-center">No</th>
                                 <th width="100" class="text-center">Kode</th>
                                 <th width="180">Nama Tanaman</th>
@@ -222,9 +215,6 @@
 <script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 <script>
     $(function () {
-        // Counter for row numbers
-        var rowCounter = 0;
-
         var table = $('#jenisTanamanTable').DataTable({
             "processing": true,
             "serverSide": true,
@@ -233,17 +223,28 @@
                 "type": "GET",
                 "error": function (xhr, error, thrown) {
                     console.error('DataTables AJAX error:', error, thrown);
-                    alert('Error loading data. Please check console for details.');
+                    alert('Error loading data. Silakan periksa console untuk detail.');
                 }
             },
             "scrollX": false,
             "autoWidth": false,
             "columns": [
                 {
+                    "data": "id",
+                    "orderable": false,
+                    "searchable": false,
+                    "className": "text-center",
+                    "width": "40",
+                    "render": function (data) {
+                        return '<input type="checkbox" class="checkItem" name="items[]" value="' + data + '">';
+                    }
+                },
+                {
                     "data": null,
                     "orderable": false,
                     "searchable": false,
                     "className": "text-center",
+                    "width": "50",
                     "render": function (data, type, row, meta) {
                         return meta.row + 1 + meta.settings._iDisplayStart;
                     }
@@ -503,7 +504,7 @@
                     }
                 }
             ],
-            "order": [[1, "asc"]],
+            "order": [[2, "asc"]],
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -519,42 +520,45 @@
             }
         });
 
-        // Search functionality
-        $('#searchBox').on('keyup', function() {
+        // Live search pada kotak pencarian di header
+        $('#searchBox').on('keyup', function () {
             table.search(this.value).draw();
         });
 
-        // Set to track selected item ids across pagination / search
+        // Set untuk melacak ID yang dipilih lintas halaman / search
         var selectedIds = new Set();
-        var allSelected = false; // flag for "Pilih Semua" mode
 
-        // Sync the bulk action UI (delete button + counter)
-        function syncBulkActionUI() {
-            var count = allSelected ? table.rows().count() : selectedIds.size;
-            $('#btnHapusMassal').prop('disabled', count === 0);
-            if (count > 0) {
-                $('#selectedCount').text(count).show();
+        function syncCheckAllState() {
+            var totalRows = table.rows().count();
+            var selectedCount = selectedIds.size;
+
+            if (selectedCount === 0) {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', false);
+            } else if (selectedCount === totalRows) {
+                $('#checkAll').prop('checked', true);
+                $('#checkAll').prop('indeterminate', false);
             } else {
-                $('#selectedCount').hide();
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', true);
             }
         }
 
-        // Apply visual "selected" highlighting to currently rendered rows
-        function applyRowHighlight() {
-            $('#jenisTanamanTable tbody tr').each(function () {
-                var $tr = $(this);
-                var id = String(table.row($tr).data().id);
-                var isSelected = allSelected || selectedIds.has(id);
-                $tr.toggleClass('table-selected', isSelected);
-            });
-        }
-
-        // "Pilih Semua" header checkbox toggle
-        $('#checkAll').on('change', function () {
+        // Perubahan checkbox tiap baris
+        $('#jenisTanamanTable tbody').on('change', '.checkItem', function () {
+            var id = $(this).val();
             if (this.checked) {
-                // Select all rows across all pages
-                allSelected = true;
-                selectedIds.clear();
+                selectedIds.add(id);
+            } else {
+                selectedIds.delete(id);
+            }
+            syncCheckAllState();
+        });
+
+        // Check all (mencakup semua halaman via DataTables rows())
+        $('#checkAll').on('change', function () {
+            var isChecked = this.checked;
+            if (isChecked) {
                 table.rows().every(function () {
                     var rowData = this.data();
                     if (rowData && rowData.id) {
@@ -562,42 +566,27 @@
                     }
                 });
             } else {
-                allSelected = false;
                 selectedIds.clear();
             }
-            applyRowHighlight();
-            syncBulkActionUI();
+            $('#jenisTanamanTable tbody .checkItem').prop('checked', isChecked);
+            syncCheckAllState();
         });
 
-        // Re-apply highlight after DataTables redraw
+        // Terapkan ulang status pilihan setelah DataTables redraw
         table.on('draw', function () {
-            applyRowHighlight();
-            syncBulkActionUI();
+            $('#jenisTanamanTable tbody .checkItem').each(function () {
+                var id = $(this).val();
+                $(this).prop('checked', selectedIds.has(id));
+            });
+            syncCheckAllState();
         });
 
-        // Click on a row to toggle its individual selection (only when "Pilih Semua" is NOT active)
-        $('#jenisTanamanTable tbody').on('click', 'tr', function () {
-            if (allSelected) return; // disabled when "Pilih Semua" is active
-            var rowData = table.row(this).data();
-            if (!rowData || !rowData.id) return;
-            var id = String(rowData.id);
-            if (selectedIds.has(id)) {
-                selectedIds.delete(id);
-            } else {
-                selectedIds.add(id);
-            }
-            applyRowHighlight();
-            syncBulkActionUI();
-        });
-
-        // Expose helpers for the delete handler
+        // Helper agar dapat diakses oleh tombol Hapus
         window.getSelectedIds = function () {
             return Array.from(selectedIds);
         };
         window.clearSelectedIds = function () {
             selectedIds.clear();
-            allSelected = false;
-            $('#checkAll').prop('checked', false).prop('indeterminate', false);
         };
     });
 

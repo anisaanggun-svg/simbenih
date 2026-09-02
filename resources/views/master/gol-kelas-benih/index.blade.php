@@ -1,14 +1,14 @@
 @extends("template.t_admin")
 
-@section("title", "Master Golongan - Data Master")
+@section("title", "Master Gol Kelas Benih - Data Master")
 
 @push("header")
 <!-- DataTables -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <style>
-    #komoditasTable th { white-space: nowrap; }
-    #komoditasTable td { vertical-align: middle; padding: 8px 10px; }
+    #golKelasBenihTable th { white-space: nowrap; }
+    #golKelasBenihTable td { vertical-align: middle; padding: 8px 10px; }
     .card-tools {
         display: flex;
         gap: 0.5rem;
@@ -30,12 +30,12 @@
         margin: 0;
     }
     /* Soft colors for Aktif / Tidak Aktif badges */
-    #komoditasTable .badge.badge-success {
+    #golKelasBenihTable .badge.badge-success {
         background-color: #dff3e1 !important;
         color: #2e7d32 !important;
         border: 1px solid #c8e6c9;
     }
-    #komoditasTable .badge.badge-danger {
+    #golKelasBenihTable .badge.badge-danger {
         background-color: #fde2e2 !important;
         color: #c62828 !important;
         border: 1px solid #efcfcf;
@@ -62,36 +62,37 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Data Master > Manajemen Golongan</h3>
+                <h3 class="card-title">Data Master &raquo; Manajemen Gol Kelas Benih</h3>
                 <div class="card-tools">
-                    <a href="{{ route('master.komoditas.create') }}" class="btn btn-success btn-sm">
+                    <a href="{{ route('master.gol-kelas-benih.create') }}" class="btn btn-success btn-sm">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                     <button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapusData()">
                         <i class="fas fa-trash"></i> Hapus
                     </button>
-                    <div class="input-group input-group-sm ml-2" style="width: 200px;">
+                    <div class="input-group input-group-sm ml-2" style="width: 220px;">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input type="text" id="searchBox" class="form-control" placeholder="kata kunci pencarian" aria-controls="komoditasTable">
+                        <input type="text" id="searchBox" class="form-control" placeholder="kata kunci pencarian" aria-controls="golKelasBenihTable">
                     </div>
                 </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <!-- Table -->
                 <div class="table-responsive">
-                    <table id="komoditasTable" class="table table-bordered table-striped table-hover">
+                    <table id="golKelasBenihTable" class="table table-bordered table-striped table-hover">
                         <thead class="thead-light">
                             <tr>
-                                <th width="40" class="text-center" data-priority="1">
+                                <th width="40" class="text-center all" data-priority="1">
                                     <input type="checkbox" id="checkAll" title="Pilih Semua">
                                 </th>
                                 <th width="50" class="text-center">No</th>
-                                <th width="120" class="text-center">Kode Golongan</th>
-                                <th width="180">Nama Golongan</th>
-                                <th width="120" class="text-center">Status</th>
+                                <th width="120" class="text-center">Kode Gol Kelas Benih</th>
+                                <th width="180">Nama Gol Kelas Benih</th>
+                                <th width="100" class="text-center">Digit Label</th>
+                                <th width="100" class="text-center">Warna Label</th>
+                                <th width="100" class="text-center">Status</th>
                                 <th width="90" class="text-center" data-priority="1">Aksi</th>
                             </tr>
                         </thead>
@@ -117,18 +118,15 @@
 <script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 <script>
     $(function () {
-        // Counter for row numbers
-        var rowCounter = 0;
-
-        var table = $('#komoditasTable').DataTable({
+        var table = $('#golKelasBenihTable').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": "{{ route('master.komoditas.grid') }}",
+                "url": "{{ route('master.gol-kelas-benih.grid') }}",
                 "type": "GET",
                 "error": function (xhr, error, thrown) {
                     console.error('DataTables AJAX error:', error, thrown);
-                    alert('Error loading data. Please check console for details.');
+                    alert('Error loading data. Silakan periksa console untuk detail.');
                 }
             },
             "columns": [
@@ -138,7 +136,7 @@
                     "searchable": false,
                     "className": "text-center",
                     "width": "40",
-                    "render": function (data, type, row, meta) {
+                    "render": function (data) {
                         return '<input type="checkbox" class="checkItem" name="items[]" value="' + data + '">';
                     }
                 },
@@ -152,14 +150,16 @@
                         return meta.row + 1 + meta.settings._iDisplayStart;
                     }
                 },
-                { "data": "kode_komoditas", "className": "text-center" },
-                { "data": "nama_komoditas" },
+                { "data": "kode_grup_kelas_benih", "className": "text-center" },
+                { "data": "nama_grup_kelas_benih" },
+                { "data": "digit", "className": "text-center" },
+                { "data": "warna_label", "className": "text-center" },
                 {
-                    "data": "status_komoditas",
+                    "data": "status_grup",
                     "className": "text-center",
                     "render": function (data, type, row) {
-                        var badgeClass = data == '1' ? 'badge-success' : 'badge-danger';
-                        var label = data == '1' ? 'Aktif' : 'Tidak Aktif';
+                        var badgeClass = row.status_badge || 'badge-secondary';
+                        var label = row.status_label || (data == '1' ? 'Aktif' : 'Tidak Aktif');
                         return '<span class="badge ' + badgeClass + '">' + label + '</span>';
                     }
                 },
@@ -169,10 +169,11 @@
                     "searchable": false,
                     "className": "text-center",
                     "width": "90",
-                    "render": function (data, type, row) {
-                        var editUrl = '{{ url("admin/master/komoditas/edit") }}/' + data;
-                        var deleteUrl = '{{ url("admin/master/komoditas/delete") }}/' + data;
-                        return '<div class="action-buttons"><a href="' + editUrl + '" class="btn btn-warning btn-sm" title="Edit">' +
+                    "render": function (data) {
+                        var editUrl = '{{ url("admin/master/gol-kelas-benih/edit") }}/' + data;
+                        var deleteUrl = '{{ url("admin/master/gol-kelas-benih/delete") }}/' + data;
+                        return '<div class="action-buttons">' +
+                               '<a href="' + editUrl + '" class="btn btn-warning btn-sm" title="Edit">' +
                                '<i class="fas fa-edit"></i></a> ' +
                                '<a href="' + deleteUrl + '" class="btn btn-danger btn-sm" title="Hapus" onclick="return confirm(\'Apakah Anda yakin ingin menghapus data ini?\')">' +
                                '<i class="fas fa-trash"></i></a></div>';
@@ -182,38 +183,42 @@
             "order": [[2, "asc"]],
             "paging": true,
             "lengthChange": true,
-            "searching": true,
+            "searching": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
-            "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">>rtip',
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
-            },
-            "drawCallback": function(settings) {
-                console.log('DataTables draw callback', settings.json);
             }
         });
 
-        // Search functionality
-        $('#searchBox').on('keyup', function() {
+        // Live search pada kotak pencarian di header
+        $('#searchBox').on('keyup', function () {
             table.search(this.value).draw();
         });
 
-        // Set to track selected item ids across pagination / search
+        // Set untuk melacak ID yang dipilih lintas halaman / search
         var selectedIds = new Set();
 
-        // Sync the "check all" checkbox state (checked / indeterminate / unchecked)
         function syncCheckAllState() {
-            var total = $('#komoditasTable tbody .checkItem').length;
-            var checked = $('#komoditasTable tbody .checkItem:checked').length;
-            $('#checkAll').prop('checked', total > 0 && total === checked);
-            $('#checkAll').prop('indeterminate', checked > 0 && checked < total);
+            var totalRows = table.rows().count();
+            var selectedCount = selectedIds.size;
+
+            if (selectedCount === 0) {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', false);
+            } else if (selectedCount === totalRows) {
+                $('#checkAll').prop('checked', true);
+                $('#checkAll').prop('indeterminate', false);
+            } else {
+                $('#checkAll').prop('checked', false);
+                $('#checkAll').prop('indeterminate', true);
+            }
         }
 
-        // Individual checkbox change
-        $('#komoditasTable tbody').on('change', '.checkItem', function () {
+        // Perubahan checkbox tiap baris
+        $('#golKelasBenihTable tbody').on('change', '.checkItem', function () {
             var id = $(this).val();
             if (this.checked) {
                 selectedIds.add(id);
@@ -223,7 +228,7 @@
             syncCheckAllState();
         });
 
-        // Check all / uncheck all (works across all pages via DataTables nodes)
+        // Check all (mencakup semua halaman via DataTables rows())
         $('#checkAll').on('change', function () {
             var isChecked = this.checked;
             if (isChecked) {
@@ -236,21 +241,20 @@
             } else {
                 selectedIds.clear();
             }
-            // Apply visual state to currently rendered rows
-            $('#komoditasTable tbody .checkItem').prop('checked', isChecked);
+            $('#golKelasBenihTable tbody .checkItem').prop('checked', isChecked);
             syncCheckAllState();
         });
 
-        // Re-apply selection state after DataTables redraw (search, pagination, sort, etc.)
+        // Terapkan ulang status pilihan setelah DataTables redraw
         table.on('draw', function () {
-            $('#komoditasTable tbody .checkItem').each(function () {
+            $('#golKelasBenihTable tbody .checkItem').each(function () {
                 var id = $(this).val();
                 $(this).prop('checked', selectedIds.has(id));
             });
             syncCheckAllState();
         });
 
-        // Expose helpers for the delete handler
+        // Helper agar dapat diakses oleh tombol Hapus
         window.getSelectedIds = function () {
             return Array.from(selectedIds);
         };
@@ -273,7 +277,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "{{ route('master.komoditas.delete') }}",
+            url: "{{ route('master.gol-kelas-benih.delete') }}",
             data: { items: itemlist, _token: "{{ csrf_token() }}" },
             dataType: 'json',
             success: function (response) {
