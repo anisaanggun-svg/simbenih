@@ -47,13 +47,110 @@
         }
     </style>
      @stack("header")
+    <!-- Sidebar theme override: perbenihan green (hanya sidebar, tidak mengubah elemen lain) -->
+    <style>
+        .main-sidebar.sidebar-dark-primary {
+            background-color: #073d24 !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link,
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+        .sidebar-dark-primary .nav-sidebar .nav-header {
+            color: #e6f5ec !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover {
+            background-color: #0e7c4a !important;
+            color: #ffffff !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item.menu-open > .nav-link,
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+            background-color: #0e7c4a !important;
+            color: #ffffff !important;
+            border-left-color: #34d399 !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-treeview {
+            background-color: rgba(14, 124, 74, 0.18) !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-treeview > .nav-item > .nav-link,
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-treeview > .nav-item > .nav-link.active {
+            color: #d1fae5 !important;
+        }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-treeview > .nav-item > .nav-link:hover,
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-treeview > .nav-item > .nav-link.active {
+            background-color: #0e7c4a !important;
+            color: #ffffff !important;
+        }
+        .brand-link {
+            background-color: #073d24 !important;
+            color: #ffffff !important;
+            border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+        }
+        .brand-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Navbar match sidebar color (perbenihan green gelap) */
+        .navbar.navbar-white.navbar-light {
+            background-color: #073d24 !important;
+            border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+        }
+        .navbar.navbar-white.navbar-light .navbar-nav .nav-link,
+        .navbar.navbar-white.navbar-light .navbar-nav .nav-link .nav-icon {
+            color: #e6f5ec !important;
+        }
+        .navbar.navbar-white.navbar-light .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+            background-color: #0e7c4a !important;
+        }
+        .navbar.navbar-white.navbar-light .form-inline .form-control {
+            background-color: rgba(255,255,255,0.12) !important;
+            color: #ffffff !important;
+            border-color: rgba(255,255,255,0.15) !important;
+        }
+        .navbar.navbar-white.navbar-light .form-inline .form-control::placeholder {
+            color: rgba(230, 245, 236, 0.7) !important;
+        }
+
+        /* Brand logo lebih besar dan lurus dengan brand-text */
+        .main-sidebar .brand-link {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            line-height: 1.2;
+        }
+        .main-sidebar .brand-link .row {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .main-sidebar .brand-link .row > [class*="col-"] {
+            display: flex;
+            align-items: center;
+        }
+        .main-sidebar .brand-image {
+            max-height: 56px !important;
+            width: auto !important;
+            height: auto !important;
+            float: none !important;
+            margin: 0 auto !important;
+            transform: none !important;
+            position: static !important;
+            top: auto !important;
+        }
+        .main-sidebar .brand-text {
+            font-size: 1rem !important;
+            letter-spacing: 0.4px !important;
+            line-height: 1.2 !important;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+        }
+    </style>
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-fixed-navbar">
     <div class="wrapper">
 
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light fixed-top navbar-fixed">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -88,11 +185,11 @@
             <!-- Brand Logo -->
             <a href="{{  url('admin') }}" class="brand-link">
                 <div class="row">
-                    <div class="col-3" style="position: relative;top: 50%;transform: translateY(25%)">
+                    <div class="col-3">
                         <img src="{{  asset('assets/img/icon.png') }}" alt="BPSB" class="brand-image" style="-webkit-filter: drop-shadow(0px 0px 5px #feffd9);filter: drop-shadow(0px 0px 5px #aaaaaa);">
                     </div>
                     <div class="col-9">
-                        <span class="brand-text" style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.3px;">
+                        <span class="brand-text" style="font-family: 'Poppins', sans-serif; font-weight: 600; letter-spacing: 0.3px;">
                             SISTEM INFORMASI<br>PERBENIHAN
                         </span>
                     </div>

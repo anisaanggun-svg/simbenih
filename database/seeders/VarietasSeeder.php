@@ -30,3 +30,4 @@ class VarietasSeeder extends Seeder
         }
     }
 }
+

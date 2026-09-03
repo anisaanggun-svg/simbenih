@@ -9,6 +9,11 @@ use App\Models\GrupKelasBenih;
 use App\Models\JenisTanaman;
 use App\Models\Varietas;
 use App\Models\KelasBenih;
+use App\Models\Penyakit;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Satuan;
+use App\Models\Satgas;
 
 class MasterController extends Controller
 {
@@ -1386,5 +1391,1121 @@ class MasterController extends Controller
 
         return redirect()->route('master.kelas-benih.index')
             ->with('success', 'Data Kelas Benih berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER PENYAKIT
+     *
+     *  Fitur ini mengikuti sistem sumber atur_penyakit pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Penyakit.
+     *  - Edit data Penyakit.
+     *  - Hapus satu / banyak (bulk delete) data Penyakit.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Penyakit (sumber: atur_penyakit).
+     */
+    public function penyakitIndex(Request $request)
+    {
+        $query = Penyakit::query();
+
+        // Search filter
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_penyakit', 'like', "%{$search}%")
+                    ->orWhere('kelompok_penyakit', 'like', "%{$search}%")
+                    ->orWhere('nama_penyakit', 'like', "%{$search}%")
+                    ->orWhere('ket_penyakit', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_penyakit')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.penyakit.index', compact('data'));
+    }
+
+    /**
+     * Endpoint JSON untuk DataTables server-side (AJAX grid).
+     */
+    public function penyakitGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumnIndex = $request->input('order.0.column', 0);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Pemetaan index kolom ke field DB / accessor
+        $columns = [
+            'id',
+            'kode_penyakit',
+            'kelompok_penyakit',
+            'nama_penyakit',
+            'ket_penyakit',
+            'status_penyakit',
+        ];
+        $sortColumnName = $columns[$sortColumnIndex] ?? 'kode_penyakit';
+
+        $query = Penyakit::query();
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_penyakit', 'like', "%{$search}%")
+                    ->orWhere('kelompok_penyakit', 'like', "%{$search}%")
+                    ->orWhere('nama_penyakit', 'like', "%{$search}%")
+                    ->orWhere('ket_penyakit', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = Penyakit::count();
+        $filteredRecords = $query->count();
+
+        $data = $query->orderBy($sortColumnName, $sortDir)
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        $formattedData = [];
+        foreach ($data as $row) {
+            $formattedData[] = [
+                'id' => $row->id,
+                'kode_penyakit' => $row->kode_penyakit,
+                'kelompok_penyakit' => $row->kelompok_penyakit,
+                'kelompok_badge' => $row->kelompok_badge,
+                'nama_penyakit' => $row->nama_penyakit,
+                'ket_penyakit' => $row->ket_penyakit,
+                'status_penyakit' => $row->status_penyakit,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => intval($draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $formattedData,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Penyakit.
+     */
+    public function penyakitCreate()
+    {
+        return view('master.penyakit.create');
+    }
+
+    /**
+     * Simpan data Penyakit baru.
+     */
+    public function penyakitStore(Request $request)
+    {
+        $request->validate([
+            'kode_penyakit' => 'required|string|max:10|unique:penyakit,kode_penyakit',
+            'kelompok_penyakit' => 'required|in:Bakteri,Virus,Hama,Hama Vektor,Jamur',
+            'nama_penyakit' => 'required|string|max:255',
+            'ket_penyakit' => 'nullable|string|max:255',
+            'status_penyakit' => 'required|in:0,1',
+        ], [
+            'kode_penyakit.required' => 'Kode Penyakit wajib diisi.',
+            'kode_penyakit.max' => 'Kode Penyakit maksimal 10 karakter.',
+            'kode_penyakit.unique' => 'Kode Penyakit sudah terdaftar.',
+            'kelompok_penyakit.required' => 'Kelompok Penyakit wajib dipilih.',
+            'kelompok_penyakit.in' => 'Kelompok Penyakit tidak valid.',
+            'nama_penyakit.required' => 'Nama Penyakit wajib diisi.',
+            'status_penyakit.required' => 'Status wajib dipilih.',
+        ]);
+
+        Penyakit::create([
+            'kode_penyakit' => $request->kode_penyakit,
+            'kelompok_penyakit' => $request->kelompok_penyakit,
+            'nama_penyakit' => $request->nama_penyakit,
+            'ket_penyakit' => $request->ket_penyakit,
+            'status_penyakit' => $request->status_penyakit,
+        ]);
+
+        return redirect()->route('master.penyakit.index')
+            ->with('success', 'Data Penyakit berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Penyakit.
+     */
+    public function penyakitEdit($id)
+    {
+        $penyakit = Penyakit::findOrFail($id);
+        return view('master.penyakit.edit', compact('penyakit'));
+    }
+
+    /**
+     * Update data Penyakit.
+     */
+    public function penyakitUpdate(Request $request, $id)
+    {
+        $penyakit = Penyakit::findOrFail($id);
+
+        $request->validate([
+            'kode_penyakit' => 'required|string|max:10|unique:penyakit,kode_penyakit,' . $id,
+            'kelompok_penyakit' => 'required|in:Bakteri,Virus,Hama,Hama Vektor,Jamur',
+            'nama_penyakit' => 'required|string|max:255',
+            'ket_penyakit' => 'nullable|string|max:255',
+            'status_penyakit' => 'required|in:0,1',
+        ], [
+            'kode_penyakit.required' => 'Kode Penyakit wajib diisi.',
+            'kode_penyakit.max' => 'Kode Penyakit maksimal 10 karakter.',
+            'kode_penyakit.unique' => 'Kode Penyakit sudah terdaftar.',
+            'kelompok_penyakit.required' => 'Kelompok Penyakit wajib dipilih.',
+            'kelompok_penyakit.in' => 'Kelompok Penyakit tidak valid.',
+            'nama_penyakit.required' => 'Nama Penyakit wajib diisi.',
+            'status_penyakit.required' => 'Status wajib dipilih.',
+        ]);
+
+        $penyakit->update([
+            'kode_penyakit' => $request->kode_penyakit,
+            'kelompok_penyakit' => $request->kelompok_penyakit,
+            'nama_penyakit' => $request->nama_penyakit,
+            'ket_penyakit' => $request->ket_penyakit,
+            'status_penyakit' => $request->status_penyakit,
+        ]);
+
+        return redirect()->route('master.penyakit.index')
+            ->with('success', 'Data Penyakit berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Penyakit (bulk delete dari checkbox).
+     */
+    public function penyakitDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (empty($ids) || !is_array($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        // Pastikan semua ID adalah numeric untuk mencegah injection
+        $ids = array_filter($ids, fn ($v) => is_numeric($v));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Penyakit::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Penyakit berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Penyakit.
+     */
+    public function penyakitDelete($id)
+    {
+        $penyakit = Penyakit::findOrFail($id);
+        $penyakit->delete();
+
+        return redirect()->route('master.penyakit.index')
+            ->with('success', 'Data Penyakit berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  Master Kabupaten (sumber: atur_kabupaten)
+     *
+     *  Fitur ini mengikuti sistem sumber atur_kabupaten pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Kabupaten.
+     *  - Edit data Kabupaten.
+     *  - Hapus satu / banyak (bulk delete) data Kabupaten.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Kabupaten (sumber: atur_kabupaten).
+     */
+    public function kabupatenIndex(Request $request)
+    {
+        $query = Kabupaten::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satkab', 'like', "%{$search}%")
+                    ->orWhere('kode_kabupaten_nasional', 'like', "%{$search}%")
+                    ->orWhere('nama_kabupaten', 'like', "%{$search}%")
+                    ->orWhere('satgas', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_satkab')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.kabupaten.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola penyakit).
+     */
+    public function kabupatenGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 2);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        $columns = ['id', 'id', 'kode_satkab', 'kode_kabupaten_nasional', 'nama_kabupaten', 'satgas', 'status_kabupaten'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_satkab';
+
+        $query = Kabupaten::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satkab', 'like', "%{$search}%")
+                    ->orWhere('kode_kabupaten_nasional', 'like', "%{$search}%")
+                    ->orWhere('nama_kabupaten', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = Kabupaten::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_satkab' => $row->kode_satkab,
+                'kode_kabupaten_nasional' => $row->kode_kabupaten_nasional,
+                'nama_kabupaten' => $row->nama_kabupaten,
+                'satgas' => $row->satgas,
+                'satgas_label' => $row->satgas_label,
+                'satgas_badge' => $row->satgas_badge,
+                'status_kabupaten' => $row->status_kabupaten,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Kabupaten.
+     */
+    public function kabupatenCreate()
+    {
+        return view('master.kabupaten.create');
+    }
+
+    /**
+     * Simpan data Kabupaten baru.
+     */
+    public function kabupatenStore(Request $request)
+    {
+        $request->validate([
+            'satgas' => 'required|integer|min:1|max:6',
+            'kode_satkab' => 'required|string|max:10|unique:kabupaten,kode_satkab',
+            'kode_kabupaten_nasional' => 'required|string|max:10',
+            'nama_kabupaten' => 'required|string|max:255',
+            'status_kabupaten' => 'required|in:0,1',
+        ], [
+            'satgas.required' => 'Satgas wajib dipilih.',
+            'satgas.in' => 'Pilihan satgas tidak valid.',
+            'kode_satkab.required' => 'Kode Kabupaten wajib diisi.',
+            'kode_satkab.max' => 'Kode Kabupaten maksimal 10 karakter.',
+            'kode_satkab.unique' => 'Kode Kabupaten sudah terdaftar.',
+            'kode_kabupaten_nasional.required' => 'Kode Kabupaten Nasional wajib diisi.',
+            'nama_kabupaten.required' => 'Nama Kabupaten wajib diisi.',
+            'status_kabupaten.required' => 'Status wajib dipilih.',
+        ]);
+
+        Kabupaten::create([
+            'satgas' => $request->satgas,
+            'kode_satkab' => $request->kode_satkab,
+            'kode_kabupaten_nasional' => $request->kode_kabupaten_nasional,
+            'nama_kabupaten' => $request->nama_kabupaten,
+            'status_kabupaten' => $request->status_kabupaten,
+        ]);
+
+        return redirect()->route('master.kabupaten.index')
+            ->with('success', 'Data Kabupaten berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Kabupaten.
+     */
+    public function kabupatenEdit($id)
+    {
+        $kabupaten = Kabupaten::findOrFail($id);
+        return view('master.kabupaten.edit', compact('kabupaten'));
+    }
+
+    /**
+     * Update data Kabupaten.
+     */
+    public function kabupatenUpdate(Request $request, $id)
+    {
+        $kabupaten = Kabupaten::findOrFail($id);
+
+        $request->validate([
+            'satgas' => 'required|integer|min:1|max:6',
+            'kode_satkab' => 'required|string|max:10|unique:kabupaten,kode_satkab,' . $id,
+            'kode_kabupaten_nasional' => 'required|string|max:10',
+            'nama_kabupaten' => 'required|string|max:255',
+            'status_kabupaten' => 'required|in:0,1',
+        ], [
+            'satgas.required' => 'Satgas wajib dipilih.',
+            'satgas.in' => 'Pilihan satgas tidak valid.',
+            'kode_satkab.required' => 'Kode Kabupaten wajib diisi.',
+            'kode_satkab.max' => 'Kode Kabupaten maksimal 10 karakter.',
+            'kode_satkab.unique' => 'Kode Kabupaten sudah terdaftar.',
+            'kode_kabupaten_nasional.required' => 'Kode Kabupaten Nasional wajib diisi.',
+            'nama_kabupaten.required' => 'Nama Kabupaten wajib diisi.',
+            'status_kabupaten.required' => 'Status wajib dipilih.',
+        ]);
+
+        $kabupaten->update([
+            'satgas' => $request->satgas,
+            'kode_satkab' => $request->kode_satkab,
+            'kode_kabupaten_nasional' => $request->kode_kabupaten_nasional,
+            'nama_kabupaten' => $request->nama_kabupaten,
+            'status_kabupaten' => $request->status_kabupaten,
+        ]);
+
+        return redirect()->route('master.kabupaten.index')
+            ->with('success', 'Data Kabupaten berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Kabupaten (bulk delete dari checkbox).
+     */
+    public function kabupatenDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Kabupaten::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Kabupaten berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Kabupaten.
+     */
+    public function kabupatenDelete($id)
+    {
+        $kabupaten = Kabupaten::findOrFail($id);
+        $kabupaten->delete();
+
+        return redirect()->route('master.kabupaten.index')
+            ->with('success', 'Data Kabupaten berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  Master Kecamatan (sumber: atur_kecamatan)
+     *
+     *  Fitur ini mengikuti sistem sumber atur_kecamatan pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Kecamatan.
+     *  - Edit data Kecamatan.
+     *  - Hapus satu / banyak (bulk delete) data Kecamatan.
+     *  - Relasi ke Master Kabupaten sebagai parent (dependent dropdown).
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Kecamatan (sumber: atur_kecamatan).
+     */
+    public function kecamatanIndex(Request $request)
+    {
+        $query = Kecamatan::query()->with('kabupaten');
+
+        // Search filter (mengikuti kolom pencarian dari sumber).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_kecamatan', 'like', "%{$search}%")
+                    ->orWhere('kode_kecamatan_nasional', 'like', "%{$search}%")
+                    ->orWhere('nama_kecamatan', 'like', "%{$search}%")
+                    ->orWhereHas('kabupaten', function ($qq) use ($search) {
+                        $qq->where('nama_kabupaten', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $data = $query->orderBy('kode_kecamatan')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.kecamatan.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola kabupaten).
+     */
+    public function kecamatanGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 2);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        $columns = ['id', 'id', 'kode_kecamatan', 'kode_kecamatan_nasional', 'nama_kecamatan', 'nama_kabupaten', 'status_kecamatan'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_kecamatan';
+
+        $query = Kecamatan::query()->with('kabupaten');
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_kecamatan', 'like', "%{$search}%")
+                    ->orWhere('kode_kecamatan_nasional', 'like', "%{$search}%")
+                    ->orWhere('nama_kecamatan', 'like', "%{$search}%")
+                    ->orWhereHas('kabupaten', function ($qq) use ($search) {
+                        $qq->where('nama_kabupaten', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $totalRecords = Kecamatan::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_kecamatan' => $row->kode_kecamatan,
+                'kode_kecamatan_nasional' => $row->kode_kecamatan_nasional,
+                'nama_kecamatan' => $row->nama_kecamatan,
+                'kabupaten_id' => $row->kabupaten_id,
+                'nama_kabupaten' => $row->kabupaten ? $row->kabupaten->nama_kabupaten : '-',
+                'status_kecamatan' => $row->status_kecamatan,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Kecamatan.
+     */
+    public function kecamatanCreate()
+    {
+        $kabupatenList = Kabupaten::orderBy('kode_satkab')->get();
+        return view('master.kecamatan.create', compact('kabupatenList'));
+    }
+
+    /**
+     * Simpan data Kecamatan baru.
+     */
+    public function kecamatanStore(Request $request)
+    {
+        $request->validate([
+            'kode_kecamatan' => 'required|string|max:10|unique:kecamatan,kode_kecamatan',
+            'kode_kecamatan_nasional' => 'required|string|max:10',
+            'nama_kecamatan' => 'required|string|max:255',
+            'kabupaten_id' => 'required|exists:kabupaten,id',
+            'status_kecamatan' => 'required|in:0,1',
+        ], [
+            'kode_kecamatan.required' => 'Kode Kecamatan wajib diisi.',
+            'kode_kecamatan.max' => 'Kode Kecamatan maksimal 10 karakter.',
+            'kode_kecamatan.unique' => 'Kode Kecamatan sudah terdaftar.',
+            'kode_kecamatan_nasional.required' => 'Kode Kecamatan Nasional wajib diisi.',
+            'nama_kecamatan.required' => 'Nama Kecamatan wajib diisi.',
+            'kabupaten_id.required' => 'Kabupaten wajib dipilih.',
+            'kabupaten_id.exists' => 'Kabupaten yang dipilih tidak valid.',
+            'status_kecamatan.required' => 'Status wajib dipilih.',
+        ]);
+
+        Kecamatan::create([
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_kecamatan_nasional' => $request->kode_kecamatan_nasional,
+            'nama_kecamatan' => $request->nama_kecamatan,
+            'kabupaten_id' => $request->kabupaten_id,
+            'status_kecamatan' => $request->status_kecamatan,
+        ]);
+
+        return redirect()->route('master.kecamatan.index')
+            ->with('success', 'Data Kecamatan berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Kecamatan.
+     */
+    public function kecamatanEdit($id)
+    {
+        $kecamatan = Kecamatan::findOrFail($id);
+        $kabupatenList = Kabupaten::orderBy('kode_satkab')->get();
+        return view('master.kecamatan.edit', compact('kecamatan', 'kabupatenList'));
+    }
+
+    /**
+     * Update data Kecamatan.
+     */
+    public function kecamatanUpdate(Request $request, $id)
+    {
+        $kecamatan = Kecamatan::findOrFail($id);
+
+        $request->validate([
+            'kode_kecamatan' => 'required|string|max:10|unique:kecamatan,kode_kecamatan,' . $id,
+            'kode_kecamatan_nasional' => 'required|string|max:10',
+            'nama_kecamatan' => 'required|string|max:255',
+            'kabupaten_id' => 'required|exists:kabupaten,id',
+            'status_kecamatan' => 'required|in:0,1',
+        ], [
+            'kode_kecamatan.required' => 'Kode Kecamatan wajib diisi.',
+            'kode_kecamatan.max' => 'Kode Kecamatan maksimal 10 karakter.',
+            'kode_kecamatan.unique' => 'Kode Kecamatan sudah terdaftar.',
+            'kode_kecamatan_nasional.required' => 'Kode Kecamatan Nasional wajib diisi.',
+            'nama_kecamatan.required' => 'Nama Kecamatan wajib diisi.',
+            'kabupaten_id.required' => 'Kabupaten wajib dipilih.',
+            'kabupaten_id.exists' => 'Kabupaten yang dipilih tidak valid.',
+            'status_kecamatan.required' => 'Status wajib dipilih.',
+        ]);
+
+        $kecamatan->update([
+            'kode_kecamatan' => $request->kode_kecamatan,
+            'kode_kecamatan_nasional' => $request->kode_kecamatan_nasional,
+            'nama_kecamatan' => $request->nama_kecamatan,
+            'kabupaten_id' => $request->kabupaten_id,
+            'status_kecamatan' => $request->status_kecamatan,
+        ]);
+
+        return redirect()->route('master.kecamatan.index')
+            ->with('success', 'Data Kecamatan berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Kecamatan (bulk delete dari checkbox).
+     */
+    public function kecamatanDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Kecamatan::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Kecamatan berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Kecamatan.
+     */
+    public function kecamatanDelete($id)
+    {
+        $kecamatan = Kecamatan::findOrFail($id);
+        $kecamatan->delete();
+
+        return redirect()->route('master.kecamatan.index')
+            ->with('success', 'Data Kecamatan berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  Master Satuan (sumber: atur_satuan)
+     *
+     *  Fitur ini mengikuti sistem sumber atur_satuan pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Satuan (Kode, Nama, Jenis, Pengali, Status).
+     *  - Edit data Satuan.
+     *  - Hapus satu / banyak (bulk delete) data Satuan.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Satuan (sumber: atur_satuan).
+     */
+    public function satuanIndex(Request $request)
+    {
+        $query = Satuan::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satuan', 'like', "%{$search}%")
+                    ->orWhere('nama_satuan', 'like', "%{$search}%")
+                    ->orWhere('jenis_satuan', 'like', "%{$search}%")
+                    ->orWhere('pengali', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_satuan')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.satuan.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola kabupaten/penyakit).
+     */
+    public function satuanGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 2);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        $columns = ['id', 'id', 'kode_satuan', 'nama_satuan', 'jenis_satuan', 'pengali', 'status_satuan'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_satuan';
+
+        $query = Satuan::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satuan', 'like', "%{$search}%")
+                    ->orWhere('nama_satuan', 'like', "%{$search}%")
+                    ->orWhere('jenis_satuan', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = Satuan::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_satuan' => $row->kode_satuan,
+                'nama_satuan' => $row->nama_satuan,
+                'jenis_satuan' => $row->jenis_satuan,
+                'jenis_satuan_label' => $row->jenis_satuan_label,
+                'jenis_satuan_badge' => $row->jenis_satuan_badge,
+                'pengali' => $row->pengali,
+                'status_satuan' => $row->status_satuan,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Satuan.
+     */
+    public function satuanCreate()
+    {
+        return view('master.satuan.create');
+    }
+
+    /**
+     * Simpan data Satuan baru.
+     */
+    public function satuanStore(Request $request)
+    {
+        $request->validate([
+            'kode_satuan'   => 'required|string|max:50|unique:satuan,kode_satuan',
+            'nama_satuan'   => 'required|string|max:255',
+            'jenis_satuan'  => 'required|in:Satuan Berat,Satuan Jumlah,Satuan Luas',
+            'pengali'       => 'required|integer|min:1',
+            'status_satuan' => 'required|in:0,1',
+        ], [
+            'kode_satuan.required'  => 'Kode satuan wajib diisi.',
+            'kode_satuan.max'       => 'Kode satuan maksimal 50 karakter.',
+            'kode_satuan.unique'    => 'Kode satuan sudah terdaftar.',
+            'nama_satuan.required'  => 'Nama satuan wajib diisi.',
+            'jenis_satuan.required' => 'Jenis satuan wajib dipilih.',
+            'jenis_satuan.in'       => 'Jenis satuan tidak valid.',
+            'pengali.required'      => 'Pengali wajib diisi.',
+            'pengali.integer'       => 'Pengali harus berupa bilangan bulat.',
+            'pengali.min'           => 'Pengali minimal 1.',
+            'status_satuan.required'=> 'Status wajib dipilih.',
+        ]);
+
+        Satuan::create([
+            'kode_satuan'   => $request->kode_satuan,
+            'nama_satuan'   => $request->nama_satuan,
+            'jenis_satuan'  => $request->jenis_satuan,
+            'pengali'       => $request->pengali,
+            'status_satuan' => $request->status_satuan,
+        ]);
+
+        return redirect()->route('master.satuan.index')
+            ->with('success', 'Data Satuan berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Satuan.
+     */
+    public function satuanEdit($id)
+    {
+        $satuan = Satuan::findOrFail($id);
+        return view('master.satuan.edit', compact('satuan'));
+    }
+
+    /**
+     * Update data Satuan.
+     */
+    public function satuanUpdate(Request $request, $id)
+    {
+        $satuan = Satuan::findOrFail($id);
+
+        $request->validate([
+            'kode_satuan'   => 'required|string|max:50|unique:satuan,kode_satuan,' . $id,
+            'nama_satuan'   => 'required|string|max:255',
+            'jenis_satuan'  => 'required|in:Satuan Berat,Satuan Jumlah,Satuan Luas',
+            'pengali'       => 'required|integer|min:1',
+            'status_satuan' => 'required|in:0,1',
+        ], [
+            'kode_satuan.required'  => 'Kode satuan wajib diisi.',
+            'kode_satuan.max'       => 'Kode satuan maksimal 50 karakter.',
+            'kode_satuan.unique'    => 'Kode satuan sudah terdaftar.',
+            'nama_satuan.required'  => 'Nama satuan wajib diisi.',
+            'jenis_satuan.required' => 'Jenis satuan wajib dipilih.',
+            'jenis_satuan.in'       => 'Jenis satuan tidak valid.',
+            'pengali.required'      => 'Pengali wajib diisi.',
+            'pengali.integer'       => 'Pengali harus berupa bilangan bulat.',
+            'pengali.min'           => 'Pengali minimal 1.',
+            'status_satuan.required'=> 'Status wajib dipilih.',
+        ]);
+
+        $satuan->update([
+            'kode_satuan'   => $request->kode_satuan,
+            'nama_satuan'   => $request->nama_satuan,
+            'jenis_satuan'  => $request->jenis_satuan,
+            'pengali'       => $request->pengali,
+            'status_satuan' => $request->status_satuan,
+        ]);
+
+        return redirect()->route('master.satuan.index')
+            ->with('success', 'Data Satuan berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Satuan (bulk delete dari checkbox).
+     */
+    public function satuanDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Satuan::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Satuan berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Satuan.
+     */
+    public function satuanDelete($id)
+    {
+        $satuan = Satuan::findOrFail($id);
+        $satuan->delete();
+
+        return redirect()->route('master.satuan.index')
+            ->with('success', 'Data Satuan berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER WILAYAH KERJA (SATGAS)
+     *
+     *  Fitur ini mengikuti sistem sumber atur_satgas pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Wilayah Kerja (Kode, Nama, Status).
+     *  - Edit data Wilayah Kerja.
+     *  - Hapus satu / banyak (bulk delete) data Wilayah Kerja.
+     *  - Relasi ke Master Kabupaten sebagai child (kabupaten.satgas).
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Wilayah Kerja (sumber: atur_satgas).
+     */
+    public function wilayahKerjaIndex(Request $request)
+    {
+        $query = Satgas::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber: Kode, Nama, Status).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satgas', 'like', "%{$search}%")
+                    ->orWhere('nama_satgas', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_satgas')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.wilayah-kerja.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola satuan/kabupaten).
+     */
+    public function wilayahKerjaGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 2);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database (kolom 0 dan 1 adalah checkbox dan nomor urut).
+        $columns = ['id', 'id', 'kode_satgas', 'nama_satgas', 'status_satgas'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_satgas';
+
+        $query = Satgas::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_satgas', 'like', "%{$search}%")
+                    ->orWhere('nama_satgas', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = Satgas::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_satgas' => $row->kode_satgas,
+                'nama_satgas' => $row->nama_satgas,
+                'status_satgas' => $row->status_satgas,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Wilayah Kerja.
+     */
+    public function wilayahKerjaCreate()
+    {
+        return view('master.wilayah-kerja.create');
+    }
+
+    /**
+     * Simpan data Wilayah Kerja baru.
+     */
+    public function wilayahKerjaStore(Request $request)
+    {
+        $request->validate([
+            'kode_satgas'   => 'required|integer|min:0|max:255|unique:satgas,kode_satgas',
+            'nama_satgas'   => 'required|string|max:255',
+            'status_satgas' => 'required|in:0,1',
+        ], [
+            'kode_satgas.required'   => 'Kode Wilayah Kerja wajib diisi.',
+            'kode_satgas.integer'    => 'Kode Wilayah Kerja harus berupa bilangan bulat.',
+            'kode_satgas.unique'     => 'Kode Wilayah Kerja sudah terdaftar.',
+            'nama_satgas.required'   => 'Nama Wilayah Kerja wajib diisi.',
+            'status_satgas.required' => 'Status wajib dipilih.',
+        ]);
+
+        Satgas::create([
+            'kode_satgas'   => (int) $request->kode_satgas,
+            'nama_satgas'   => $request->nama_satgas,
+            'status_satgas' => $request->status_satgas,
+        ]);
+
+        return redirect()->route('master.wilayah-kerja.index')
+            ->with('success', 'Data Wilayah Kerja berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Wilayah Kerja.
+     */
+    public function wilayahKerjaEdit($id)
+    {
+        $wilayahKerja = Satgas::findOrFail($id);
+        return view('master.wilayah-kerja.edit', compact('wilayahKerja'));
+    }
+
+    /**
+     * Update data Wilayah Kerja.
+     */
+    public function wilayahKerjaUpdate(Request $request, $id)
+    {
+        $wilayahKerja = Satgas::findOrFail($id);
+
+        $request->validate([
+            'kode_satgas'   => 'required|integer|min:0|max:255|unique:satgas,kode_satgas,' . $id,
+            'nama_satgas'   => 'required|string|max:255',
+            'status_satgas' => 'required|in:0,1',
+        ], [
+            'kode_satgas.required'   => 'Kode Wilayah Kerja wajib diisi.',
+            'kode_satgas.integer'    => 'Kode Wilayah Kerja harus berupa bilangan bulat.',
+            'kode_satgas.unique'     => 'Kode Wilayah Kerja sudah terdaftar.',
+            'nama_satgas.required'   => 'Nama Wilayah Kerja wajib diisi.',
+            'status_satgas.required' => 'Status wajib dipilih.',
+        ]);
+
+        $wilayahKerja->update([
+            'kode_satgas'   => (int) $request->kode_satgas,
+            'nama_satgas'   => $request->nama_satgas,
+            'status_satgas' => $request->status_satgas,
+        ]);
+
+        return redirect()->route('master.wilayah-kerja.index')
+            ->with('success', 'Data Wilayah Kerja berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Wilayah Kerja (bulk delete dari checkbox).
+     */
+    public function wilayahKerjaDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Satgas::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Wilayah Kerja berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Wilayah Kerja.
+     */
+    public function wilayahKerjaDelete($id)
+    {
+        $wilayahKerja = Satgas::findOrFail($id);
+        $wilayahKerja->delete();
+
+        return redirect()->route('master.wilayah-kerja.index')
+            ->with('success', 'Data Wilayah Kerja berhasil dihapus.');
     }
 }

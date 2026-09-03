@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SertifikasiController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\MasterController;
@@ -18,9 +19,7 @@ Route::post('/logout', function () {
     return redirect('/login')->with('success', 'Logout berhasil.');
 })->name('logout');
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Sertifikasi Routes
 Route::prefix('admin/sertifikasi')->name('sertifikasi.')->group(function () {
@@ -169,4 +168,54 @@ Route::prefix('admin/master')->name('master.')->group(function () {
     Route::post('/kelas-benih/update/{id}', [MasterController::class, 'kelasBenihUpdate'])->name('kelas-benih.update');
     Route::post('/kelas-benih/delete', [MasterController::class, 'kelasBenihDestroy'])->name('kelas-benih.delete');
     Route::get('/kelas-benih/delete/{id}', [MasterController::class, 'kelasBenihDelete'])->name('kelas-benih.delete.single');
+
+    // Penyakit (Master Penyakit) Routes
+    Route::get('/penyakit', [MasterController::class, 'penyakitIndex'])->name('penyakit.index');
+    Route::get('/penyakit/grid', [MasterController::class, 'penyakitGrid'])->name('penyakit.grid');
+    Route::get('/penyakit/create', [MasterController::class, 'penyakitCreate'])->name('penyakit.create');
+    Route::post('/penyakit/store', [MasterController::class, 'penyakitStore'])->name('penyakit.store');
+    Route::get('/penyakit/edit/{id}', [MasterController::class, 'penyakitEdit'])->name('penyakit.edit');
+    Route::post('/penyakit/update/{id}', [MasterController::class, 'penyakitUpdate'])->name('penyakit.update');
+    Route::post('/penyakit/delete', [MasterController::class, 'penyakitDestroy'])->name('penyakit.delete');
+    Route::get('/penyakit/delete/{id}', [MasterController::class, 'penyakitDelete'])->name('penyakit.delete.single');
+
+    // Kabupaten (Master Kabupaten) Routes
+    Route::get('/kabupaten', [MasterController::class, 'kabupatenIndex'])->name('kabupaten.index');
+    Route::get('/kabupaten/grid', [MasterController::class, 'kabupatenGrid'])->name('kabupaten.grid');
+    Route::get('/kabupaten/create', [MasterController::class, 'kabupatenCreate'])->name('kabupaten.create');
+    Route::post('/kabupaten/store', [MasterController::class, 'kabupatenStore'])->name('kabupaten.store');
+    Route::get('/kabupaten/edit/{id}', [MasterController::class, 'kabupatenEdit'])->name('kabupaten.edit');
+    Route::post('/kabupaten/update/{id}', [MasterController::class, 'kabupatenUpdate'])->name('kabupaten.update');
+    Route::post('/kabupaten/delete', [MasterController::class, 'kabupatenDestroy'])->name('kabupaten.delete');
+    Route::get('/kabupaten/delete/{id}', [MasterController::class, 'kabupatenDelete'])->name('kabupaten.delete.single');
+
+    // Kecamatan (Master Kecamatan) Routes
+    Route::get('/kecamatan', [MasterController::class, 'kecamatanIndex'])->name('kecamatan.index');
+    Route::get('/kecamatan/grid', [MasterController::class, 'kecamatanGrid'])->name('kecamatan.grid');
+    Route::get('/kecamatan/create', [MasterController::class, 'kecamatanCreate'])->name('kecamatan.create');
+    Route::post('/kecamatan/store', [MasterController::class, 'kecamatanStore'])->name('kecamatan.store');
+    Route::get('/kecamatan/edit/{id}', [MasterController::class, 'kecamatanEdit'])->name('kecamatan.edit');
+    Route::post('/kecamatan/update/{id}', [MasterController::class, 'kecamatanUpdate'])->name('kecamatan.update');
+    Route::post('/kecamatan/delete', [MasterController::class, 'kecamatanDestroy'])->name('kecamatan.delete');
+    Route::get('/kecamatan/delete/{id}', [MasterController::class, 'kecamatanDelete'])->name('kecamatan.delete.single');
+
+    // Satuan (Master Satuan) Routes
+    Route::get('/satuan', [MasterController::class, 'satuanIndex'])->name('satuan.index');
+    Route::get('/satuan/grid', [MasterController::class, 'satuanGrid'])->name('satuan.grid');
+    Route::get('/satuan/create', [MasterController::class, 'satuanCreate'])->name('satuan.create');
+    Route::post('/satuan/store', [MasterController::class, 'satuanStore'])->name('satuan.store');
+    Route::get('/satuan/edit/{id}', [MasterController::class, 'satuanEdit'])->name('satuan.edit');
+    Route::post('/satuan/update/{id}', [MasterController::class, 'satuanUpdate'])->name('satuan.update');
+    Route::post('/satuan/delete', [MasterController::class, 'satuanDestroy'])->name('satuan.delete');
+    Route::get('/satuan/delete/{id}', [MasterController::class, 'satuanDelete'])->name('satuan.delete.single');
+
+    // Wilayah Kerja (Master Wilayah Kerja / Satgas) Routes
+    Route::get('/wilayah-kerja', [MasterController::class, 'wilayahKerjaIndex'])->name('wilayah-kerja.index');
+    Route::get('/wilayah-kerja/grid', [MasterController::class, 'wilayahKerjaGrid'])->name('wilayah-kerja.grid');
+    Route::get('/wilayah-kerja/create', [MasterController::class, 'wilayahKerjaCreate'])->name('wilayah-kerja.create');
+    Route::post('/wilayah-kerja/store', [MasterController::class, 'wilayahKerjaStore'])->name('wilayah-kerja.store');
+    Route::get('/wilayah-kerja/edit/{id}', [MasterController::class, 'wilayahKerjaEdit'])->name('wilayah-kerja.edit');
+    Route::post('/wilayah-kerja/update/{id}', [MasterController::class, 'wilayahKerjaUpdate'])->name('wilayah-kerja.update');
+    Route::post('/wilayah-kerja/delete', [MasterController::class, 'wilayahKerjaDestroy'])->name('wilayah-kerja.delete');
+    Route::get('/wilayah-kerja/delete/{id}', [MasterController::class, 'wilayahKerjaDelete'])->name('wilayah-kerja.delete.single');
 });
