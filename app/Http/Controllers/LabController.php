@@ -36,8 +36,9 @@ class LabController extends Controller
         $pegawai_list = Pegawai::orderBy('nama')->get();
         $pegawai_ttd_list = Pegawai::whereIn('id', [270, 280, 353, 394, 407, 417, 464])->orderBy('nama')->get();
         $mode = 'create';
-        
-        return view('lab.uji_laboratorium.form', compact('produsen_list', 'pegawai_list', 'pegawai_ttd_list', 'mode'));
+        $lhu = null;
+
+        return view('lab.uji_laboratorium.form', compact('produsen_list', 'pegawai_list', 'pegawai_ttd_list', 'mode', 'lhu'));
     }
 
     /**
@@ -45,44 +46,12 @@ class LabController extends Controller
      */
     public function show($id, $a = null, $b = null, $mode = 'lihat')
     {
-        // TODO: Fetch from database
-        $lhu = (object) [
-            'id' => $id,
-            'no_induk_lapangan' => 'PdnQI.P.3523070.0041.0001',
-            'no_berkas' => 'TP24.107.0001',
-            'nama_produsen' => 'UD. AGRO TANI',
-            'alamat_produsen' => 'Desa Sokosari, Kec. Soko, Kab. Tuban',
-            'no_asal' => 'SP.0229.11.124',
-            'no_lab' => 'S.0202.1.24',
-            'jenis_tanaman' => 'Padi Inbrida',
-            'varietas' => 'Inpari 32 HDB',
-            'kelas_benih' => 'BP',
-            'no_lot' => '01/01',
-            'tgl_panen_awal' => '2024-04-03',
-            'tgl_panen_akhir' => '2024-04-05',
-            'luas_lulus' => '5.5 Ha (Fase Terakhir)',
-            'tonase' => '17500 Kilogram',
-            'tgl_selesai_pengujian' => '2024-06-21',
-            'kadar_air' => '11.8',
-            'benih_murni' => '99.7',
-            'kotoran_benih' => '0.3',
-            'btl_gulma' => '0.0',
-            'daya_berkecambah' => '93',
-            'biji_keras' => '0',
-            'benih_warna_lain' => '-',
-            'no_induk_lhu' => 'PdnQI.P.3523070.0041.0001',
-            'tgl_lhu' => '2024-06-21',
-            'petugas_lhu' => 434,
-            'tgl_kadaluarsa' => '2024-12-21',
-            'kesimpulan' => '1',
-            'keterangan' => '',
-            'id_pegawai_ttd' => 270,
-        ];
-        
+        $lhu = UjiLaboratorium::findOrFail($id);
+
         $produsen_list = Produsen::orderBy('nama')->get();
         $pegawai_list = Pegawai::orderBy('nama')->get();
         $pegawai_ttd_list = Pegawai::whereIn('id', [270, 280, 353, 394, 407, 417, 464])->orderBy('nama')->get();
-        
+
         return view('lab.uji_laboratorium.form', compact('lhu', 'produsen_list', 'pegawai_list', 'pegawai_ttd_list', 'mode'));
     }
 
@@ -91,7 +60,7 @@ class LabController extends Controller
      */
     public function edit($id)
     {
-        return $this->show($id);
+        return $this->show($id, null, null, 'edit');
     }
 
     /**
@@ -99,7 +68,50 @@ class LabController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Implement store logic
+        $validated = $request->validate([
+            'no_induk_lapangan' => 'nullable|string|max:100',
+            'no_berkas' => 'nullable|string|max:100',
+            'nama_produsen' => 'nullable|string|max:150',
+            'alamat_produsen' => 'nullable|string|max:65535',
+            'no_asal' => 'nullable|string|max:100',
+            'no_lab' => 'nullable|string|max:100',
+            'jenis_tanaman' => 'nullable|string|max:100',
+            'varietas' => 'nullable|string|max:100',
+            'kelas_benih' => 'nullable|string|max:50',
+            'warna_label' => 'nullable|string|max:50',
+            'no_lot' => 'nullable|string|max:50',
+            'tgl_panen_awal' => 'nullable|date',
+            'tgl_panen_akhir' => 'nullable|date',
+            'luas_lulus' => 'nullable|string|max:100',
+            'tonase' => 'nullable|string|max:100',
+            'tgl_selesai_pengujian' => 'nullable|date',
+            'kadar_air' => 'nullable|numeric|min:0|max:100',
+            'benih_murni' => 'nullable|numeric|min:0|max:100',
+            'kotoran_benih' => 'nullable|numeric|min:0|max:100',
+            'btl_gulma' => 'nullable|numeric|min:0|max:100',
+            'daya_berkecambah' => 'nullable|integer|min:0|max:100',
+            'biji_keras' => 'nullable|integer|min:0|max:100',
+            'benih_warna_lain' => 'nullable|string|max:50',
+            'no_induk_lhu' => 'nullable|string|max:100',
+            'tgl_lhu' => 'nullable|date',
+            'petugas_lhu' => 'nullable|integer|exists:pegawai,id',
+            'tgl_kadaluarsa' => 'nullable|date',
+            'kesimpulan' => 'nullable|in:0,1',
+            'keterangan' => 'nullable|string|max:65535',
+            'id_pegawai_ttd' => 'nullable|integer|exists:pegawai,id',
+        ]);
+
+        // Convert produsen ID to name if needed
+        if ($request->filled('nama_produsen') && is_numeric($request->nama_produsen)) {
+            $produsen = Produsen::find($request->nama_produsen);
+            if ($produsen) {
+                $validated['nama_produsen'] = $produsen->nama_produsen ?? $produsen->nama;
+                $validated['alamat_produsen'] = $produsen->alamat ?? $validated['alamat_produsen'];
+            }
+        }
+
+        $lhu = UjiLaboratorium::create($validated);
+
         return redirect()->route('lab.uji_laboratorium.index')->with('success', 'Data LHU berhasil disimpan.');
     }
 
@@ -108,7 +120,52 @@ class LabController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // TODO: Implement update logic
+        $lhu = UjiLaboratorium::findOrFail($id);
+
+        $validated = $request->validate([
+            'no_induk_lapangan' => 'nullable|string|max:100',
+            'no_berkas' => 'nullable|string|max:100',
+            'nama_produsen' => 'nullable|string|max:150',
+            'alamat_produsen' => 'nullable|string|max:65535',
+            'no_asal' => 'nullable|string|max:100',
+            'no_lab' => 'nullable|string|max:100',
+            'jenis_tanaman' => 'nullable|string|max:100',
+            'varietas' => 'nullable|string|max:100',
+            'kelas_benih' => 'nullable|string|max:50',
+            'warna_label' => 'nullable|string|max:50',
+            'no_lot' => 'nullable|string|max:50',
+            'tgl_panen_awal' => 'nullable|date',
+            'tgl_panen_akhir' => 'nullable|date',
+            'luas_lulus' => 'nullable|string|max:100',
+            'tonase' => 'nullable|string|max:100',
+            'tgl_selesai_pengujian' => 'nullable|date',
+            'kadar_air' => 'nullable|numeric|min:0|max:100',
+            'benih_murni' => 'nullable|numeric|min:0|max:100',
+            'kotoran_benih' => 'nullable|numeric|min:0|max:100',
+            'btl_gulma' => 'nullable|numeric|min:0|max:100',
+            'daya_berkecambah' => 'nullable|integer|min:0|max:100',
+            'biji_keras' => 'nullable|integer|min:0|max:100',
+            'benih_warna_lain' => 'nullable|string|max:50',
+            'no_induk_lhu' => 'nullable|string|max:100',
+            'tgl_lhu' => 'nullable|date',
+            'petugas_lhu' => 'nullable|integer|exists:pegawai,id',
+            'tgl_kadaluarsa' => 'nullable|date',
+            'kesimpulan' => 'nullable|in:0,1',
+            'keterangan' => 'nullable|string|max:65535',
+            'id_pegawai_ttd' => 'nullable|integer|exists:pegawai,id',
+        ]);
+
+        // Convert produsen ID to name if needed
+        if ($request->filled('nama_produsen') && is_numeric($request->nama_produsen)) {
+            $produsen = Produsen::find($request->nama_produsen);
+            if ($produsen) {
+                $validated['nama_produsen'] = $produsen->nama_produsen ?? $produsen->nama;
+                $validated['alamat_produsen'] = $produsen->alamat ?? $validated['alamat_produsen'];
+            }
+        }
+
+        $lhu->update($validated);
+
         return redirect()->route('lab.uji_laboratorium.index')->with('success', 'Data LHU berhasil diperbarui.');
     }
 
@@ -268,7 +325,7 @@ class LabController extends Controller
                 'no' => $start + $index + 1,
                 'nama' => $row->nama,
                 'log' => $row->log,
-                'logdate' => $row->logdate ? $row->logdate->format('d-m-Y / H:i:s') : '-',
+                'logdate' => $row->logdate ? \Carbon\Carbon::parse($row->logdate)->format('d-m-Y / H:i:s') : '-',
                 'username' => $row->username,
             ];
         }
@@ -325,7 +382,7 @@ class LabController extends Controller
                     $index + 1,
                     $row->nama,
                     $row->log,
-                    $row->logdate ? $row->logdate->format('d-m-Y / H:i:s') : '-',
+                    $row->logdate ? \Carbon\Carbon::parse($row->logdate)->format('d-m-Y / H:i:s') : '-',
                     $row->username,
                 ]);
             }

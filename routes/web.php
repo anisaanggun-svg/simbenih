@@ -218,4 +218,65 @@ Route::prefix('admin/master')->name('master.')->group(function () {
     Route::post('/wilayah-kerja/update/{id}', [MasterController::class, 'wilayahKerjaUpdate'])->name('wilayah-kerja.update');
     Route::post('/wilayah-kerja/delete', [MasterController::class, 'wilayahKerjaDestroy'])->name('wilayah-kerja.delete');
     Route::get('/wilayah-kerja/delete/{id}', [MasterController::class, 'wilayahKerjaDelete'])->name('wilayah-kerja.delete.single');
+
+    // Status (Master Status) Routes
+    Route::get('/status', [MasterController::class, 'statusIndex'])->name('status.index');
+    Route::get('/status/grid', [MasterController::class, 'statusGrid'])->name('status.grid');
+    Route::get('/status/create', [MasterController::class, 'statusCreate'])->name('status.create');
+    Route::post('/status/store', [MasterController::class, 'statusStore'])->name('status.store');
+    Route::get('/status/edit/{id}', [MasterController::class, 'statusEdit'])->name('status.edit');
+    Route::post('/status/update/{id}', [MasterController::class, 'statusUpdate'])->name('status.update');
+    Route::post('/status/delete', [MasterController::class, 'statusDestroy'])->name('status.delete');
+    Route::get('/status/delete/{id}', [MasterController::class, 'statusDelete'])->name('status.delete.single');
+
+    // Produsen (Master Produsen) Routes
+    Route::get('/produsen', [MasterController::class, 'produsenIndex'])->name('produsen.index');
+    Route::get('/produsen/grid', [MasterController::class, 'produsenGrid'])->name('produsen.grid');
+    Route::get('/produsen/create', [MasterController::class, 'produsenCreate'])->name('produsen.create');
+    Route::post('/produsen/store', [MasterController::class, 'produsenStore'])->name('produsen.store');
+    Route::get('/produsen/edit/{id}', [MasterController::class, 'produsenEdit'])->name('produsen.edit');
+    Route::post('/produsen/update/{id}', [MasterController::class, 'produsenUpdate'])->name('produsen.update');
+    Route::post('/produsen/delete', [MasterController::class, 'produsenDestroy'])->name('produsen.delete');
+    Route::get('/produsen/delete/{id}', [MasterController::class, 'produsenDelete'])->name('produsen.delete.single');
+
+    // Pegawai (Master Pegawai) Routes
+    Route::get('/pegawai', [MasterController::class, 'pegawaiIndex'])->name('pegawai.index');
+    Route::get('/pegawai/grid', [MasterController::class, 'pegawaiGrid'])->name('pegawai.grid');
+    Route::get('/pegawai/create', [MasterController::class, 'pegawaiCreate'])->name('pegawai.create');
+    Route::post('/pegawai/store', [MasterController::class, 'pegawaiStore'])->name('pegawai.store');
+    Route::get('/pegawai/edit/{id}', [MasterController::class, 'pegawaiEdit'])->name('pegawai.edit');
+    Route::post('/pegawai/update/{id}', [MasterController::class, 'pegawaiUpdate'])->name('pegawai.update');
+    Route::post('/pegawai/delete', [MasterController::class, 'pegawaiDestroy'])->name('pegawai.delete');
+    Route::get('/pegawai/delete/{id}', [MasterController::class, 'pegawaiDelete'])->name('pegawai.delete.single');
+
+    // Mata Anggaran (Master M. Anggaran) Routes
+    Route::get('/m-anggaran', [MasterController::class, 'mataAnggaranIndex'])->name('mata-anggaran.index');
+    Route::get('/m-anggaran/grid', [MasterController::class, 'mataAnggaranGrid'])->name('mata-anggaran.grid');
+    Route::get('/m-anggaran/create', [MasterController::class, 'mataAnggaranCreate'])->name('mata-anggaran.create');
+    Route::post('/m-anggaran/store', [MasterController::class, 'mataAnggaranStore'])->name('mata-anggaran.store');
+    Route::get('/m-anggaran/edit/{id}', [MasterController::class, 'mataAnggaranEdit'])->name('mata-anggaran.edit');
+    Route::post('/m-anggaran/update/{id}', [MasterController::class, 'mataAnggaranUpdate'])->name('mata-anggaran.update');
+    Route::post('/m-anggaran/delete', [MasterController::class, 'mataAnggaranDestroy'])->name('mata-anggaran.delete');
+    Route::get('/m-anggaran/delete/{id}', [MasterController::class, 'mataAnggaranDelete'])->name('mata-anggaran.delete.single');
+
+    // Konfigurasi User (Master Konfigurasi User) Routes
+    Route::get('/konfigurasi-user', [MasterController::class, 'konfigurasiUserIndex'])->name('konfigurasi-user.index');
+    Route::get('/konfigurasi-user/grid', [MasterController::class, 'konfigurasiUserGrid'])->name('konfigurasi-user.grid');
+    Route::get('/konfigurasi-user/create', [MasterController::class, 'konfigurasiUserCreate'])->name('konfigurasi-user.create');
+    Route::post('/konfigurasi-user/store', [MasterController::class, 'konfigurasiUserStore'])->name('konfigurasi-user.store');
+    Route::get('/konfigurasi-user/edit/{id}', [MasterController::class, 'konfigurasiUserEdit'])->name('konfigurasi-user.edit');
+    Route::post('/konfigurasi-user/update/{id}', [MasterController::class, 'konfigurasiUserUpdate'])->name('konfigurasi-user.update');
+    Route::post('/konfigurasi-user/delete', [MasterController::class, 'konfigurasiUserDestroy'])->name('konfigurasi-user.delete');
+    Route::get('/konfigurasi-user/delete/{id}', [MasterController::class, 'konfigurasiUserDelete'])->name('konfigurasi-user.delete.single');
+
+    // Daftar User (Master Daftar User) Routes
+    Route::get('/daftar-user', [MasterController::class, 'userIndex'])->name('daftar-user.index');
+    Route::get('/daftar-user/grid', [MasterController::class, 'userGrid'])->name('daftar-user.grid');
+    Route::get('/daftar-user/create', [MasterController::class, 'userCreate'])->name('daftar-user.create');
+    Route::post('/daftar-user/store', [MasterController::class, 'userStore'])->name('daftar-user.store');
+    Route::get('/daftar-user/edit/{id}', [MasterController::class, 'userEdit'])->name('daftar-user.edit');
+    Route::post('/daftar-user/update/{id}', [MasterController::class, 'userUpdate'])->name('daftar-user.update');
+    Route::post('/daftar-user/reset-password/{id}', [MasterController::class, 'userResetPassword'])->name('daftar-user.reset-password');
+    Route::post('/daftar-user/delete', [MasterController::class, 'userDestroy'])->name('daftar-user.delete');
+    Route::get('/daftar-user/delete/{id}', [MasterController::class, 'userDelete'])->name('daftar-user.delete.single');
 });

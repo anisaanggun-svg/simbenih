@@ -14,6 +14,12 @@ use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Satuan;
 use App\Models\Satgas;
+use App\Models\Status;
+use App\Models\Produsen;
+use App\Models\Pegawai;
+use App\Models\MataAnggaran;
+use App\Models\KonfigurasiUser;
+use App\Models\User;
 
 class MasterController extends Controller
 {
@@ -2507,5 +2513,1525 @@ class MasterController extends Controller
 
         return redirect()->route('master.wilayah-kerja.index')
             ->with('success', 'Data Wilayah Kerja berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  Master Status (sumber: atur_status)
+     *
+     *  Fitur ini mengikuti sistem sumber atur_status pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Status (Kode, Nama, Status Aktif/Tidak Aktif).
+     *  - Edit data Status.
+     *  - Hapus satu / banyak (bulk delete) data Status.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Status (sumber: atur_status).
+     */
+    public function statusIndex(Request $request)
+    {
+        $query = Status::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber: Kode, Nama, Status).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_status', 'like', "%{$search}%")
+                    ->orWhere('nama_status', 'like', "%{$search}%")
+                    ->orWhere('status_status', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_status')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.status.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola kabupaten/penyakit/satuan).
+     */
+    public function statusGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 1);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        // Index 0 = checkbox (id), 1 = No, 2 = Kode, 3 = Nama, 4 = Status.
+        $columns = ['id', 'id', 'kode_status', 'nama_status', 'status_status'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_status';
+
+        $query = Status::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_status', 'like', "%{$search}%")
+                    ->orWhere('nama_status', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = Status::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_status' => $row->kode_status,
+                'nama_status' => $row->nama_status,
+                'status_status' => $row->status_status,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Status.
+     */
+    public function statusCreate()
+    {
+        return view('master.status.create');
+    }
+
+    /**
+     * Simpan data Status baru.
+     */
+    public function statusStore(Request $request)
+    {
+        $request->validate([
+            'kode_status'   => 'required|integer|min:0|max:25|unique:status,kode_status',
+            'nama_status'   => 'required|string|max:255',
+            'status_status' => 'required|in:0,1',
+        ], [
+            'kode_status.required'    => 'Kode status wajib diisi.',
+            'kode_status.integer'     => 'Kode status harus berupa bilangan bulat.',
+            'kode_status.unique'      => 'Kode status sudah terdaftar.',
+            'kode_status.min'         => 'Kode status minimal 0.',
+            'kode_status.max'         => 'Kode status maksimal 25.',
+            'nama_status.required'    => 'Nama status wajib diisi.',
+            'nama_status.max'         => 'Nama status maksimal 255 karakter.',
+            'status_status.required'  => 'Status wajib dipilih.',
+            'status_status.in'        => 'Status tidak valid.',
+        ]);
+
+        Status::create([
+            'kode_status'   => (int) $request->kode_status,
+            'nama_status'   => $request->nama_status,
+            'status_status' => $request->status_status,
+        ]);
+
+        return redirect()->route('master.status.index')
+            ->with('success', 'Data Status berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Status.
+     */
+    public function statusEdit($id)
+    {
+        $status = Status::findOrFail($id);
+        return view('master.status.edit', compact('status'));
+    }
+
+    /**
+     * Update data Status.
+     */
+    public function statusUpdate(Request $request, $id)
+    {
+        $status = Status::findOrFail($id);
+
+        $request->validate([
+            'kode_status'   => 'required|integer|min:0|max:25|unique:status,kode_status,' . $id,
+            'nama_status'   => 'required|string|max:255',
+            'status_status' => 'required|in:0,1',
+        ], [
+            'kode_status.required'    => 'Kode status wajib diisi.',
+            'kode_status.integer'     => 'Kode status harus berupa bilangan bulat.',
+            'kode_status.unique'      => 'Kode status sudah terdaftar.',
+            'kode_status.min'         => 'Kode status minimal 0.',
+            'kode_status.max'         => 'Kode status maksimal 25.',
+            'nama_status.required'    => 'Nama status wajib diisi.',
+            'nama_status.max'         => 'Nama status maksimal 255 karakter.',
+            'status_status.required'  => 'Status wajib dipilih.',
+            'status_status.in'        => 'Status tidak valid.',
+        ]);
+
+        $status->update([
+            'kode_status'   => (int) $request->kode_status,
+            'nama_status'   => $request->nama_status,
+            'status_status' => $request->status_status,
+        ]);
+
+        return redirect()->route('master.status.index')
+            ->with('success', 'Data Status berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Status (bulk delete dari checkbox).
+     */
+    public function statusDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Status::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Status berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Status.
+     */
+    public function statusDelete($id)
+    {
+        $status = Status::findOrFail($id);
+        $status->delete();
+
+        return redirect()->route('master.status.index')
+            ->with('success', 'Data Status berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER PRODUSEN
+     *
+     *  Fitur ini mengikuti sistem sumber atur_produsen pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Produsen.
+     *  - Edit data Produsen.
+     *  - Hapus satu / banyak (bulk delete) data Produsen.
+     *  - Relasi ke Master Kabupaten dan Master Status.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Produsen.
+     */
+    public function produsenIndex(Request $request)
+    {
+        $query = Produsen::query()->with(['kabupaten', 'statusRef']);
+
+        // Filter pencarian sederhana (opsional, juga difilter oleh DataTables server-side)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('no_induk_produsen_nasional', 'like', "%{$search}%")
+                    ->orWhere('no_tdpb', 'like', "%{$search}%")
+                    ->orWhere('badan_usaha', 'like', "%{$search}%")
+                    ->orWhere('nama_produsen', 'like', "%{$search}%")
+                    ->orWhere('alamat', 'like', "%{$search}%")
+                    ->orWhere('no_telp', 'like', "%{$search}%")
+                    ->orWhere('nama_kontak', 'like', "%{$search}%")
+                    ->orWhere('jabatan_kontak', 'like', "%{$search}%")
+                    ->orWhereHas('kabupaten', function ($qq) use ($search) {
+                        $qq->where('nama_kabupaten', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('statusRef', function ($qq) use ($search) {
+                        $qq->where('nama_status', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $data = $query->orderBy('id', 'desc')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.produsen.index', compact('data'));
+    }
+
+    /**
+     * Endpoint JSON untuk DataTables server-side (AJAX grid) Master Produsen.
+     */
+    public function produsenGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumnIndex = $request->input('order.0.column', 0);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Pemetaan index kolom ke field DB / accessor
+        $columns = [
+            'id',
+            'id',
+            'no_induk_produsen_nasional',
+            'no_tdpb',
+            'status_id',
+            'badan_usaha',
+            'nama_produsen',
+            'kabupaten_id',
+            'alamat',
+            'no_telp',
+            'nama_kontak',
+            'jabatan_kontak',
+            'status_produsen',
+        ];
+        $sortColumnName = $columns[$sortColumnIndex] ?? 'id';
+
+        $query = Produsen::query()->with(['kabupaten', 'statusRef']);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('no_induk_produsen_nasional', 'like', "%{$search}%")
+                    ->orWhere('no_tdpb', 'like', "%{$search}%")
+                    ->orWhere('badan_usaha', 'like', "%{$search}%")
+                    ->orWhere('nama_produsen', 'like', "%{$search}%")
+                    ->orWhere('alamat', 'like', "%{$search}%")
+                    ->orWhere('no_telp', 'like', "%{$search}%")
+                    ->orWhere('nama_kontak', 'like', "%{$search}%")
+                    ->orWhere('jabatan_kontak', 'like', "%{$search}%")
+                    ->orWhereHas('kabupaten', function ($qq) use ($search) {
+                        $qq->where('nama_kabupaten', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('statusRef', function ($qq) use ($search) {
+                        $qq->where('nama_status', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $totalRecords = Produsen::count();
+        $filteredRecords = $query->count();
+
+        $data = $query->orderBy($sortColumnName, $sortDir)
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        $formattedData = [];
+        foreach ($data as $row) {
+            $formattedData[] = [
+                'id' => $row->id,
+                'no_induk_produsen_nasional' => $row->no_induk_produsen_nasional,
+                'no_tdpb' => $row->no_tdpb,
+                'badan_usaha' => $row->badan_usaha,
+                'nama_produsen' => $row->nama_produsen,
+                'kabupaten_id' => $row->kabupaten_id,
+                'nama_kabupaten' => $row->kabupaten ? $row->kabupaten->nama_kabupaten : '-',
+                'alamat' => $row->alamat,
+                'no_telp' => $row->no_telp,
+                'status_id' => $row->status_id,
+                'nama_status' => ($row->statusRef && $row->statusRef->nama_status) ? $row->statusRef->nama_status : '-',
+                'nama_kontak' => $row->nama_kontak,
+                'jabatan_kontak' => $row->jabatan_kontak,
+                'status_produsen' => $row->status_produsen,
+                'status_produsen_label' => $row->status_produsen_label,
+                'status_produsen_badge' => $row->status_produsen_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => intval($draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $formattedData,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Produsen.
+     */
+    public function produsenCreate()
+    {
+        $kabupatenList = Kabupaten::orderBy('nama_kabupaten')->get();
+        $statusList = Status::where('status_status', '1')->orderBy('kode_status')->get();
+        return view('master.produsen.create', compact('kabupatenList', 'statusList'));
+    }
+
+    /**
+     * Simpan data Produsen baru.
+     */
+    public function produsenStore(Request $request)
+    {
+        $request->validate([
+            'no_tdpb' => 'required|string|max:100|unique:produsen,no_tdpb',
+            'no_induk_produsen_nasional' => 'nullable|string|max:100',
+            'badan_usaha' => 'nullable|string|max:50',
+            'nama_produsen' => 'required|string|max:255',
+            'kabupaten_id' => 'nullable|exists:kabupaten,id',
+            'alamat' => 'required|string',
+            'no_telp' => 'required|string|max:50',
+            'status_id' => 'required|exists:status,kode_status',
+            'nama_kontak' => 'required|string|max:150',
+            'jabatan_kontak' => 'required|string|max:100',
+            'status_produsen' => 'required|in:0,1',
+        ], [
+            'no_tdpb.required' => 'No TDPB wajib diisi.',
+            'no_tdpb.unique' => 'No TDPB sudah terdaftar.',
+            'nama_produsen.required' => 'Nama Produsen wajib diisi.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'no_telp.required' => 'Nomor Telepon wajib diisi.',
+            'status_id.required' => 'Nama Status wajib dipilih.',
+            'status_id.exists' => 'Status tidak valid.',
+            'nama_kontak.required' => 'Nama Kontak wajib diisi.',
+            'jabatan_kontak.required' => 'Jabatan Kontak wajib diisi.',
+            'status_produsen.required' => 'Status Master wajib dipilih.',
+            'kabupaten_id.exists' => 'Kabupaten tidak valid.',
+        ]);
+
+        // Tentukan ID baru secara manual (incrementing = false)
+        $maxId = (int) Produsen::max('id');
+        $newId = $maxId > 0 ? $maxId + 1 : 1;
+
+        // 'nama' adalah kolom legacy (NOT NULL pada tabel produsen) yang
+        // masih dipakai oleh modul Sertifikasi & Laboratorium. Kita tulis
+        // nilai yang sama dengan 'nama_produsen' agar keduanya tetap sinkron
+        // dan constraint NOT NULL terpenuhi.
+        Produsen::create([
+            'id' => $newId,
+            'no_tdpb' => $request->no_tdpb,
+            'no_induk_produsen_nasional' => $request->no_induk_produsen_nasional,
+            'badan_usaha' => $request->badan_usaha,
+            'nama_produsen' => $request->nama_produsen,
+            'nama' => $request->nama_produsen,
+            'kabupaten_id' => $request->kabupaten_id ?: null,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+            'status_id' => $request->status_id,
+            'nama_kontak' => $request->nama_kontak,
+            'jabatan_kontak' => $request->jabatan_kontak,
+            'status_produsen' => $request->status_produsen,
+        ]);
+
+        return redirect()->route('master.produsen.index')
+            ->with('success', 'Data Produsen berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Produsen.
+     */
+    public function produsenEdit($id)
+    {
+        $produsen = Produsen::findOrFail($id);
+        $kabupatenList = Kabupaten::orderBy('nama_kabupaten')->get();
+        $statusList = Status::orderBy('kode_status')->get();
+        return view('master.produsen.edit', compact('produsen', 'kabupatenList', 'statusList'));
+    }
+
+    /**
+     * Update data Produsen.
+     */
+    public function produsenUpdate(Request $request, $id)
+    {
+        $produsen = Produsen::findOrFail($id);
+
+        $request->validate([
+            'no_tdpb' => 'required|string|max:100|unique:produsen,no_tdpb,' . $id,
+            'no_induk_produsen_nasional' => 'nullable|string|max:100',
+            'badan_usaha' => 'nullable|string|max:50',
+            'nama_produsen' => 'required|string|max:255',
+            'kabupaten_id' => 'nullable|exists:kabupaten,id',
+            'alamat' => 'required|string',
+            'no_telp' => 'required|string|max:50',
+            'status_id' => 'required|exists:status,kode_status',
+            'nama_kontak' => 'required|string|max:150',
+            'jabatan_kontak' => 'required|string|max:100',
+            'status_produsen' => 'required|in:0,1',
+        ], [
+            'no_tdpb.required' => 'No TDPB wajib diisi.',
+            'no_tdpb.unique' => 'No TDPB sudah terdaftar.',
+            'nama_produsen.required' => 'Nama Produsen wajib diisi.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'no_telp.required' => 'Nomor Telepon wajib diisi.',
+            'status_id.required' => 'Nama Status wajib dipilih.',
+            'status_id.exists' => 'Status tidak valid.',
+            'nama_kontak.required' => 'Nama Kontak wajib diisi.',
+            'jabatan_kontak.required' => 'Jabatan Kontak wajib diisi.',
+            'status_produsen.required' => 'Status Master wajib dipilih.',
+            'kabupaten_id.exists' => 'Kabupaten tidak valid.',
+        ]);
+
+        $produsen->update([
+            'no_tdpb' => $request->no_tdpb,
+            'no_induk_produsen_nasional' => $request->no_induk_produsen_nasional,
+            'badan_usaha' => $request->badan_usaha,
+            'nama_produsen' => $request->nama_produsen,
+            // Sinkronkan 'nama' (kolom legacy NOT NULL) dengan 'nama_produsen'
+            // agar modul Sertifikasi & Lab yang masih membaca 'nama' konsisten.
+            'nama' => $request->nama_produsen,
+            'kabupaten_id' => $request->kabupaten_id ?: null,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+            'status_id' => $request->status_id,
+            'nama_kontak' => $request->nama_kontak,
+            'jabatan_kontak' => $request->jabatan_kontak,
+            'status_produsen' => $request->status_produsen,
+        ]);
+
+        return redirect()->route('master.produsen.index')
+            ->with('success', 'Data Produsen berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Produsen (bulk delete dari checkbox).
+     */
+    public function produsenDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Produsen::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Produsen berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Produsen.
+     */
+    public function produsenDelete($id)
+    {
+        $produsen = Produsen::findOrFail($id);
+        $produsen->delete();
+
+        return redirect()->route('master.produsen.index')
+            ->with('success', 'Data Produsen berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER PEGAWAI
+     *
+     *  Fitur ini mengikuti sistem sumber atur_pegawai pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Pegawai.
+     *  - Edit data Pegawai.
+     *  - Hapus satu / banyak (bulk delete) data Pegawai.
+     *  - Relasi ke Master Wilayah Kerja (satgas).
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Pegawai.
+     */
+    public function pegawaiIndex(Request $request)
+    {
+        $query = Pegawai::query()->with('wilayahKerja');
+
+        if ($search = trim((string) $request->get('search', ''))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nip_pegawai', 'like', "%{$search}%")
+                    ->orWhere('nama_pegawai', 'like', "%{$search}%")
+                    ->orWhere('jabatan', 'like', "%{$search}%")
+                    ->orWhere('no_telp', 'like', "%{$search}%")
+                    ->orWhereHas('wilayahKerja', function ($qq) use ($search) {
+                        $qq->where('nama_satgas', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $data = $query->orderBy('id', 'asc')->paginate(15)->withQueryString();
+
+        return view('master.pegawai.index', compact('data'));
+    }
+
+    /**
+     * Endpoint JSON untuk DataTables server-side (AJAX grid) Master Pegawai.
+     */
+    public function pegawaiGrid(Request $request)
+    {
+        $columns = [
+            0 => 'id',
+            1 => 'id',
+            2 => 'satgas_id',
+            3 => 'nip_pegawai',
+            4 => 'nama_pegawai',
+            5 => 'jabatan',
+            6 => 'no_telp',
+            7 => 'status_pegawai',
+            8 => 'is_ka_satgas',
+        ];
+
+        $query = Pegawai::query()->with('wilayahKerja');
+
+        $totalRecords = Pegawai::count();
+
+        if ($search = trim((string) $request->input('search.value', ''))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nip_pegawai', 'like', "%{$search}%")
+                    ->orWhere('nama_pegawai', 'like', "%{$search}%")
+                    ->orWhere('jabatan', 'like', "%{$search}%")
+                    ->orWhere('no_telp', 'like', "%{$search}%")
+                    ->orWhereHas('wilayahKerja', function ($qq) use ($search) {
+                        $qq->where('nama_satgas', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $filteredRecords = $query->count();
+
+        $orderColumnIdx = (int) $request->input('order.0.column', 3);
+        $orderDir = $request->input('order.0.dir', 'asc') === 'desc' ? 'desc' : 'asc';
+        $orderField = $columns[$orderColumnIdx] ?? 'id';
+
+        if ($orderField === 'satgas_id') {
+            $query->orderBy(
+                \Illuminate\Support\Facades\DB::raw('(SELECT nama_satgas FROM satgas WHERE satgas.kode_satgas = pegawai.satgas_id)'),
+                $orderDir
+            );
+        } else {
+            $query->orderBy($orderField, $orderDir);
+        }
+
+        $start = (int) $request->input('start', 0);
+        $length = (int) $request->input('length', 10);
+        if ($length > 0) {
+            $query->skip($start)->take($length);
+        }
+
+        $rows = $query->get();
+
+        $data = [];
+        $no = $start + 1;
+        foreach ($rows as $row) {
+            $data[] = [
+                'id'                  => $row->id,
+                'no'                  => $no++,
+                'satgas_id'           => $row->satgas_id,
+                'nama_satgas'         => $row->label_wilayah_kerja,
+                'nip_pegawai'         => $row->nip_pegawai,
+                'nama_pegawai'        => $row->nama_pegawai,
+                'jabatan'             => $row->jabatan,
+                'no_telp'             => $row->no_telp,
+                'status_pegawai'      => $row->status_pegawai,
+                'status_pegawai_label'=> $row->status_pegawai_label,
+                'status_pegawai_badge'=> $row->status_pegawai_badge,
+                'is_ka_satgas'        => $row->is_ka_satgas,
+                'is_ka_satgas_label'  => $row->is_ka_satgas_label,
+                'is_ka_satgas_badge'  => $row->is_ka_satgas_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw'            => (int) $request->input('draw', 0),
+            'recordsTotal'    => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data'            => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Pegawai.
+     */
+    public function pegawaiCreate()
+    {
+        $satgasList = Satgas::orderBy('nama_satgas')->get();
+        return view('master.pegawai.create', compact('satgasList'));
+    }
+
+    /**
+     * Simpan data Pegawai baru.
+     */
+    public function pegawaiStore(Request $request)
+    {
+        $request->validate([
+            'nip_pegawai'    => 'required|string|max:50|unique:pegawai,nip_pegawai',
+            'nama_pegawai'   => 'required|string|max:255',
+            'satgas_id'      => 'required|exists:satgas,kode_satgas',
+            'jabatan'        => 'required|string|max:200',
+            'no_telp'        => 'required|string|max:50',
+            'status_pegawai' => 'required|in:0,1',
+            'is_ka_satgas'   => 'required|in:0,1',
+        ], [
+            'nip_pegawai.required'    => 'NIP Pegawai wajib diisi.',
+            'nip_pegawai.unique'      => 'NIP Pegawai sudah terdaftar.',
+            'nama_pegawai.required'   => 'Nama Pegawai wajib diisi.',
+            'satgas_id.required'      => 'Nama satgas (Wilayah Kerja) wajib dipilih.',
+            'satgas_id.exists'        => 'Wilayah Kerja tidak valid.',
+            'jabatan.required'        => 'Jabatan wajib diisi.',
+            'no_telp.required'        => 'No Telp wajib diisi.',
+            'status_pegawai.required' => 'Status Master wajib dipilih.',
+            'is_ka_satgas.required'   => 'Status Ka Korwil wajib dipilih.',
+        ]);
+
+        // Tentukan ID baru secara manual (incrementing = false)
+        $maxId = (int) Pegawai::max('id');
+        $newId = $maxId > 0 ? $maxId + 1 : 1;
+
+        Pegawai::create([
+            'id'             => $newId,
+            'nip_pegawai'    => $request->nip_pegawai,
+            'nama_pegawai'   => $request->nama_pegawai,
+            // 'nama' adalah kolom legacy (NOT NULL) yang dipakai modul
+            // Sertifikasi & Lab melalui Pegawai::orderBy('nama').
+            'nama'           => $request->nama_pegawai,
+            'satgas_id'      => $request->satgas_id,
+            'jabatan'        => $request->jabatan,
+            'no_telp'        => $request->no_telp,
+            'status_pegawai' => $request->status_pegawai,
+            'is_ka_satgas'   => $request->is_ka_satgas,
+        ]);
+
+        return redirect()->route('master.pegawai.index')
+            ->with('success', 'Data Pegawai berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Pegawai.
+     */
+    public function pegawaiEdit($id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+        $satgasList = Satgas::orderBy('nama_satgas')->get();
+        return view('master.pegawai.edit', compact('pegawai', 'satgasList'));
+    }
+
+    /**
+     * Update data Pegawai.
+     */
+    public function pegawaiUpdate(Request $request, $id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+
+        $request->validate([
+            'nip_pegawai'    => 'required|string|max:50|unique:pegawai,nip_pegawai,' . $id,
+            'nama_pegawai'   => 'required|string|max:255',
+            'satgas_id'      => 'required|exists:satgas,kode_satgas',
+            'jabatan'        => 'required|string|max:200',
+            'no_telp'        => 'required|string|max:50',
+            'status_pegawai' => 'required|in:0,1',
+            'is_ka_satgas'   => 'required|in:0,1',
+        ], [
+            'nip_pegawai.required'    => 'NIP Pegawai wajib diisi.',
+            'nip_pegawai.unique'      => 'NIP Pegawai sudah terdaftar.',
+            'nama_pegawai.required'   => 'Nama Pegawai wajib diisi.',
+            'satgas_id.required'      => 'Nama satgas (Wilayah Kerja) wajib dipilih.',
+            'satgas_id.exists'        => 'Wilayah Kerja tidak valid.',
+            'jabatan.required'        => 'Jabatan wajib diisi.',
+            'no_telp.required'        => 'No Telp wajib diisi.',
+            'status_pegawai.required' => 'Status Master wajib dipilih.',
+            'is_ka_satgas.required'   => 'Status Ka Korwil wajib dipilih.',
+        ]);
+
+        $pegawai->update([
+            'nip_pegawai'    => $request->nip_pegawai,
+            'nama_pegawai'   => $request->nama_pegawai,
+            'nama'           => $request->nama_pegawai,
+            'satgas_id'      => $request->satgas_id,
+            'jabatan'        => $request->jabatan,
+            'no_telp'        => $request->no_telp,
+            'status_pegawai' => $request->status_pegawai,
+            'is_ka_satgas'   => $request->is_ka_satgas,
+        ]);
+
+        return redirect()->route('master.pegawai.index')
+            ->with('success', 'Data Pegawai berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Pegawai (bulk delete dari checkbox).
+     */
+    public function pegawaiDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = Pegawai::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Pegawai berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Pegawai.
+     */
+    public function pegawaiDelete($id)
+    {
+        $pegawai = Pegawai::findOrFail($id);
+        $pegawai->delete();
+
+        return redirect()->route('master.pegawai.index')
+            ->with('success', 'Data Pegawai berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER M. ANGGARAN
+     *
+     *  Fitur ini mengikuti sistem sumber atur_mata_anggaran pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Mata Anggaran.
+     *  - Edit data Mata Anggaran.
+     *  - Hapus satu / banyak (bulk delete) data Mata Anggaran.
+     *  - Field: kode_mata_anggaran, nama_mata_anggaran, status_mata_anggaran.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master M. Anggaran (sumber: atur_mata_anggaran).
+     */
+    public function mataAnggaranIndex(Request $request)
+    {
+        $query = MataAnggaran::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber: Kode, Nama, Status).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_mata_anggaran', 'like', "%{$search}%")
+                    ->orWhere('nama_mata_anggaran', 'like', "%{$search}%")
+                    ->orWhere('status_mata_anggaran', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('kode_mata_anggaran')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.mata-anggaran.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola status/penyakit/satuan).
+     */
+    public function mataAnggaranGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 1);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        // Index 0 = checkbox (id), 1 = No, 2 = Kode, 3 = Nama, 4 = Status.
+        $columns = ['id', 'id', 'kode_mata_anggaran', 'nama_mata_anggaran', 'status_mata_anggaran'];
+        $sortColumnName = $columns[$sortColumn] ?? 'kode_mata_anggaran';
+
+        $query = MataAnggaran::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('kode_mata_anggaran', 'like', "%{$search}%")
+                    ->orWhere('nama_mata_anggaran', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = MataAnggaran::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'kode_mata_anggaran' => $row->kode_mata_anggaran,
+                'nama_mata_anggaran' => $row->nama_mata_anggaran,
+                'status_mata_anggaran' => $row->status_mata_anggaran,
+                'status_label' => $row->status_label,
+                'status_badge' => $row->status_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master M. Anggaran.
+     */
+    public function mataAnggaranCreate()
+    {
+        return view('master.mata-anggaran.create');
+    }
+
+    /**
+     * Simpan data M. Anggaran baru.
+     */
+    public function mataAnggaranStore(Request $request)
+    {
+        $request->validate([
+            'kode_mata_anggaran'   => 'required|string|max:50|unique:mata_anggaran,kode_mata_anggaran',
+            'nama_mata_anggaran'   => 'required|string|max:255',
+            'status_mata_anggaran' => 'required|in:0,1',
+        ], [
+            'kode_mata_anggaran.required'    => 'Kode Mata Anggaran wajib diisi.',
+            'kode_mata_anggaran.string'      => 'Kode Mata Anggaran harus berupa teks.',
+            'kode_mata_anggaran.max'         => 'Kode Mata Anggaran maksimal 50 karakter.',
+            'kode_mata_anggaran.unique'      => 'Kode Mata Anggaran sudah terdaftar.',
+            'nama_mata_anggaran.required'    => 'Nama Mata Anggaran wajib diisi.',
+            'nama_mata_anggaran.max'         => 'Nama Mata Anggaran maksimal 255 karakter.',
+            'status_mata_anggaran.required'  => 'Status wajib dipilih.',
+            'status_mata_anggaran.in'        => 'Status tidak valid.',
+        ]);
+
+        MataAnggaran::create([
+            'kode_mata_anggaran'   => $request->kode_mata_anggaran,
+            'nama_mata_anggaran'   => $request->nama_mata_anggaran,
+            'status_mata_anggaran' => $request->status_mata_anggaran,
+        ]);
+
+        return redirect()->route('master.mata-anggaran.index')
+            ->with('success', 'Data M. Anggaran berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master M. Anggaran.
+     */
+    public function mataAnggaranEdit($id)
+    {
+        $mataAnggaran = MataAnggaran::findOrFail($id);
+        return view('master.mata-anggaran.edit', compact('mataAnggaran'));
+    }
+
+    /**
+     * Update data M. Anggaran.
+     */
+    public function mataAnggaranUpdate(Request $request, $id)
+    {
+        $mataAnggaran = MataAnggaran::findOrFail($id);
+
+        $request->validate([
+            'kode_mata_anggaran'   => 'required|string|max:50|unique:mata_anggaran,kode_mata_anggaran,' . $id,
+            'nama_mata_anggaran'   => 'required|string|max:255',
+            'status_mata_anggaran' => 'required|in:0,1',
+        ], [
+            'kode_mata_anggaran.required'    => 'Kode Mata Anggaran wajib diisi.',
+            'kode_mata_anggaran.string'      => 'Kode Mata Anggaran harus berupa teks.',
+            'kode_mata_anggaran.max'         => 'Kode Mata Anggaran maksimal 50 karakter.',
+            'kode_mata_anggaran.unique'      => 'Kode Mata Anggaran sudah terdaftar.',
+            'nama_mata_anggaran.required'    => 'Nama Mata Anggaran wajib diisi.',
+            'nama_mata_anggaran.max'         => 'Nama Mata Anggaran maksimal 255 karakter.',
+            'status_mata_anggaran.required'  => 'Status wajib dipilih.',
+            'status_mata_anggaran.in'        => 'Status tidak valid.',
+        ]);
+
+        $mataAnggaran->update([
+            'kode_mata_anggaran'   => $request->kode_mata_anggaran,
+            'nama_mata_anggaran'   => $request->nama_mata_anggaran,
+            'status_mata_anggaran' => $request->status_mata_anggaran,
+        ]);
+
+        return redirect()->route('master.mata-anggaran.index')
+            ->with('success', 'Data M. Anggaran berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data M. Anggaran (bulk delete dari checkbox).
+     */
+    public function mataAnggaranDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = MataAnggaran::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data M. Anggaran berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data M. Anggaran.
+     */
+    public function mataAnggaranDelete($id)
+    {
+        $mataAnggaran = MataAnggaran::findOrFail($id);
+        $mataAnggaran->delete();
+
+        return redirect()->route('master.mata-anggaran.index')
+            ->with('success', 'Data M. Anggaran berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER KONFIGURASI USER
+     *
+     *  Fitur ini mengikuti sistem sumber atur_konfigurasi pada sistem lama.
+     *  - Daftar data dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah data Konfigurasi User.
+     *  - Edit data Konfigurasi User.
+     *  - Hapus satu / banyak (bulk delete) data Konfigurasi User.
+     *  - Field: nama_konfigurasi, nilai_konfigurasi (string dinamis).
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Konfigurasi User (sumber: atur_konfigurasi).
+     */
+    public function konfigurasiUserIndex(Request $request)
+    {
+        $query = KonfigurasiUser::query();
+
+        // Search filter (mengikuti kolom pencarian dari sumber: Nama, Nilai).
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_konfigurasi', 'like', "%{$search}%")
+                    ->orWhere('nilai_konfigurasi', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('nama_konfigurasi')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.konfigurasi-user.index', compact('data'));
+    }
+
+    /**
+     * JSON data untuk DataTables AJAX (mengikuti pola status/penyakit/satuan).
+     */
+    public function konfigurasiUserGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 1);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database.
+        // Index 0 = checkbox (id), 1 = No, 2 = Nama, 3 = Nilai.
+        $columns = ['id', 'id', 'nama_konfigurasi', 'nilai_konfigurasi'];
+        $sortColumnName = $columns[$sortColumn] ?? 'nama_konfigurasi';
+
+        $query = KonfigurasiUser::query();
+
+        // Pencocokan pencarian.
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_konfigurasi', 'like', "%{$search}%")
+                    ->orWhere('nilai_konfigurasi', 'like', "%{$search}%");
+            });
+        }
+
+        $totalRecords = KonfigurasiUser::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'nama_konfigurasi' => $row->nama_konfigurasi,
+                'nilai_konfigurasi' => $row->nilai_konfigurasi,
+                'nilai_singkat' => $row->nilai_singkat,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Konfigurasi User.
+     */
+    public function konfigurasiUserCreate()
+    {
+        return view('master.konfigurasi-user.create');
+    }
+
+    /**
+     * Simpan data Konfigurasi User baru.
+     */
+    public function konfigurasiUserStore(Request $request)
+    {
+        $request->validate([
+            'nama_konfigurasi'   => 'required|string|max:255',
+            'nilai_konfigurasi'  => 'nullable|string|max:65535',
+        ], [
+            'nama_konfigurasi.required'   => 'Nama konfigurasi wajib diisi.',
+            'nama_konfigurasi.string'     => 'Nama konfigurasi harus berupa teks.',
+            'nama_konfigurasi.max'        => 'Nama konfigurasi maksimal 255 karakter.',
+            'nilai_konfigurasi.string'    => 'Nilai konfigurasi harus berupa teks.',
+        ]);
+
+        KonfigurasiUser::create([
+            'nama_konfigurasi'  => $request->nama_konfigurasi,
+            'nilai_konfigurasi' => $request->nilai_konfigurasi,
+        ]);
+
+        return redirect()->route('master.konfigurasi-user.index')
+            ->with('success', 'Data Konfigurasi User berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Konfigurasi User.
+     */
+    public function konfigurasiUserEdit($id)
+    {
+        $konfigurasiUser = KonfigurasiUser::findOrFail($id);
+        return view('master.konfigurasi-user.edit', compact('konfigurasiUser'));
+    }
+
+    /**
+     * Update data Konfigurasi User.
+     */
+    public function konfigurasiUserUpdate(Request $request, $id)
+    {
+        $konfigurasiUser = KonfigurasiUser::findOrFail($id);
+
+        $request->validate([
+            'nama_konfigurasi'   => 'required|string|max:255',
+            'nilai_konfigurasi'  => 'nullable|string|max:65535',
+        ], [
+            'nama_konfigurasi.required'   => 'Nama konfigurasi wajib diisi.',
+            'nama_konfigurasi.string'     => 'Nama konfigurasi harus berupa teks.',
+            'nama_konfigurasi.max'        => 'Nama konfigurasi maksimal 255 karakter.',
+            'nilai_konfigurasi.string'    => 'Nilai konfigurasi harus berupa teks.',
+        ]);
+
+        $konfigurasiUser->update([
+            'nama_konfigurasi'  => $request->nama_konfigurasi,
+            'nilai_konfigurasi' => $request->nilai_konfigurasi,
+        ]);
+
+        return redirect()->route('master.konfigurasi-user.index')
+            ->with('success', 'Data Konfigurasi User berhasil diperbarui.');
+    }
+
+    /**
+     * Hapus banyak data Konfigurasi User (bulk delete dari checkbox).
+     */
+    public function konfigurasiUserDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = KonfigurasiUser::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data Konfigurasi User berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data Konfigurasi User.
+     */
+    public function konfigurasiUserDelete($id)
+    {
+        $konfigurasiUser = KonfigurasiUser::findOrFail($id);
+        $konfigurasiUser->delete();
+
+        return redirect()->route('master.konfigurasi-user.index')
+            ->with('success', 'Data Konfigurasi User berhasil dihapus.');
+    }
+
+    /* =====================================================================
+     *  MASTER DAFTAR USER
+     *
+     *  Fitur ini mengikuti sistem sumber atur_user pada sistem lama.
+     *  - Daftar user dengan pencarian, sorting, pagination (DataTables server-side).
+     *  - Tambah user dengan role, wewenang data, dan relasi ke Pegawai.
+     *  - Edit user (username, role, wewenang, relasi pegawai).
+     *  - Reset password user.
+     *  - Hapus satu / banyak (bulk delete) user.
+     * ===================================================================== */
+
+    /**
+     * Halaman index Master Daftar User.
+     */
+    public function userIndex(Request $request)
+    {
+        $roles = User::roles();
+
+        $query = User::query()->with(['pegawai', 'wewenang', 'satgas', 'kabupaten']);
+
+        // Filter pencarian sederhana (opsional, juga difilter oleh DataTables server-side)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%")
+                    ->orWhereHas('pegawai', function ($qq) use ($search) {
+                        $qq->where('nama_pegawai', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $data = $query->orderBy('id', 'desc')->paginate(10);
+        $data->appends($request->all());
+
+        return view('master.user.index', compact('data', 'roles'));
+    }
+
+    /**
+     * Endpoint JSON untuk DataTables server-side (AJAX grid) Daftar User.
+     */
+    public function userGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $sortColumnIndex = $request->input('order.0.column', 0);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        $columns = [
+            'id',
+            'username',
+            'name',
+            'role',
+            'id_pegawai',
+            'wewenang_data',
+            'id_satgas',
+            'kode_kabupaten',
+        ];
+        $sortColumnName = $columns[$sortColumnIndex] ?? 'id';
+
+        $query = User::query()->with(['pegawai', 'wewenang', 'satgas', 'kabupaten']);
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('role', 'like', "%{$search}%")
+                    ->orWhereHas('pegawai', function ($qq) use ($search) {
+                        $qq->where('nama_pegawai', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $totalRecords = User::count();
+        $filteredRecords = $query->count();
+
+        $data = $query->orderBy($sortColumnName, $sortDir)
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        $roles = User::roles();
+
+        $formattedData = [];
+        foreach ($data as $row) {
+            $formattedData[] = [
+                'id'             => $row->id,
+                'username'       => $row->username,
+                'name'           => $row->name,
+                'email'          => $row->email,
+                'role'           => $row->role,
+                'role_label'     => $roles[$row->role] ?? $row->role,
+                'id_pegawai'     => $row->id_pegawai,
+                'nip'            => $row->pegawai ? $row->pegawai->nip : '-',
+                'nama_pegawai'   => $row->pegawai ? $row->pegawai->nama_pegawai : '-',
+                'wewenang_data'  => $row->wewenang_data,
+                'nama_komoditas' => $row->wewenang ? $row->wewenang->nama_komoditas : '-',
+                'id_satgas'      => $row->id_satgas,
+                'nama_satgas'    => $row->satgas ? $row->satgas->nama_satgas : '-',
+                'kode_kabupaten' => $row->kode_kabupaten,
+                'nama_kabupaten' => $row->kabupaten ? $row->kabupaten->nama_kabupaten : '-',
+            ];
+        }
+
+        return response()->json([
+            'draw'            => intval($draw),
+            'recordsTotal'    => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data'            => $formattedData,
+        ]);
+    }
+
+    /**
+     * Form tambah Master Daftar User.
+     */
+    public function userCreate()
+    {
+        $roles      = User::roles();
+        $pegawai    = Pegawai::orderBy('nama_pegawai')->get();
+        $komoditas  = Komoditas::orderBy('kode_komoditas')->get();
+        $satgasList = Satgas::orderBy('id_satgas')->get();
+        $kabupaten  = Kabupaten::orderBy('kode_kabupaten')->get();
+
+        return view('master.user.create', compact('roles', 'pegawai', 'komoditas', 'satgasList', 'kabupaten'));
+    }
+
+    /**
+     * Simpan data User baru.
+     */
+    public function userStore(Request $request)
+    {
+        $roleKeys = array_keys(User::roles());
+
+        $request->validate([
+            'username'       => 'required|string|max:255|unique:users,username',
+            'password'       => 'required|string|min:6|confirmed',
+            'name'           => 'required|string|max:255',
+            'email'          => 'nullable|email|max:255|unique:users,email',
+            'role'           => 'required|in:' . implode(',', $roleKeys),
+            'wewenang_data'  => 'nullable|in:1,2,3,4,5',
+            'id_pegawai'     => 'nullable|exists:pegawai,id',
+            'id_satgas'      => 'nullable|string|max:255',
+            'kode_kabupaten' => 'nullable|string|max:255',
+            'id_komoditas'   => 'nullable|exists:komoditas,id',
+        ], [
+            'username.required'        => 'Username wajib diisi.',
+            'username.unique'          => 'Username sudah terdaftar.',
+            'password.required'        => 'Password wajib diisi.',
+            'password.min'             => 'Password minimal 6 karakter.',
+            'password.confirmed'       => 'Konfirmasi password tidak cocok.',
+            'name.required'            => 'Nama wajib diisi.',
+            'email.email'              => 'Format email tidak valid.',
+            'email.unique'             => 'Email sudah terdaftar.',
+            'role.required'            => 'Role wajib dipilih.',
+            'role.in'                  => 'Role tidak valid.',
+        ]);
+
+        User::create([
+            'username'       => $request->username,
+            'password'       => $request->password,
+            'name'           => $request->name,
+            'email'          => $request->email,
+            'role'           => $request->role,
+            'wewenang_data'  => $request->wewenang_data ?: null,
+            'id_pegawai'     => $request->id_pegawai ?: null,
+            'id_satgas'      => $request->id_satgas ?: null,
+            'kode_kabupaten' => $request->kode_kabupaten ?: null,
+            'id_komoditas'   => $request->id_komoditas ?: null,
+        ]);
+
+        return redirect()->route('master.user.index')
+            ->with('success', 'Data User berhasil ditambahkan.');
+    }
+
+    /**
+     * Form edit Master Daftar User.
+     */
+    public function userEdit($id)
+    {
+        $user       = User::findOrFail($id);
+        $roles      = User::roles();
+        $pegawai    = Pegawai::orderBy('nama_pegawai')->get();
+        $komoditas  = Komoditas::orderBy('kode_komoditas')->get();
+        $satgasList = Satgas::orderBy('id_satgas')->get();
+        $kabupaten  = Kabupaten::orderBy('kode_kabupaten')->get();
+
+        return view('master.user.edit', compact('user', 'roles', 'pegawai', 'komoditas', 'satgasList', 'kabupaten'));
+    }
+
+    /**
+     * Update data User.
+     */
+    public function userUpdate(Request $request, $id)
+    {
+        $user       = User::findOrFail($id);
+        $roleKeys   = array_keys(User::roles());
+
+        $request->validate([
+            'username'       => 'required|string|max:255|unique:users,username,' . $id,
+            'password'       => 'nullable|string|min:6|confirmed',
+            'name'           => 'required|string|max:255',
+            'email'          => 'nullable|email|max:255|unique:users,email,' . $id,
+            'role'           => 'required|in:' . implode(',', $roleKeys),
+            'wewenang_data'  => 'nullable|in:1,2,3,4,5',
+            'id_pegawai'     => 'nullable|exists:pegawai,id',
+            'id_satgas'      => 'nullable|string|max:255',
+            'kode_kabupaten' => 'nullable|string|max:255',
+            'id_komoditas'   => 'nullable|exists:komoditas,id',
+        ], [
+            'username.required'  => 'Username wajib diisi.',
+            'username.unique'    => 'Username sudah terdaftar.',
+            'password.min'       => 'Password minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'name.required'      => 'Nama wajib diisi.',
+            'email.email'        => 'Format email tidak valid.',
+            'email.unique'       => 'Email sudah terdaftar.',
+            'role.required'      => 'Role wajib dipilih.',
+            'role.in'            => 'Role tidak valid.',
+        ]);
+
+        $data = [
+            'username'       => $request->username,
+            'name'           => $request->name,
+            'email'          => $request->email,
+            'role'           => $request->role,
+            'wewenang_data'  => $request->wewenang_data ?: null,
+            'id_pegawai'     => $request->id_pegawai ?: null,
+            'id_satgas'      => $request->id_satgas ?: null,
+            'kode_kabupaten' => $request->kode_kabupaten ?: null,
+            'id_komoditas'   => $request->id_komoditas ?: null,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = $request->password;
+        }
+
+        $user->update($data);
+
+        return redirect()->route('master.user.index')
+            ->with('success', 'Data User berhasil diperbarui.');
+    }
+
+    /**
+     * Reset password user.
+     */
+    public function userResetPassword(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'password.required'  => 'Password baru wajib diisi.',
+            'password.min'       => 'Password minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ]);
+
+        $user->update([
+            'password' => $request->password,
+        ]);
+
+        return redirect()->route('master.user.index')
+            ->with('success', 'Password user berhasil direset.');
+    }
+
+    /**
+     * Hapus banyak data User (bulk delete dari checkbox).
+     */
+    public function userDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
+        }
+
+        $ids = array_filter(array_map('intval', $ids));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = User::whereIn('id', $ids)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => $deleted . ' data User berhasil dihapus.',
+            'deleted' => $deleted,
+        ]);
+    }
+
+    /**
+     * Hapus satu data User.
+     */
+    public function userDelete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('master.user.index')
+            ->with('success', 'Data User berhasil dihapus.');
     }
 }

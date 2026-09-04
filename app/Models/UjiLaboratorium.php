@@ -18,6 +18,7 @@ class UjiLaboratorium extends Model
         'jenis_tanaman',
         'varietas',
         'kelas_benih',
+        'warna_label',
         'no_lot',
         'tgl_panen_awal',
         'tgl_panen_akhir',
