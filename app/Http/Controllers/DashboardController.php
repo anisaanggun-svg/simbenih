@@ -11,6 +11,8 @@ use App\Models\GrupKelasBenih;
 use App\Models\KelasBenih;
 use App\Models\Penyakit;
 use App\Models\UjiLaboratorium;
+use App\Models\Pegawai;
+use App\Models\Satgas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -144,5 +146,18 @@ class DashboardController extends Controller
             'months' => $months,
             'values' => $values,
         ];
+    }
+
+    public function userInfo(Request $request)
+    {
+        $user = null;
+        $tahun = (int) Carbon::now()->format('Y');
+
+        if (function_exists('auth') && auth()->check()) {
+            $u = auth()->user();
+            $user = User::with(['pegawai', 'satgas', 'kabupaten', 'wewenang'])->find($u->id);
+        }
+
+        return view('admin.user_info', compact('user', 'tahun'));
     }
 }

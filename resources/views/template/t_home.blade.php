@@ -126,7 +126,7 @@
                             <a href="https://wa.me/6285234400071?text=Hai Admin BPSB Saya ingin bertanya....." target="_blank" class="dropdown-item">
                                 <i class="fas fa-phone mr-1"></i> Hubungi Admin
                             </a>
-                            <a onclick="logout()" class="dropdown-item">
+                            <a onclick="showLogoutConfirm()" class="dropdown-item">
                                 <i class="fas fa-sign-out-alt mr-1"></i> Logout
                             </a>
                         </div>
@@ -216,10 +216,41 @@
         }('@yield("title")' + " | Badan Sertifikasi Benih Tanaman Pangan Hortikultura (BPSBTPH) Provinsi Jawa Timur | "));
     </script>
     <script src="{{  url('') }}/assets/js/helper.js"></script>
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutConfirmModalLabel">Konfirmasi Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin keluar dari aplikasi?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function showLogoutConfirm() {
+            $('#logoutConfirmModal').modal('show');
+        }
+
+        function confirmLogout() {
+            $('#logoutConfirmModal').modal('hide');
+            localStorage.clear();
+            window.location = b_url;
+        }
+
         function logout() {
-            localStorage.clear()
-            window.location = b_url
+            localStorage.clear();
+            window.location = b_url;
         }
         (function() {
             cekAuth();

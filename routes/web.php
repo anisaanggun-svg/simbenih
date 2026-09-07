@@ -20,6 +20,7 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::get('/admin', [DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/user-info', [DashboardController::class, 'userInfo'])->name('admin.user-info');
 
 // Sertifikasi Routes
 Route::prefix('admin/sertifikasi')->name('sertifikasi.')->group(function () {
@@ -107,6 +108,23 @@ Route::prefix('admin/lab')->name('lab.')->group(function () {
     Route::get('/log/download-excel', [LabController::class, 'logDownloadExcel'])->name('log.download_excel');
     Route::post('/log/export-excel', [LabController::class, 'logExportExcel'])->name('log.export_excel');
     Route::post('/log/delete', [LabController::class, 'logDestroy'])->name('log.delete');
+});
+
+// Manajemen Aplikasi Routes
+Route::prefix('admin/app')->name('app.')->group(function () {
+    // Serti Log Routes
+    Route::get('/serti-log', [LabController::class, 'sertiLogIndex'])->name('serti_log.index');
+    Route::get('/serti-log/grid', [LabController::class, 'sertiLogGrid'])->name('serti_log.grid');
+    Route::get('/serti-log/download-excel', [LabController::class, 'sertiLogDownloadExcel'])->name('serti_log.download_excel');
+    Route::post('/serti-log/export-excel', [LabController::class, 'sertiLogExportExcel'])->name('serti_log.export_excel');
+    Route::post('/serti-log/delete', [LabController::class, 'sertiLogDestroy'])->name('serti_log.delete');
+
+    // Laboratorium Log Routes (alias to existing lab log)
+    Route::get('/lab-log', [LabController::class, 'logIndex'])->name('lab_log.index');
+    Route::get('/lab-log/grid', [LabController::class, 'logGrid'])->name('lab_log.grid');
+    Route::get('/lab-log/download-excel', [LabController::class, 'logDownloadExcel'])->name('lab_log.download_excel');
+    Route::post('/lab-log/export-excel', [LabController::class, 'logExportExcel'])->name('lab_log.export_excel');
+    Route::post('/lab-log/delete', [LabController::class, 'logDestroy'])->name('lab_log.delete');
 });
 
 // Master Data Routes

@@ -1,14 +1,14 @@
 @extends("template.t_admin")
 
-@section("title", "Laboratorium Log - Manajemen Aplikasi")
+@section("title", "Serti Log - Manajemen Aplikasi")
 
 @push("header")
 <!-- DataTables -->
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <style>
-    #logTable th { white-space: nowrap; }
-    #logTable td { vertical-align: middle; padding: 8px 10px; }
+    #sertiLogTable th { white-space: nowrap; }
+    #sertiLogTable td { vertical-align: middle; padding: 8px 10px; }
     .filter-form {
         background-color: #f8f9fa;
         padding: 0.5rem 0.75rem;
@@ -47,9 +47,9 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Laboratorium > Laboratorium Log</h3>
+                <h3 class="card-title">Manajemen Aplikasi > Serti Log</h3>
                 <div class="card-tools">
-                    <a href="{{ route('lab.log.download_excel') }}" class="btn btn-success btn-sm">
+                    <a href="{{ route('app.serti_log.download_excel') }}" class="btn btn-success btn-sm">
                         <i class="fas fa-file-excel"></i> Excel
                     </a>
                     <button type="button" class="btn btn-danger btn-sm ml-1" onclick="hapusData()">
@@ -59,14 +59,14 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
-                        <input type="text" id="customSearch" class="form-control" placeholder="kata kunci pencarian" aria-controls="logTable">
+                        <input type="text" id="customSearch" class="form-control" placeholder="kata kunci pencarian" aria-controls="sertiLogTable">
                     </div>
                 </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <!-- Filter Form -->
-                <form action="{{ route('lab.log.index') }}" method="GET" class="filter-form form-inline">
+                <form action="{{ route('app.serti_log.index') }}" method="GET" class="filter-form form-inline">
                     <div class="form-group mr-3">
                         <label for="tgl_awal" class="mr-2 font-weight-bold">Tgl Awal :</label>
                         <input type="date" name="tgl_awal" id="tgl_awal" class="form-control form-control-sm" value="{{ request('tgl_awal') }}">
@@ -82,7 +82,7 @@
 
                 <!-- Table -->
                 <div class="table-responsive">
-                    <table id="logTable" class="table table-bordered table-striped table-hover">
+                    <table id="sertiLogTable" class="table table-bordered table-striped table-hover">
                         <thead class="thead-light">
                             <tr>
                                 <th width="40" class="text-center" data-priority="1">
@@ -117,11 +117,11 @@
 <script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 <script>
     $(function () {
-        var table = $('#logTable').DataTable({
+        var table = $('#sertiLogTable').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": "{{ route('lab.log.grid') }}",
+                "url": "{{ route('app.serti_log.grid') }}",
                 "type": "GET",
                 "data": function (d) {
                     d.tgl_awal = $('#tgl_awal').val();
@@ -171,14 +171,14 @@
 
         // Sync the "check all" checkbox state (checked / indeterminate / unchecked)
         function syncCheckAllState() {
-            var total = $('#logTable tbody .checkItem').length;
-            var checked = $('#logTable tbody .checkItem:checked').length;
+            var total = $('#sertiLogTable tbody .checkItem').length;
+            var checked = $('#sertiLogTable tbody .checkItem:checked').length;
             $('#checkAll').prop('checked', total > 0 && total === checked);
             $('#checkAll').prop('indeterminate', checked > 0 && checked < total);
         }
 
         // Individual checkbox change
-        $('#logTable tbody').on('change', '.checkItem', function () {
+        $('#sertiLogTable tbody').on('change', '.checkItem', function () {
             var id = $(this).val();
             if (this.checked) {
                 selectedIds.add(id);
@@ -202,13 +202,13 @@
                 selectedIds.clear();
             }
             // Apply visual state to currently rendered rows
-            $('#logTable tbody .checkItem').prop('checked', isChecked);
+            $('#sertiLogTable tbody .checkItem').prop('checked', isChecked);
             syncCheckAllState();
         });
 
         // Re-apply selection state after DataTables redraw (search, pagination, sort, etc.)
         table.on('draw', function () {
-            $('#logTable tbody .checkItem').each(function () {
+            $('#sertiLogTable tbody .checkItem').each(function () {
                 var id = $(this).val();
                 $(this).prop('checked', selectedIds.has(id));
             });
@@ -238,7 +238,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "{{ route('lab.log.delete') }}",
+            url: "{{ route('app.serti_log.delete') }}",
             data: { items: itemlist, _token: "{{ csrf_token() }}" },
             dataType: 'json',
             success: function (response) {

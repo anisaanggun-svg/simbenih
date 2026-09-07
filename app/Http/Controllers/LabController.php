@@ -530,4 +530,165 @@ class LabController extends Controller
             'message' => 'Log berhasil dihapus.'
         ]);
     }
+
+    /**
+     * Display the Serti Log page.
+     */
+    public function sertiLogIndex(Request $request)
+    {
+        $query = LogLaboratorium::query();
+
+        // Filter by date range if provided
+        if ($request->filled('tgl_awal') && $request->filled('tgl_akhir')) {
+            $query->whereBetween('logdate', [$request->tgl_awal . ' 00:00:00', $request->tgl_akhir . ' 23:59:59']);
+        }
+
+        // Filter by search keyword
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('log', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        $data = $query->orderBy('logdate', 'desc')->paginate(20);
+        $data->appends($request->all());
+
+        return view('app.serti_log.index', compact('data'));
+    }
+
+    /**
+     * Return JSON data for DataTables AJAX (Serti Log).
+     */
+    public function sertiLogGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 20);
+        $search = $request->input('search.value', '');
+        $sortColumn = $request->input('order.0.column', 0);
+        $sortDir = $request->input('order.0.dir', 'desc');
+
+        // Map column index to database column
+        $columns = ['id', 'nama', 'log', 'logdate', 'username'];
+        $sortColumnName = $columns[$sortColumn] ?? 'logdate';
+
+        $query = LogLaboratorium::query();
+
+        // Apply search filter
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('log', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply date range filter
+        if ($request->filled('tgl_awal') && $request->filled('tgl_akhir')) {
+            $query->whereBetween('logdate', [$request->tgl_awal . ' 00:00:00', $request->tgl_akhir . ' 23:59:59']);
+        }
+
+        // Get total counts
+        $totalRecords = LogLaboratorium::count();
+        $filteredRecords = $query->count();
+
+        // Apply sorting and pagination
+        $data = $query->orderBy($sortColumnName, $sortDir)
+            ->offset($start)
+            ->limit($length)
+            ->get();
+
+        // Format data for DataTables
+        $formattedData = [];
+        foreach ($data as $index => $row) {
+            $formattedData[] = [
+                'no' => $start + $index + 1,
+                'nama' => $row->nama,
+                'log' => $row->log,
+                'logdate' => $row->logdate ? \Carbon\Carbon::parse($row->logdate)->format('d-m-Y / H:i:s') : '-',
+                'username' => $row->username,
+            ];
+        }
+
+        return response()->json([
+            'draw' => intval($draw),
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $formattedData,
+        ]);
+    }
+
+    /**
+     * Show the download Excel form (Serti Log).
+     */
+    public function sertiLogDownloadExcel()
+    {
+        return view('app.serti_log.download_excel');
+    }
+
+    /**
+     * Export Serti Log data to Excel.
+     */
+    public function sertiLogExportExcel(Request $request)
+    {
+        $request->validate([
+            'tgl_awal' => 'required|date',
+            'tgl_akhir' => 'required|date',
+        ], [
+            'tgl_awal.required' => 'Tanggal awal wajib diisi.',
+            'tgl_akhir.required' => 'Tanggal akhir wajib diisi.',
+        ]);
+
+        $data = LogLaboratorium::whereBetween('logdate', [$request->tgl_awal . ' 00:00:00', $request->tgl_akhir . ' 23:59:59'])
+            ->orderBy('logdate', 'desc')
+            ->get();
+
+        // Generate CSV content
+        $filename = 'serti-log-' . $request->tgl_awal . '-' . $request->tgl_akhir . '.csv';
+        $headers = [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function () use ($data) {
+            $file = fopen('php://output', 'w');
+            // Add BOM for UTF-8
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            // Header row
+            fputcsv($file, ['No', 'Nama Pengguna', 'Aksi', 'Tanggal', 'Username']);
+
+            foreach ($data as $index => $row) {
+                fputcsv($file, [
+                    $index + 1,
+                    $row->nama,
+                    $row->log,
+                    $row->logdate ? \Carbon\Carbon::parse($row->logdate)->format('d-m-Y / H:i:s') : '-',
+                    $row->username,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Delete selected Serti Log entries.
+     */
+    public function sertiLogDestroy(Request $request)
+    {
+        $ids = $request->input('items', []);
+        if (!empty($ids)) {
+            LogLaboratorium::whereIn('id', $ids)->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Log berhasil dihapus.'
+        ]);
+    }
 }

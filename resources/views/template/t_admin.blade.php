@@ -115,33 +115,38 @@
             padding-top: 10px;
             padding-bottom: 10px;
             line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .main-sidebar .brand-link .row {
             display: flex;
             align-items: center;
             width: 100%;
+            margin: 0;
         }
         .main-sidebar .brand-link .row > [class*="col-"] {
             display: flex;
             align-items: center;
+            padding: 0;
         }
         .main-sidebar .brand-image {
-            max-height: 56px !important;
+            max-height: 48px !important;
             width: auto !important;
             height: auto !important;
             float: none !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             transform: none !important;
             position: static !important;
             top: auto !important;
         }
         .main-sidebar .brand-text {
-            font-size: 1rem !important;
-            letter-spacing: 0.4px !important;
-            line-height: 1.2 !important;
+            font-size: 0.95rem !important;
+            letter-spacing: 0.3px !important;
+            line-height: 1.25 !important;
             display: flex;
             align-items: center;
-            padding-left: 10px;
+            padding-left: 0;
         }
     </style>
 </head>
@@ -184,16 +189,10 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{  url('admin') }}" class="brand-link">
-                <div class="row">
-                    <div class="col-3">
-                        <img src="{{  asset('assets/img/icon.png') }}" alt="BPSB" class="brand-image" style="-webkit-filter: drop-shadow(0px 0px 5px #feffd9);filter: drop-shadow(0px 0px 5px #aaaaaa);">
-                    </div>
-                    <div class="col-9">
-                        <span class="brand-text" style="font-family: 'Poppins', sans-serif; font-weight: 600; letter-spacing: 0.3px;">
-                            SISTEM INFORMASI<br>PERBENIHAN
-                        </span>
-                    </div>
-                </div>
+                <img src="{{  asset('assets/img/icon.png') }}" alt="BPSB" class="brand-image" style="-webkit-filter: drop-shadow(0px 0px 5px #feffd9);filter: drop-shadow(0px 0px 5px #aaaaaa);">
+                <span class="brand-text" style="font-family: 'Poppins', sans-serif; font-weight: 600; letter-spacing: 0.3px;">
+                    SISTEM INFORMASI<br>PERBENIHAN
+                </span>
             </a>
 
             <!-- Sidebar -->
@@ -446,7 +445,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a onclick="logout()" class="nav-link">
+                                    <a onclick="showLogoutConfirm()" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Logout</p>
                                     </a>
@@ -665,7 +664,38 @@
             }, 100);
         }(completeTitle));
     </script>
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutConfirmModal" tabindex="-1" role="dialog" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutConfirmModalLabel">Konfirmasi Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin keluar dari aplikasi?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function showLogoutConfirm() {
+            $('#logoutConfirmModal').modal('show');
+        }
+
+        function confirmLogout() {
+            $('#logoutConfirmModal').modal('hide');
+            localStorage.clear();
+            window.location.href = "{{url('')}}/login";
+        }
+
         function logout() {
             localStorage.clear();
             window.location.href = "{{url('')}}/login";
