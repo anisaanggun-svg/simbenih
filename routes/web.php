@@ -89,12 +89,14 @@ Route::prefix('admin/sertifikasi')->name('sertifikasi.')->group(function () {
 // Laboratorium Routes
 Route::prefix('admin/lab')->name('lab.')->group(function () {
     Route::get('/uji', [LabController::class, 'index'])->name('uji_laboratorium.index');
+    Route::get('/uji/grid', [LabController::class, 'ujiGrid'])->name('uji_laboratorium.grid');
     Route::get('/uji/tambah', [LabController::class, 'create'])->name('uji_laboratorium.create');
     Route::get('/uji/lihat/{id}/{a}/{b}/{mode}', [LabController::class, 'show'])->name('uji_laboratorium.show');
     Route::get('/uji/edit/{id}', [LabController::class, 'edit'])->name('uji_laboratorium.edit');
     Route::post('/uji/store', [LabController::class, 'store'])->name('uji_laboratorium.store');
     Route::post('/uji/update/{id}', [LabController::class, 'update'])->name('uji_laboratorium.update');
     Route::post('/uji/delete', [LabController::class, 'destroy'])->name('uji_laboratorium.delete');
+    Route::get('/uji/delete/{id}', [LabController::class, 'destroySingle'])->name('uji_laboratorium.delete.single');
     Route::get('/uji/cetak/{id}', [LabController::class, 'cetak'])->name('uji_laboratorium.cetak');
     Route::get('/buku-induk', [LabController::class, 'bukuInduk'])->name('buku_induk');
     Route::post('/buku-induk', [LabController::class, 'bukuIndukDownload'])->name('buku_induk.download');

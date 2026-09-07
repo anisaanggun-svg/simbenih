@@ -16,15 +16,107 @@ class LabController extends Controller
      */
     public function index(Request $request)
     {
+        $tahun = $request->input('tahun', '');
+
+        return view('lab.uji_laboratorium.index', compact('tahun'));
+    }
+
+    /**
+     * JSON data untuk DataTables server-side (AJAX grid).
+     * Mengikuti pola pengujian laboratorium.
+     */
+    public function ujiGrid(Request $request)
+    {
+        $draw = $request->input('draw', 1);
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search.value', '');
+        $searchField = $request->input('search_field', '');
+        $sortColumn = $request->input('order.0.column', 1);
+        $sortDir = $request->input('order.0.dir', 'asc');
+
+        // Map column index ke kolom database
+        $columns = [
+            0 => 'id',
+            1 => 'id',
+            2 => 'jenis_tanaman',
+            3 => 'no_asal',
+            4 => 'no_lab',
+            5 => 'no_lot',
+            6 => 'nama_produsen',
+            7 => 'varietas',
+            8 => 'kelas_benih',
+            9 => 'tgl_selesai_pengujian',
+            10 => 'kesimpulan',
+            11 => 'id',
+        ];
+        $sortColumnName = $columns[$sortColumn] ?? 'id';
+
         $query = UjiLaboratorium::query();
 
+        // Filter tahun
         if ($request->filled('tahun')) {
-            $query->whereYear('tgl_lhu', $request->tahun);
+            $tahun = $request->tahun;
+            $query->where(function ($q) use ($tahun) {
+                $q->whereYear('tgl_lhu', $tahun)
+                  ->orWhereYear('tgl_selesai_pengujian', $tahun);
+            });
         }
 
-        $data = $query->orderBy('id')->get();
+        // Pencocokan pencarian
+        if (!empty($search)) {
+            if (!empty($searchField) && in_array($searchField, ['jenis_tanaman', 'no_asal', 'no_lab', 'no_lot', 'nama_produsen', 'varietas', 'kelas_benih', 'no_induk_lapangan', 'no_berkas'])) {
+                $query->where($searchField, 'like', "%{$search}%");
+            } else {
+                $query->where(function ($q) use ($search) {
+                    $q->where('no_induk_lapangan', 'like', "%{$search}%")
+                        ->orWhere('no_berkas', 'like', "%{$search}%")
+                        ->orWhere('nama_produsen', 'like', "%{$search}%")
+                        ->orWhere('jenis_tanaman', 'like', "%{$search}%")
+                        ->orWhere('varietas', 'like', "%{$search}%")
+                        ->orWhere('kelas_benih', 'like', "%{$search}%")
+                        ->orWhere('no_lot', 'like', "%{$search}%")
+                        ->orWhere('no_asal', 'like', "%{$search}%")
+                        ->orWhere('no_lab', 'like', "%{$search}%");
+                });
+            }
+        }
 
-        return view('lab.uji_laboratorium.index', compact('data'));
+        $totalRecords = UjiLaboratorium::count();
+        $filteredRecords = $query->count();
+
+        $records = $query->orderBy($sortColumnName, $sortDir)
+            ->skip($start)
+            ->take($length)
+            ->get();
+
+        $data = [];
+        foreach ($records as $row) {
+            $data[] = [
+                'id' => $row->id,
+                'no_induk_lapangan' => $row->no_induk_lapangan ?? '-',
+                'no_berkas' => $row->no_berkas ?? '-',
+                'nama_produsen' => $row->nama_produsen ?? '-',
+                'jenis_tanaman' => $row->jenis_tanaman ?? '-',
+                'varietas' => $row->varietas ?? '-',
+                'kelas_benih' => $row->kelas_benih ?? '-',
+                'no_lot' => $row->no_lot ?? '-',
+                'no_asal' => $row->no_asal ?? '-',
+                'no_lab' => $row->no_lab ?? '-',
+                'tgl_selesai_pengujian' => $row->tgl_selesai_pengujian ? \Carbon\Carbon::parse($row->tgl_selesai_pengujian)->format('d-m-Y') : ($row->tgl_lhu ? \Carbon\Carbon::parse($row->tgl_lhu)->format('d-m-Y') : '-'),
+                'tgl_lhu' => $row->tgl_lhu ? \Carbon\Carbon::parse($row->tgl_lhu)->format('d-m-Y') : '-',
+                'kesimpulan' => $row->kesimpulan,
+                'kesimpulan_label' => $row->kesimpulan_label,
+                'kesimpulan_badge' => $row->kesimpulan_badge,
+            ];
+        }
+
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -170,19 +262,49 @@ class LabController extends Controller
     }
 
     /**
-     * Delete LHU record.
+     * Delete selected LHU records (bulk delete).
      */
     public function destroy(Request $request)
     {
         $ids = $request->input('items', []);
-        if (!empty($ids)) {
-            UjiLaboratorium::whereIn('id', $ids)->delete();
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak ada data yang dipilih untuk dihapus.',
+            ], 422);
         }
+
+        // Pastikan semua ID adalah numeric untuk mencegah injection
+        $ids = array_filter($ids, fn ($v) => is_numeric($v));
+
+        if (empty($ids)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID data tidak valid.',
+            ], 422);
+        }
+
+        $deleted = UjiLaboratorium::whereIn('id', $ids)->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Data LHU berhasil dihapus.'
+            'message' => $deleted . ' data LHU berhasil dihapus.',
+            'deleted' => $deleted,
         ]);
+    }
+
+    /**
+     * Delete single LHU record (redirect with success message).
+     * Mengikuti pola atur_mata_anggaran delete single.
+     */
+    public function destroySingle($id)
+    {
+        $lhu = UjiLaboratorium::findOrFail($id);
+        $lhu->delete();
+
+        return redirect()->route('lab.uji_laboratorium.index')
+            ->with('success', 'Data LHU berhasil dihapus.');
     }
 
     /**

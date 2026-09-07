@@ -48,4 +48,28 @@ class UjiLaboratorium extends Model
         'tgl_lhu' => 'date',
         'tgl_kadaluarsa' => 'date',
     ];
+
+    /**
+     * Mendapatkan label kesimpulan (Memenuhi Syarat / Tidak Memenuhi Syarat / Belum Ditentukan).
+     */
+    public function getKesimpulanLabelAttribute(): string
+    {
+        return match ($this->kesimpulan) {
+            '1' => 'Memenuhi Syarat',
+            '0' => 'Tidak Memenuhi Syarat',
+            default => 'Belum Ditentukan',
+        };
+    }
+
+    /**
+     * Mendapatkan kelas badge untuk kesimpulan (warna AdminLTE).
+     */
+    public function getKesimpulanBadgeAttribute(): string
+    {
+        return match ($this->kesimpulan) {
+            '1' => 'badge-success',
+            '0' => 'badge-danger',
+            default => 'badge-warning',
+        };
+    }
 }
