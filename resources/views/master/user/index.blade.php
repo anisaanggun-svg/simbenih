@@ -113,7 +113,7 @@
 
 <!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="modalKonfirmasiHapus" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiHapusLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="modalKonfirmasiHapusLabel">
@@ -144,7 +144,7 @@
 
 <!-- Modal Reset Password -->
 <div class="modal fade" id="modalResetPassword" tabindex="-1" role="dialog" aria-labelledby="modalResetPasswordLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning">
                 <h5 class="modal-title" id="modalResetPasswordLabel">

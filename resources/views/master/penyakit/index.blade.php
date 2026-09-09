@@ -129,6 +129,34 @@
     <!-- /.col -->
 </div>
 <!-- /.row -->
+
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="modalKonfirmasiHapus" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiHapusLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalKonfirmasiHapusLabel">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> Konfirmasi Hapus Data
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus <strong id="hapusCount" class="text-danger">0</strong> data yang dipilih?</p>
+                <p class="text-muted small mb-0"><i class="fas fa-info-circle mr-1"></i> Tindakan ini tidak dapat dibatalkan.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-1"></i> Batal
+                </button>
+                <button type="button" class="btn btn-danger" id="btnConfirmHapus">
+                    <i class="fas fa-trash mr-1"></i> Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push("footer")
@@ -289,6 +317,35 @@
         window.clearSelectedIds = function () {
             selectedIds.clear();
         };
+
+        // Konfirmasi hapus via modal
+        $('#btnConfirmHapus').on('click', function () {
+            $('#modalKonfirmasiHapus').modal('hide');
+            var itemlist = (typeof window.getSelectedIds === 'function') ? window.getSelectedIds() : [];
+            if (itemlist.length === 0) return;
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('master.penyakit.delete') }}",
+                data: { items: itemlist, _token: "{{ csrf_token() }}" },
+                dataType: 'json',
+                success: function (response) {
+                    alert((response && response.message) ? response.message : 'Data berhasil dihapus.');
+                    if (typeof window.clearSelectedIds === 'function') {
+                        window.clearSelectedIds();
+                    }
+                    location.reload();
+                },
+                error: function (xhr) {
+                    var msg = 'Gagal menghapus data.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    } else if (xhr.status === 419) {
+                        msg = 'Sesi kadaluarsa, silakan muat ulang halaman.';
+                    }
+                    alert('Terjadi kesalahan: ' + msg);
+                }
+            });
+        });
     });
 
     function hapusData() {
@@ -299,32 +356,8 @@
             return;
         }
 
-        if (!confirm('Apakah Anda yakin ingin menghapus ' + itemlist.length + ' data yang dipilih?')) {
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: "{{ route('master.penyakit.delete') }}",
-            data: { items: itemlist, _token: "{{ csrf_token() }}" },
-            dataType: 'json',
-            success: function (response) {
-                alert((response && response.message) ? response.message : 'Data berhasil dihapus.');
-                if (typeof window.clearSelectedIds === 'function') {
-                    window.clearSelectedIds();
-                }
-                location.reload();
-            },
-            error: function (xhr) {
-                var msg = 'Gagal menghapus data.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    msg = xhr.responseJSON.message;
-                } else if (xhr.status === 419) {
-                    msg = 'Sesi kadaluarsa, silakan muat ulang halaman.';
-                }
-                alert('Terjadi kesalahan: ' + msg);
-            }
-        });
+        $('#hapusCount').text(itemlist.length);
+        $('#modalKonfirmasiHapus').modal('show');
     }
 </script>
 @endpush

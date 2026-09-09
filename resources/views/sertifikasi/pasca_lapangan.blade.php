@@ -204,6 +204,34 @@
     <!-- /.col -->
 </div>
 <!-- /.row -->
+
+                <!-- Modal Konfirmasi Hapus -->
+                <div class="modal fade" id="modalKonfirmasiHapus" tabindex="-1" role="dialog" aria-labelledby="modalKonfirmasiHapusLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="modalKonfirmasiHapusLabel">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i> Konfirmasi Hapus Data
+                                </h5>
+                                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah Anda yakin ingin menghapus <strong id="hapusCount" class="text-danger">0</strong> data yang dipilih?</p>
+                                <p class="text-muted small mb-0"><i class="fas fa-info-circle mr-1"></i> Tindakan ini tidak dapat dibatalkan.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <i class="fas fa-times mr-1"></i> Batal
+                                </button>
+                                <button type="button" class="btn btn-danger" id="btnConfirmHapus">
+                                    <i class="fas fa-trash mr-1"></i> Ya, Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 @endsection
 
 @push("footer")
@@ -213,7 +241,8 @@
 
 <script>
 $(function() {
-    $("#pascaTable").DataTable({
+    // Initialize DataTable first
+    var table = $("#pascaTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         "pageLength": 10,
@@ -234,11 +263,10 @@ $(function() {
         $(".row-check").prop("checked", this.checked);
     });
 
-    // Custom search box
+    // Custom search box - kata kunci pencarian
     $('#searchBox').on('keyup', function() {
         table.search(this.value).draw();
     });
-    var table = $('#pascaTable').DataTable();
 });
 
 function hapusData() {
@@ -247,11 +275,19 @@ function hapusData() {
         alert("Pilih data yang akan dihapus!");
         return false;
     }
-    if (confirm("Anda yakin ingin menghapus " + selected.length + " buah data?")) {
+    // Show confirmation modal
+    $('#hapusCount').text(selected.length);
+    $('#modalKonfirmasiHapus').modal('show');
+    
+    // Handle confirm button click
+    $('#btnConfirmHapus').off('click').on('click', function() {
         var itemlist = selected.map(function() { return this.value; }).get().join(",");
-        // AJAX delete here
-        alert("Data terpilih: " + itemlist);
-    }
+        $.post("{{ url('') }}/admin/sertifikasi/pasca_lapangan/hapus", {_token:"{{ csrf_token() }}", items: itemlist}, function(d){
+            $('#modalKonfirmasiHapus').modal('hide');
+            alert(d.message || 'Berhasil');
+            location.reload();
+        });
+    });
 }
 
 function printData() {
