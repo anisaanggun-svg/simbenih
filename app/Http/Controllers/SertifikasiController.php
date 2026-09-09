@@ -68,10 +68,11 @@ class SertifikasiController extends Controller
     /**
      * Show form to add new data.
      */
-    public function tambah()
+    public function tambah(Request $request)
     {
+        $tipeForm = $request->get('tipe', '1');
         // TODO: Return view for add form
-        return view('sertifikasi.form_pengajuan');
+        return view('sertifikasi.form_pengajuan', compact('tipeForm'));
     }
 
     /**

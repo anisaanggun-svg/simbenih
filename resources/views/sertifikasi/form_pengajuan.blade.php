@@ -205,16 +205,17 @@
 @section("content")
 <div class="card full-width-card">
             <div class="card-header">
-                <h3 class="card-title">Pengajuan Sertifikasi (Jenis Tanaman Hibrida)</h3>
+                <h3 class="card-title">Pengajuan Sertifikasi (Jenis Tanaman {{ $tipeForm == 1 ? 'Hibrida' : ($tipeForm == 4 ? 'Umbi/Rimpang' : 'Non Hibrida') }})</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
                 @include('sertifikasi.partials.header_fase', ['active_fase' => 'pengajuan', 'id_permohonan' => $id ?? 105271])
 
 
-                <form action="{{ url('') }}/admin/sertifikasi/pengajuan/update" method="POST">
+                <form action="{{ url('') }}/admin/sertifikasi/pengajuan/update" method="POST" class="form-hibrida">
                     @csrf
                     <input type="hidden" name="id_permohonan" value="105271">
+                    <input type="hidden" name="tipe_form" value="{{ $tipeForm ?? 1 }}">
 
                     <!-- Section 1: Nomer Permohonan Sertifikasi -->
                     <div class="fieldset-tab">
@@ -265,6 +266,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if($tipeForm == 2)
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" name="pv" id="pv" value="1"> Pemurnian Varietas (PV)
+                                    </label>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -277,16 +285,20 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Nama Produsen <span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
+                                        @if($tipeForm == 2)
+                                        <input type="text" class="form-control" name="nama_produsen" id="nama_produsen" value="LIMAGRAIN AGRICON INDONESIA - PT." onchange="dapatkan_alamat()">
+                                        @else
                                         <select name="nama_produsen" id="nama_produsen" class="form-control select2" onChange="dapatkan_alamat()">
                                             <option value="0">-- Pilih Produsen --</option>
                                             <option value="2424" selected>LIMAGRAIN AGRICON INDONESIA - PT. - Surabaya - 0911</option>
                                         </select>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Alamat Produsen</label>
                                     <div class="col-sm-9">
-                                        <textarea class="form-control" name="alamat_produsen" rows="3" readonly>Desa Genteng, Kec. Genteng, Kota Surabaya</textarea>
+                                        <textarea class="form-control" name="alamat_produsen" id="alamat_produsen" rows="3" readonly>Desa Genteng, Kec. Genteng, Kota Surabaya</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -357,7 +369,9 @@
                                     <small class="form-text text-muted">Angka, contoh: 4 atau 3,4 jika desimal</small>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+
+                            <!-- Jadwal untuk Hibrida -->
+                            <div class="col-md-4 tipe-form-section" data-tipe="1">
                                 <h6 class="form-section-title">Jadwal Tebar</h6>
                                 <div class="form-group">
                                     <label>Tanggal Tebar Jantan 1 <span class="text-danger">*</span></label>
@@ -395,68 +409,108 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <h6 class="form-section-title mt-3">Jadwal Tanam</h6>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Jantan 1 <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-4" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-4" name="tgl_tanam_jantan_awal" value="14-08-2026">
+                                        <div class="input-group-append" data-target="#date-4" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mt-1">
+                                        <input type="text" class="form-control" name="lama_tgl" placeholder="Lama">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="getTanggal_jantan()">
+                                                <i class="fas fa-calculator"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Jantan 2 <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-52" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-52" name="tgl_tanam_jantan_2">
+                                        <div class="input-group-append" data-target="#date-52" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Jantan 3 <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-5" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-5" name="tgl_tanam_jantan_akhir">
+                                        <div class="input-group-append" data-target="#date-5" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Betina Awal <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-7" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-7" name="tgl_tanam_betina_awal" value="14-08-2026">
+                                        <div class="input-group-append" data-target="#date-7" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mt-1">
+                                        <input type="text" class="form-control" name="lama_tgl2" placeholder="Lama">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="getTanggal_betina()">
+                                                <i class="fas fa-calculator"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Betina Akhir <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-8" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-8" name="tgl_tanam_betina_akhir" value="14-08-2026">
+                                        <div class="input-group-append" data-target="#date-8" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Tanggal Tanam Jantan 1 <span class="text-danger">*</span></label>
-                                            <div class="input-group date" id="date-4" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#date-4" name="tgl_tanam_jantan_awal" value="14-08-2026">
-                                                <div class="input-group-append" data-target="#date-4" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                            <div class="input-group mt-1">
-                                                <input type="text" class="form-control" name="lama_tgl" placeholder="Lama">
-                                                <div class="input-group-append">
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="getTanggal_jantan()">
-                                                        <i class="fas fa-calculator"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+
+                            <!-- Jadwal untuk Non Hibrida -->
+                            <div class="col-md-4 tipe-form-section" data-tipe="2">
+                                <h6 class="form-section-title">Jadwal Tebar</h6>
+                                <div class="form-group">
+                                    <label>Tanggal Tebar <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-9" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-9" name="tgl_tebar">
+                                        <div class="input-group-append" data-target="#date-9" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Tanggal Tanam Jantan 2 <span class="text-danger">*</span></label>
-                                            <div class="input-group date" id="date-52" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#date-52" name="tgl_tanam_jantan_2">
-                                                <div class="input-group-append" data-target="#date-52" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+
+                                <h6 class="form-section-title mt-3">Jadwal Tanam</h6>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Awal <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-10" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-10" name="tgl_tanam_awal">
+                                        <div class="input-group-append" data-target="#date-10" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Tanggal Tanam Jantan 3 <span class="text-danger">*</span></label>
-                                            <div class="input-group date" id="date-5" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#date-5" name="tgl_tanam_jantan_akhir">
-                                                <div class="input-group-append" data-target="#date-5" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="input-group mt-1">
+                                        <input type="text" class="form-control" name="lama_tanam" placeholder="Lama (hari)">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary" onclick="hitungLama()">
+                                                <i class="fas fa-calculator"></i>
+                                            </button>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Tanggal Tanam Betina Awal <span class="text-danger">*</span></label>
-                                            <div class="input-group date" id="date-7" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#date-7" name="tgl_tanam_betina_awal" value="14-08-2026">
-                                                <div class="input-group-append" data-target="#date-7" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
-                                                </div>
-                                            </div>
-                                            <div class="input-group mt-1">
-                                                <input type="text" class="form-control" name="lama_tgl2" placeholder="Lama">
-                                                <div class="input-group-append">
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="getTanggal_betina()">
-                                                        <i class="fas fa-calculator"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Tanggal Tanam Betina Akhir <span class="text-danger">*</span></label>
-                                            <div class="input-group date" id="date-8" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#date-8" name="tgl_tanam_betina_akhir" value="14-08-2026">
-                                                <div class="input-group-append" data-target="#date-8" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="far fa-calendar"></i></div>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Tanam Akhir <span class="text-danger">*</span></label>
+                                    <div class="input-group date" id="date-11" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#date-11" name="tgl_tanam_akhir">
+                                        <div class="input-group-append" data-target="#date-11" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="far fa-calendar"></i></div>
                                         </div>
                                     </div>
                                 </div>
@@ -623,73 +677,92 @@
                                         </div>
                                     </div>
 
-                                    <h6 class="form-section-title mt-3">Induk Jantan</h6>
-                                    <div class="row">
+                                    @if($tipeForm == 2)
+                                    <div class="row tipe-form-section" data-tipe="2">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Asal Induk Jantan <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="asal_jantan" value="Surabaya">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Kode Induk Jantan <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="kode_jantan" value="SAP 21">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Jumlah Induk Jantan <span class="text-danger">*</span></label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="jumlah_jantan" value="1" size="10" maxlength="10">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_jantan" value="Kilogram" readonly></span>
+                                                <label>Tgl Kadaluarsa Asal Benih Sumber</label>
+                                                <div class="input-group date" id="tgl_kadaluarsa" data-target-input="nearest">
+                                                    <input type="text" class="form-control datetimepicker-input" data-target="#tgl_kadaluarsa" name="tgl_kadaluarsa_asal_benih">
+                                                    <div class="input-group-append" data-target="#tgl_kadaluarsa" data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="far fa-calendar"></i></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Kelas Benih Jantan <span class="text-danger">*</span></label>
-                                                <select name="kelas_benih_jantan" id="kelas_benih_jantan" class="form-control">
-                                                    <option value="">-- Pilih Kelas Benih --</option>
-                                                    <option value="0">---</option>
-                                                    <option value="1">NS-N</option>
-                                                    <option value="2" selected>BS-S</option>
-                                                    <option value="7">BD-D</option>
-                                                    <option value="12">BP-P</option>
-                                                    <option value="13">BP1-P1</option>
-                                                    <option value="14">BP2-P2</option>
-                                                    <option value="17">BR-R</option>
-                                                    <option value="18">BR1-R1</option>
-                                                    <option value="19">BR2-R2</option>
-                                                    <option value="20">BR3-R3</option>
-                                                    <option value="21">BR4-R4</option>
-                                                </select>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Induk Jantan untuk Hibrida -->
+                            <div class="col-md-12 tipe-form-section" data-tipe="1">
+                                <h6 class="form-section-title mt-3">Induk Jantan</h6>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Asal Induk Jantan <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="asal_jantan" value="Surabaya">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Kode Induk Jantan <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="kode_jantan" value="SAP 21">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Jumlah Induk Jantan <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="jumlah_jantan" value="1" size="10" maxlength="10">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Satuan: <input type="text" class="form-control-plaintext" name="satuan_jantan" value="Kilogram" readonly></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Produsen Benih <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="produsen_jantan" value="PT. LIMAGRAIN AGRICON INDONESIA">
-                                            </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Kelas Benih Jantan <span class="text-danger">*</span></label>
+                                            <select name="kelas_benih_jantan" id="kelas_benih_jantan" class="form-control">
+                                                <option value="">-- Pilih Kelas Benih --</option>
+                                                <option value="0">---</option>
+                                                <option value="1">NS-N</option>
+                                                <option value="2" selected>BS-S</option>
+                                                <option value="7">BD-D</option>
+                                                <option value="12">BP-P</option>
+                                                <option value="13">BP1-P1</option>
+                                                <option value="14">BP2-P2</option>
+                                                <option value="17">BR-R</option>
+                                                <option value="18">BR1-R1</option>
+                                                <option value="19">BR2-R2</option>
+                                                <option value="20">BR3-R3</option>
+                                                <option value="21">BR4-R4</option>
+                                            </select>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>No Kelompok Benih <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="kelompok_jantan" value="003/PS-J/LG/2026">
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Produsen Benih <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="produsen_jantan" value="PT. LIMAGRAIN AGRICON INDONESIA">
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Jumlah Label <span class="text-danger">*</span></label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="label_jantan" value="1" size="10" maxlength="10">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Lembar</span>
-                                                    </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>No Kelompok Benih <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="kelompok_jantan" value="003/PS-J/LG/2026">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>Jumlah Label <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="label_jantan" value="1" size="10" maxlength="10">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">Lembar</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -855,4 +928,195 @@ $(function() {
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap4.min.js') }}"></script>
+
+<style>
+/* Form Hibrida specific styling - scoped to this page */
+.form-hibrida .fieldset-tab {
+    border: 1px solid #e3e6f0;
+    border-radius: 0.5rem;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.form-hibrida .fieldset-tab legend {
+    width: auto;
+    padding: 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: none;
+    margin-bottom: 1.25rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+}
+.form-hibrida .form-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e3e6f0;
+    display: flex;
+    align-items: center;
+}
+.form-hibrida .form-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.1rem;
+    background-color: #007bff;
+    margin-right: 0.75rem;
+    border-radius: 2px;
+}
+.form-hibrida .form-group {
+    margin-bottom: 1.25rem;
+}
+.form-hibrida .form-group label {
+    font-weight: 500;
+    color: #37474f;
+    margin-bottom: 0.5rem;
+    font-size: 0.9375rem;
+}
+.form-hibrida .form-control {
+    border: 1px solid #cfd8dc;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.75rem;
+}
+.form-hibrida .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.15);
+}
+.form-hibrida .form-control[readonly] {
+    background-color: #f5f5f5;
+    opacity: 1;
+}
+.form-hibrida .input-group-text {
+    background-color: #f8f9fa;
+    border-color: #cfd8dc;
+    color: #495057;
+    font-size: 0.875rem;
+}
+.form-hibrida .input-group-text input {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font-weight: 500;
+    color: #007bff;
+}
+.form-hibrida .select2-container--bootstrap4 .select2-selection {
+    border: 1px solid #cfd8dc;
+    border-radius: 0.375rem;
+}
+.form-hibrida .card {
+    border: none;
+    box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.05);
+    border-radius: 0.5rem;
+}
+.form-hibrida .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 1rem 1.5rem;
+}
+.form-hibrida .card-title {
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+.form-hibrida .card-body {
+    padding: 1.5rem;
+}
+.form-hibrida .card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e3e6f0;
+    padding: 1rem 1.5rem;
+}
+.form-hibrida .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+}
+.form-hibrida .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+.form-hibrida .btn-secondary {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0.375rem;
+}
+/* All form sections are visible by default.
+   The form contains all fields needed for every tipe form
+   (Hibrida, Non Hibrida, Umbi/Rimpang).
+   Sections with data-tipe attribute are shown/hidden based on selected tipe. */
+.form-hibrida .tipe-form-section {
+    display: block;
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .form-hibrida .nav-tabs .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+    .form-hibrida .fieldset-tab {
+        padding: 1.25rem;
+    }
+}
+</style>
+
+<script>
+function hitungLama() {
+    var tglAwal = document.querySelector('input[name="tgl_tanam_awal"]').value;
+    var tglAkhir = document.querySelector('input[name="tgl_tanam_akhir"]').value;
+    if (tglAwal && tglAkhir) {
+        // Simple date difference calculation
+        var awal = new Date(tglAwal.split('-').reverse().join('-'));
+        var akhir = new Date(tglAkhir.split('-').reverse().join('-'));
+        var diff = Math.ceil((akhir - awal) / (1000 * 60 * 60 * 24));
+        if (diff > 0) {
+            document.querySelector('input[name="lama_tanam"]').value = diff + ' hari';
+        }
+    }
+}
+
+$(function() {
+    var tipeForm = "{{ $tipeForm ?? 1 }}";
+    // The form contains all fields needed for every tipe form.
+    // Sections without a data-tipe attribute are always visible.
+    $('.tipe-form-section[data-tipe]').each(function() {
+        var sectionTipe = $(this).attr('data-tipe');
+        if (tipeForm && sectionTipe == tipeForm) {
+            $(this).show();
+        } else if (tipeForm && sectionTipe) {
+            $(this).hide();
+        }
+    });
+
+    // Initialize datetimepickers for Non Hibrida date fields
+    if (tipeForm == 2) {
+        $('#date-9').datetimepicker({
+            format: 'DD-MM-YYYY',
+            showClear: true,
+            showClose: true
+        });
+        $('#date-10').datetimepicker({
+            format: 'DD-MM-YYYY',
+            showClear: true,
+            showClose: true
+        });
+        $('#date-11').datetimepicker({
+            format: 'DD-MM-YYYY',
+            showClear: true,
+            showClose: true
+        });
+        $('#tgl_kadaluarsa').datetimepicker({
+            format: 'DD-MM-YYYY',
+            showClear: true,
+            showClose: true
+        });
+    }
+});
+</script>
 @endpush
